@@ -1,0 +1,157 @@
+{
+  "main": {
+    "id": "15d265934ac34c59",
+    "type": "split",
+    "children": [
+      {
+        "id": "9bbba154c5df1dbd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3b0653f3255e0ca0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Architecture/OpenFloorPlan.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f8fcac8da4dd1b77",
+    "type": "split",
+    "children": [
+      {
+        "id": "c82966c1830756bc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fa3a0a71b3874aba",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "73a552132d2625b3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "78a0dcebf6113ffb",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "2cf25a6019181d0b",
+    "type": "split",
+    "children": [
+      {
+        "id": "d65d3cdcab65b4c6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1b69cd39c5cf0dae",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Architecture/OpenFloorPlan.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "85b84c46b861722c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Architecture/OpenFloorPlan.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "5dd705de1f8b13b0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "eb746389cb4398fb",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Architecture/OpenFloorPlan.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "3b0653f3255e0ca0",
+  "lastOpenFiles": [
+    "Architecture/BusinessLogic.md",
+    "Architecture/DeveloperNotes.md",
+    "README.md",
+    "Architecture/OpenFloorPlan.md",
+    "Architecture"
+  ]
+}
