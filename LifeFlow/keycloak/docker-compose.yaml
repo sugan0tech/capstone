@@ -1,0 +1,42 @@
+name: "keycloak-compose"
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Suga@123"
+    volumes:
+      - sqlserver_data_container:/var/opt/mssql
+    networks:
+      - keycloak_network
+
+  keycloak:
+    image: me/keycloak:latest
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
+      tags:
+        - "me/keycloak:latest"
+        #    stdin_open: true # docker run -i
+        #    tty: true        # docker run -t
+    depends_on:
+      snc-postgres:
+        condition: service_healthy
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+    ports:
+      - "8080:8080"
+      - "8001:8001"
+    networks:
+      - snc-network
+
+networks:
+  keycloak_network:
+    driver: bridge
+
+volumes:
+  sqlserver_data_container:
