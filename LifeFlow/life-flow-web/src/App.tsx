@@ -24,6 +24,7 @@ function App() {
       <NavBar></NavBar>
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/home" element={<Home />}></Route>
         <Route path="/find-centers" element={<FindCenters />}></Route>
         <Route path="/blood-center-info" element={<BloodCentersInfo />}></Route>
         <Route path="/login" element={<Login />}></Route>

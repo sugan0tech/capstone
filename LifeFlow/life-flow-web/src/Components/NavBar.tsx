@@ -45,7 +45,7 @@ function NavBar() {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a>Item 1</a>
+              <Link to="/home">Home</Link>
             </li>
             <li>
               <a>Parent</a>
@@ -59,7 +59,7 @@ function NavBar() {
               </ul>
             </li>
             <li>
-              <a>Item 3</a>
+              <Link to="/find-centers">Find Centers</Link>
             </li>
           </ul>
         </div>
@@ -98,7 +98,7 @@ function NavBar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>Item 1</a>
+            <Link to="/home">Home</Link>
           </li>
           <li>
             <details>
@@ -114,7 +114,7 @@ function NavBar() {
             </details>
           </li>
           <li>
-            <a>Item 3</a>
+            <Link to="/find-centers">Find Centers</Link>
           </li>
         </ul>
       </div>
