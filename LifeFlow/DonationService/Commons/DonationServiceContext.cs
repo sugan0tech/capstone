@@ -6,6 +6,7 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 {
     public DbSet<DonationService.User.User> Users { get; set; }
     public DbSet<DonationService.Address.Address> Addresses { get; set; }
+    public DbSet<Donor.Donor> Donors { get; set; }
     public DbSet<UserSession.UserSession> UserSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +32,12 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
         #region User
 
         modelBuilder.Entity<DonationService.User.User>();
+
+        #endregion
+
+        #region Donors
+
+        modelBuilder.Entity<Donor.Donor>();
 
         #endregion
 

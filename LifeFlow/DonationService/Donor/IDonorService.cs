@@ -32,8 +32,8 @@ public interface IDonorService
     /// </summary>
     /// <param name="lat">The latitude of the location.</param>
     /// <param name="lon">The longitude of the location.</param>
-    /// <returns>A <see cref="Task{List{DonorDto}}"/> representing the asynchronous operation, with a list of <see cref="DonorDto"/> objects.</returns>
-    Task<List<DonorDto>> GetByLocation(double lat, double lon);
+    /// <returns>A <see cref="Task{List{DonorFetchDto}}"/> representing the asynchronous operation, with a list of <see cref="DonorDto"/> objects.</returns>
+    Task<List<DonorFetchDto>> GetByLocation(double lat, double lon);
 
     /// <summary>
     /// Retrieves donors based on their location and blood type.
@@ -42,8 +42,8 @@ public interface IDonorService
     /// <param name="lon">The longitude of the location.</param>
     /// <param name="bloodType">The antigen type of the blood.</param>
     /// <param name="subtype">The subtype of the blood.</param>
-    /// <returns>A <see cref="Task{List{DonorDto}}"/> representing the asynchronous operation, with a list of <see cref="DonorDto"/> objects.</returns>
-    Task<List<DonorDto>> GetByLocationAndBloodType(double lat, double lon, AntigenType bloodType, BloodSubtype subtype);
+    /// <returns>A <see cref="Task{List{DonorFetchDto}}"/> representing the asynchronous operation, with a list of <see cref="DonorDto"/> objects.</returns>
+    Task<List<DonorFetchDto>> GetByLocationAndBloodType(double lat, double lon, AntigenType bloodType, BloodSubtype subtype);
 
     /// <summary>
     /// Deletes a donor by their unique donor ID.

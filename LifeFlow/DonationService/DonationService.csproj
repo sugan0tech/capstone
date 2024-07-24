@@ -30,4 +30,8 @@
         <PackageReference Include="WatchDog.NET" Version="1.4.11"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Donation\" />
+    </ItemGroup>
+
 </Project>

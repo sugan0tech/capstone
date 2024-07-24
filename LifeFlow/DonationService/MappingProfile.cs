@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DonationService.Address;
+using DonationService.Donor;
 using DonationService.User;
 using DonationService.UserSession;
 
@@ -23,9 +24,9 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(entity => entity.HashKey, opt => opt.Condition(src => src.HashKey is { Length: > 0 }))
             .ForAllMembers(opts => { opts.Condition((src, dest, srcMember) => srcMember != null); });
 
-
         CreateMap<User.User, RegisterDTO>().ReverseMap();
-
+        CreateMap<Donor.Donor, DonorDto>().ReverseMap();
+        CreateMap<Donor.Donor, DonorFetchDto>().ReverseMap();
         CreateMap<Address.Address, AddressDto>().ReverseMap();
 
         // User sessions
