@@ -10,9 +10,7 @@ public record RegisterDTO
     [MaxLength(256)]
     public string Email { get; init; }
 
-    [Required] [MaxLength(50)] public string FirstName { get; init; }
-
-    [Required] [MaxLength(50)] public string LastName { get; init; }
+    [Required] [MaxLength(50)] public string Name { get; init; }
 
     [Required]
     [MaxLength(10, ErrorMessage = "Phone number must be of 10 numbers")]

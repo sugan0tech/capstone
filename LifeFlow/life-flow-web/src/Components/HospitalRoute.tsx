@@ -1,14 +1,14 @@
-import { useAuth } from "@/contexts/Authcontext";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 interface Props {
   children: JSX.Element;
 }
 
-function BloodCenterRoute({ children }: Props) {
+function HospitalRoute({ children }: Props) {
   const { user } = useAuth();
-  console.log("BloodCenter route validation");
+  console.log("Hospital route validation");
   return user ? children : <Navigate to="/not-found" />;
 }
 
-export default BloodCenterRoute;
+export default HospitalRoute;

@@ -1,14 +1,14 @@
-import { useAuth } from "@/contexts/Authcontext";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
-interface PrivateRouteProps {
+interface Props {
   children: JSX.Element;
 }
 
-function PrivateRoute({ children }: PrivateRouteProps) {
+function AuthenticatedRoute({ children }: Props) {
   const { user } = useAuth();
   console.log("yaaru pa nee");
   return user ? children : <Navigate to="/login" />;
 }
 
-export default PrivateRoute;
+export default AuthenticatedRoute;

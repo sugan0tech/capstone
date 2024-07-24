@@ -123,8 +123,7 @@ public class AuthService(
             var user = new UserDto
             {
                 Email = dto.Email,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
+                Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
                 AddressId = dto.AddressId,
                 Password = hasher.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)),
