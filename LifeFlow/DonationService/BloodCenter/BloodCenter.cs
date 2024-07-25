@@ -14,6 +14,7 @@ public class BloodCenter: BaseEntity
     public int PlateletsUnits { get; set; }
     public int PlasmaUnits { get; set; }
     public bool IsCentralReserve { get; set; }
+    public int SlotsCapacity { get; set; }
     public int? AddressId { get; set; }
     public TimeSpan OpenByTime { get; set; } = new(9, 0, 0); // 9 Am
     public TimeSpan CloseByTime { get; set; } = new(21, 0, 0); // 9 PM

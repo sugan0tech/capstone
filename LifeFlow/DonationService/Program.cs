@@ -112,6 +112,7 @@ public class Program
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IBaseService<UnitBag.UnitBag, UnitBagDto>, UnitBagService>();
         builder.Services.AddScoped<IBaseService<DonationSlot.DonationSlot, DonationSlotDto>, DonationSlotService>();
+        builder.Services.AddScoped<BloodCenterService>();
         
         // Commands and queries 
         builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
