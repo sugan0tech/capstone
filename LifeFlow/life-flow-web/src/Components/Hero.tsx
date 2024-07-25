@@ -1,6 +1,6 @@
 export const Hero = () => {
   return (
-    <div className="hero bg-base-200 min-h-screen">
+    <div className="hero bg-base-200 h-fit">
       <div className="hero-content flex-col lg:flex-row">
         <img
           src="https://christcenteredmall.com/stores/art/hopkins/images/zooms/helping-hand-large-image-zoom.jpg"

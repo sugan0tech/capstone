@@ -62,16 +62,16 @@ function App() {
           }
         ></Route>
       </Routes>
-
+      <Footer></Footer>
+    </>
+  );
+  /*
       <button className="btn btn-primary rounded-none">A button</button>
       <button className="px-6 py-2 font-medium bg-indigo-500 rounded-none hover:bg-indigo-500 text-white w-fit transition-all shadow-[5px_5px_0px_black] active:shadow-none hover:translate-x-[3px] active:translate-y-[3px]">
         Increase Count
       </button>
-
       <button className="btn w-64 rounded-full">Button</button>
-      <Footer></Footer>
-    </>
-  );
+      */
 }
 
 export default App;
