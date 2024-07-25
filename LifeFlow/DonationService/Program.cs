@@ -3,11 +3,14 @@ using DonationService.Address;
 using DonationService.Address.Command;
 using DonationService.Address.Query;
 using DonationService.Auth;
+using DonationService.BloodCenter;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Commons.Services;
 using DonationService.Commons.Validations;
+using DonationService.DonationSlot;
 using DonationService.Donor;
+using DonationService.UnitBag;
 using DonationService.User;
 using DonationService.UserSession;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -91,19 +94,27 @@ public class Program
 
         builder.Services.AddScoped<IBaseRepo<Address.Address>, AddressRepo>();
         builder.Services.AddScoped<IBaseRepo<User.User>, UserRepo>();
-        builder.Services.AddScoped<IBaseRepo<Donor.Donor>, DonorRepo>();
         builder.Services.AddScoped<IBaseRepo<UserSession.UserSession>, UserSessionRepo>();
+        builder.Services.AddScoped<IBaseRepo<Donor.Donor>, DonorRepo>();
+        builder.Services.AddScoped<IBaseRepo<BloodCenter.BloodCenter>, BloodCenterRepo>();
+        builder.Services.AddScoped<IBaseRepo<DonationSlot.DonationSlot>, DonationSlotRepo>();
+        builder.Services.AddScoped<IBaseRepo<UnitBag.UnitBag>, UnitBagRepo>();
 
         #endregion
 
         #region services
 
-        builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IDonorService, DonorService>();
         builder.Services.AddScoped<IUserSessionService, UserSessionService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<IBaseService<UnitBag.UnitBag, UnitBagDto>, UnitBagService>();
+        builder.Services.AddScoped<IBaseService<DonationSlot.DonationSlot, DonationSlotDto>, DonationSlotService>();
+        
+        // Commands and queries 
+        builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
         builder.Services.AddScoped<ICommandHandler<CreateAddressCommand>, CreateAddressCommandHandler>();
         builder.Services.AddScoped<ICommandHandler<UpdateAddressCommand>, UpdateAddressCommandHandler>();
         builder.Services.AddScoped<ICommandHandler<DeleteAddressCommand>, DeleteAddressCommandHandler>();
@@ -111,6 +122,8 @@ public class Program
         builder.Services
             .AddScoped<IQueryHandler<GetAllAddressesQuery, List<AddressDto>>, GetAllAddressesQueryHandler>();
         builder.Services.AddScoped<CustomControllerValidator>();
+        
+        // todo to migrate to new service
         builder.Services.AddScoped<OtpService>();
         builder.Services.AddScoped<EmailService>();
 

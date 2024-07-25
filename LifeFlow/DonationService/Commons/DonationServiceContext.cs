@@ -7,6 +7,9 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
     public DbSet<DonationService.User.User> Users { get; set; }
     public DbSet<DonationService.Address.Address> Addresses { get; set; }
     public DbSet<Donor.Donor> Donors { get; set; }
+    public DbSet<BloodCenter.BloodCenter> BloodCenters { get; set; }
+    public DbSet<DonationSlot.DonationSlot> DonationSlots { get; set; }
+    public DbSet<UnitBag.UnitBag> UnitBags { get; set; }
     public DbSet<UserSession.UserSession> UserSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,6 +50,24 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 
         #endregion
 
+        #region BloodCenter
+
+        modelBuilder.Entity<BloodCenter.BloodCenter>().HasIndex(center => center.Name).IsUnique();
+
+        #endregion
+
+        #region DonationSlot
+
+        modelBuilder.Entity<DonationSlot.DonationSlot>();
+
+        #endregion
+
+        #region UnitBags
+
+        modelBuilder.Entity<UnitBag.UnitBag>();
+        
+
+        #endregion
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             var enumProperties = entityType.ClrType.GetProperties()
