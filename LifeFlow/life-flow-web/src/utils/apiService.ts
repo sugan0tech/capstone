@@ -75,6 +75,40 @@ async function login(email: string, password: string, staySigned: boolean) {
   return response.data;
 }
 
+export const register = async (userData: {
+  email: string;
+  name: string;
+  phoneNumber: string;
+  password: string;
+  role: "Donor" | "HospitalAdmin" | "CenterAdmin" | "PharmaAdmin";
+}) => {
+  try{
+    const response = await api.post("/Auth/register", userData);
+    return response.data;
+  }catch (error: never){
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data?.message || 'An error occurred during registration';
+      const errorStatus = error.response.data?.status || error.response.status;
+      throw new Error(`${errorMessage} (Status: ${errorStatus})`);
+    }
+    throw new Error('An unexpected error occurred');
+  }
+};
+
+export const verifyOtp = async (email: string, otp: string) => {
+  try{
+    const response = await api.post("/Auth/verify-otp", { email, otp });
+    return response.data;
+  }catch (error: never){
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data?.message || 'An error occurred during registration';
+      const errorStatus = error.response.data?.status || error.response.status;
+      throw new Error(`${errorMessage} (Status: ${errorStatus})`);
+    }
+    throw new Error('An unexpected error occurred');
+  }
+};
+
 async function logout() {
   const token = localStorage.getItem("refreshToken");
   const config = {
@@ -88,35 +122,59 @@ async function logout() {
 
 // Generic API methods
 async function get<T>(endpoint: string): Promise<T> {
-  const response = await api.get(endpoint);
-  if (response.status != 200) {
-    throw new Error(response.data);
+  try{
+    const response = await api.get(endpoint);
+    return response.data;
+  }catch (error: never){
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data?.message || 'An error occurred during registration';
+      const errorStatus = error.response.data?.status || error.response.status;
+      throw new Error(`${errorMessage} (Status: ${errorStatus})`);
+    }
+    throw new Error('An unexpected error occurred');
   }
-  return response.data;
 }
 
 async function post<T>(endpoint: string, data: any): Promise<T> {
-  const response = await api.post(endpoint, data);
-  if (response.status != 200) {
-    throw new Error(response.data);
+  try{
+    const response = await api.post(endpoint, data);
+    return response.data;
+  }catch (error: never){
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data?.message || 'An error occurred during registration';
+      const errorStatus = error.response.data?.status || error.response.status;
+      throw new Error(`${errorMessage} (Status: ${errorStatus})`);
+    }
+    throw new Error('An unexpected error occurred');
   }
-  return response.data;
 }
 
 async function put<T>(endpoint: string, data: any): Promise<T> {
-  const response = await api.put(endpoint, data);
-  if (response.status != 200) {
-    throw new Error(response.data);
+  try{
+    const response = await api.put(endpoint, data);
+    return response.data;
+  }catch (error: never){
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data?.message || 'An error occurred during registration';
+      const errorStatus = error.response.data?.status || error.response.status;
+      throw new Error(`${errorMessage} (Status: ${errorStatus})`);
+    }
+    throw new Error('An unexpected error occurred');
   }
-  return response.data;
 }
 
 async function del<T>(endpoint: string): Promise<T> {
-  const response = await api.delete(endpoint);
-  if (response.status != 200) {
-    throw new Error(response.data);
+  try{
+    const response = await api.delete(endpoint);
+    return response.data;
+  }catch (error: never){
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data?.message || 'An error occurred during registration';
+      const errorStatus = error.response.data?.status || error.response.status;
+      throw new Error(`${errorMessage} (Status: ${errorStatus})`);
+    }
+    throw new Error('An unexpected error occurred');
   }
-  return response.data;
 }
 
 export { api, login, logout, setAuthTokens, get, post, put, del };

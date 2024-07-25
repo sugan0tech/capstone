@@ -42,10 +42,10 @@ public interface IAuthService
     /// <summary>
     ///  User account registration.
     /// </summary>
-    /// <param name="userId"></param>
+    /// <param name="email"></param>
     /// <param name="otp"></param>
     /// <returns></returns>
-    Task<bool> VerifyUserByOtp(int userId, string otp);
+    Task<bool> VerifyUserByOtp(string email, string otp);
 
     /// <summary>
     ///  User password change, also invalidates all the other sessions.

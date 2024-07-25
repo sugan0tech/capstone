@@ -141,15 +141,15 @@ public class AuthController(IAuthService authService, ILogger<AuthController> lo
         }
     }
 
-    [HttpPost("verify-otp/{userId}")]
+    [HttpPost("verify-otp")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> VerifyOtp([FromBody] string otp, int userId)
+    public async Task<IActionResult> VerifyOtp([FromBody] OtpDto otp)
     {
         try
         {
-            var success = await authService.VerifyUserByOtp(userId, otp);
+            var success = await authService.VerifyUserByOtp(otp.Email, otp.Otp);
             if (success)
                 return Ok(new { Success = success });
             return BadRequest(new ErrorModel(400, "Invalid Wrong OTP"));

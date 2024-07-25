@@ -1,93 +1,158 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuthHook from "../hooks/useAuthHook";
+import { useAlert } from "../contexts/AlertContext";
+import EmailLogo from "../assets/EmailLogo";
+import MobileSvg from "../assets/MobileSvg";
+import PasswordSvg from "../assets/PasswordSvg";
+import { PersonSvg } from "../assets/PersonSvg";
+
+type Role = "Donor" | "HospitalAdmin" | "CenterAdmin" | "PharmaAdmin";
 function Register() {
+  const { register, verifyOtp } = useAuthHook();
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState<Role>("Donor");
+  const [otp, setOtp] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const navigate = useNavigate();
+  const { addAlert } = useAlert();
+
+  const handleRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      addAlert({ message: "Passwords do not match.", type: "warning" });
+      return;
+    }
+    try {
+      await register(email, username, phone, password, role);
+      addAlert({
+        message:
+          "Registration successful! Please enter the OTP sent to your email.",
+        type: "success",
+      });
+      setIsOtpSent(true);
+    } catch (error) {
+      addAlert({
+        message: "Registration failed. Please try again." + error,
+        type: "warning",
+      });
+      console.log(error);
+    }
+  };
+
+  const handleOtpSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      await verifyOtp(email, otp);
+      addAlert({
+        message: "Verification successful! Redirecting to home.",
+        type: "success",
+      });
+      navigate("/home");
+    } catch (error) {
+      addAlert({
+        message: "OTP verification failed. Please try again." + error,
+        type: "warning",
+      });
+      console.log(error);
+    }
+  };
+
   return (
-    <>
-      <div className="flex flex-col items-center gap-4">
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-            <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-          </svg>
-          <input type="text" className="grow" placeholder="Email" />
-        </label>
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
-          </svg>
-          <input type="text" className="grow" placeholder="Username" />
-        </label>
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="size-4"
-          >
-            <path d="M10.5 18.75a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" />
-            <path
-              fill-rule="evenodd"
-              d="M8.625.75A3.375 3.375 0 0 0 5.25 4.125v15.75a3.375 3.375 0 0 0 3.375 3.375h6.75a3.375 3.375 0 0 0 3.375-3.375V4.125A3.375 3.375 0 0 0 15.375.75h-6.75ZM7.5 4.125C7.5 3.504 8.004 3 8.625 3H9.75v.375c0 .621.504 1.125 1.125 1.125h2.25c.621 0 1.125-.504 1.125-1.125V3h1.125c.621 0 1.125.504 1.125 1.125v15.75c0 .621-.504 1.125-1.125 1.125h-6.75A1.125 1.125 0 0 1 7.5 19.875V4.125Z"
-              clip-rule="evenodd"
+    <div className="flex flex-col items-center gap-4">
+      {!isOtpSent ? (
+        <>
+          <label className="input input-bordered flex items-center gap-2">
+            <EmailLogo />
+            <input
+              type="text"
+              className="grow"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-          </svg>
-          <input type="number" className="grow" placeholder="Phone" />
-        </label>
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-              clipRule="evenodd"
+          </label>
+          <label className="input input-bordered flex items-center gap-2">
+            <PersonSvg />
+            <input
+              type="text"
+              className="grow"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
-          </svg>
-          <input type="password" className="grow" placeholder="Password" />
-        </label>
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-              clipRule="evenodd"
+          </label>
+          <label className="input input-bordered flex items-center gap-2">
+            <MobileSvg />
+            <input
+              type="number"
+              className="grow"
+              placeholder="Phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
-          </svg>
-          <input
-            type="password"
-            className="grow"
-            placeholder="Retype Password"
-          />
-        </label>
-        <select className="select select-bordered w-full max-w-72">
-          <option disabled selected>
-            Purpose
-          </option>
-          <option>BloodDonor</option>
-          <option>BloodRequest - Hospital</option>
-          <option>BloodRequest - Pharma</option>
-        </select>
-        <div className="form-control gap-2">
-          <button className="btn btn-accent">Register</button>
-        </div>
-      </div>
-    </>
+          </label>
+          <label className="input input-bordered flex items-center gap-2">
+            <PasswordSvg />
+            <input
+              type="password"
+              className="grow"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+          <label className="input input-bordered flex items-center gap-2">
+            <PasswordSvg />
+            <input
+              type="password"
+              className="grow"
+              placeholder="Retype Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </label>
+          <select
+            className="select select-bordered w-full max-w-72"
+            value={role}
+            onChange={(e) => setRole(e.target.value as Role)}
+          >
+            <option disabled selected value="Donor">
+              Purpose
+            </option>
+            <option value="Donor">Donor</option>
+            <option value="HospitalAdmin">BloodRequest - Hospital</option>
+            <option value="PharmaAdmin">BloodRequest - Pharma</option>
+          </select>
+          <div className="form-control gap-2">
+            <button className="btn btn-accent" onClick={handleRegister}>
+              Register
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <label className="input input-bordered flex items-center gap-2">
+            <input
+              type="text"
+              className="grow"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+            />
+          </label>
+          <div className="form-control gap-2">
+            <button className="btn btn-accent" onClick={handleOtpSubmit}>
+              Submit OTP
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 

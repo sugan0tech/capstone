@@ -1,12 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import useAuthHook from "../hooks/useAuthHook";
 import { useEffect, useState } from "react";
 
 function NavBar() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated ,user, logout } = useAuth();
   const location = useLocation();
-  const { logout } = useAuthHook();
 
   const [authButton, setAuthButton] = useState<JSX.Element | null>(null);
 

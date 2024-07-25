@@ -5,20 +5,24 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
+import useAuthHook from "../hooks/useAuthHook";
 
-interface User {
+export type Role =  "Donor" | "HospitalAdmin" | "CenterAdmin" | "PharmaAdmin" | "Admin";
+export interface User {
   id: number;
   email: string;
-  firstName: string;
-  lastName: string;
-  role: "Donor" | "HospitalAdmin" | "CenterAdmin" | "PharmaAdmin" | "Admin";
+  name: string;
+  role: Role;
 }
 
 interface AuthContextType {
   user: User | null;
-  isAuthenticated: boolean | false;
-  login: (userData: User) => void;
+  isAuthenticated: boolean;
+  role: string | null;
+  login: (email: string, password: string, staySigned: boolean) => Promise<void>;
   logout: () => void;
+  register: (email: string, name: string, phone: string, password: string, role: string) => Promise<void>;
+  verifyOtp: (email: string, otp: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,37 +32,21 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | false>(
-    false
-  );
+  const { authState, login, logout, register, verifyOtp } = useAuthHook();
+  const [isAuthenticated, setIsAuthenticated] = useState(authState.isAuthenticated);
+  const [user, setUser] = useState<User | null>(authState.user);
+  const [role, setRole] = useState<string | null>(authState.role);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  useEffect(() => {
-    const loggedStatus = localStorage.getItem("isAuthenticated");
-    setIsAuthenticated(loggedStatus != null);
-  }, []);
-
-  const login = (userData: User) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
+    setIsAuthenticated(authState.isAuthenticated);
+    setUser(authState.user);
+    setRole(authState.role);
+  }, [authState]);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+      <AuthContext.Provider value={{ user, isAuthenticated, role, login, logout, register, verifyOtp }}>
+        {children}
+      </AuthContext.Provider>
   );
 };
 

@@ -40,6 +40,7 @@ public class AuthService(
                 logger.LogInformation($"Successfully logged as Id :{user.UserId}");
                 // if staySigned => long lived token
                 var tokens = tokenService.GenerateTokens(user, !loginDto.staySigned);
+                tokens.User = user;
                 var newSession = new UserSessionDto
                 {
                     UserId = user.UserId,
@@ -150,12 +151,12 @@ public class AuthService(
         }
     }
 
-    public async Task<bool> VerifyUserByOtp(int userId, string otp)
+    public async Task<bool> VerifyUserByOtp(string email, string otp)
     {
-        var user = await userService.GetById(userId);
-        var status = otpService.VerifyOtp(user.Email, otp);
+        var user = await userService.GetByEmail(email);
+        var status = otpService.VerifyOtp(email, otp);
         if (status)
-            await userService.Validate(userId, true);
+            await userService.Validate(user.UserId, true);
 
         return status;
     }
