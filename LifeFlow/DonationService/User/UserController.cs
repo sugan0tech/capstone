@@ -12,7 +12,7 @@ namespace DonationService.User;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
-[Authorize]
+// [Authorize]
 public class UserController(
     IUserService userService,
     CustomControllerValidator validator) : ControllerBase
@@ -115,7 +115,7 @@ public class UserController(
     [HttpPost("validate/{userId}/{status}")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
-    [Authorize(Policy = "AdminPolicy")]
+    // [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> Validate(int userId, bool status)
     {
         try

@@ -1,25 +1,52 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import useAuthHook from "../hooks/useAuthHook";
+import { useEffect, useState } from "react";
 
 function NavBar() {
-  const lcoation = useLocation();
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  const { logout } = useAuthHook();
 
-  const updateAuthButton = (name: string) => {
-    const login = useAuth();
-    if (login.user != null) {
-      return <Link to="/logout">Logout</Link>;
-    }
-    switch (name) {
-      case "/login":
-        return <Link to="/register">Register</Link>;
+  const [authButton, setAuthButton] = useState<JSX.Element | null>(null);
 
-      case "/register":
-        return <Link to="/login">Login</Link>;
+  useEffect(() => {
+    const updateAuthButton = (path: string) => {
+      const status = localStorage.getItem("isAuthenticated");
+      if (status) {
+        setAuthButton(
+          <button className="btn btn-warning" onClick={logout}>
+            Logout
+          </button>
+        );
+      } else {
+        switch (path) {
+          case "/login":
+            setAuthButton(
+              <Link className="btn" to="/register">
+                Register
+              </Link>
+            );
+            break;
+          case "/register":
+            setAuthButton(
+              <Link className="btn" to="/login">
+                Login
+              </Link>
+            );
+            break;
+          default:
+            setAuthButton(
+              <Link className="btn" to="/login">
+                Login
+              </Link>
+            );
+        }
+      }
+    };
 
-      default:
-        return <Link to="/login">Login</Link>;
-    }
-  };
+    updateAuthButton(location.pathname);
+  }, [isAuthenticated, location.pathname, logout]);
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -118,9 +145,7 @@ function NavBar() {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        <div className="btn">{updateAuthButton(location.pathname)}</div>
-      </div>
+      <div className="navbar-end">{authButton}</div>
     </div>
   );
 }

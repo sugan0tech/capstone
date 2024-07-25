@@ -1,6 +1,15 @@
 using System.Text;
+using DonationService.Address;
+using DonationService.Address.Command;
+using DonationService.Address.Query;
+using DonationService.Auth;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
+using DonationService.Commons.Services;
+using DonationService.Commons.Validations;
+using DonationService.Donor;
+using DonationService.User;
+using DonationService.UserSession;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -50,10 +59,11 @@ public class Program
                 }
             });
         }); // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddHttpContextAccessor();
+
         #region Context
 
         builder.Services.AddDbContext<DonationServiceContext>(optionsBuilder =>
@@ -64,6 +74,7 @@ public class Program
         );
 
         #endregion
+
         #region Logger
 
         builder.Services.AddLogging(l => l.AddLog4Net());
@@ -72,6 +83,36 @@ public class Program
             opt.SetExternalDbConnString = builder.Configuration.GetConnectionString("eventStore");
             opt.DbDriverOption = WatchDog.src.Enums.WatchDogDbDriverEnum.MSSQL;
         });
+
+        #endregion
+
+
+        #region repos
+
+        builder.Services.AddScoped<IBaseRepo<Address.Address>, AddressRepo>();
+        builder.Services.AddScoped<IBaseRepo<User.User>, UserRepo>();
+        builder.Services.AddScoped<IBaseRepo<Donor.Donor>, DonorRepo>();
+        builder.Services.AddScoped<IBaseRepo<UserSession.UserSession>, UserSessionRepo>();
+
+        #endregion
+
+        #region services
+
+        builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IDonorService, DonorService>();
+        builder.Services.AddScoped<IUserSessionService, UserSessionService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<ICommandHandler<CreateAddressCommand>, CreateAddressCommandHandler>();
+        builder.Services.AddScoped<ICommandHandler<UpdateAddressCommand>, UpdateAddressCommandHandler>();
+        builder.Services.AddScoped<ICommandHandler<DeleteAddressCommand>, DeleteAddressCommandHandler>();
+        builder.Services.AddScoped<IQueryHandler<GetAddressByIdQuery, AddressDto>, GetAddressByIdQueryHandler>();
+        builder.Services
+            .AddScoped<IQueryHandler<GetAllAddressesQuery, List<AddressDto>>, GetAllAddressesQueryHandler>();
+        builder.Services.AddScoped<CustomControllerValidator>();
+        builder.Services.AddScoped<OtpService>();
+        builder.Services.AddScoped<EmailService>();
 
         #endregion
 
@@ -93,7 +134,8 @@ public class Program
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy("CenterAdmin", policyBuilder => policyBuilder.RequireRole(Role.CenterAdmin.ToString()));
-            options.AddPolicy("HospitalAdmin", policyBuilder => policyBuilder.RequireRole(Role.HospitalAdmin.ToString()));
+            options.AddPolicy("HospitalAdmin",
+                policyBuilder => policyBuilder.RequireRole(Role.HospitalAdmin.ToString()));
             options.AddPolicy("PharmaAdmin", policyBuilder => policyBuilder.RequireRole(Role.PharmaAdmin.ToString()));
             options.AddPolicy("AdminPolicy", policyBuilder => policyBuilder.RequireRole(Role.PharmaAdmin.ToString()));
             options.AddPolicy("Donor",
@@ -121,10 +163,13 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseAuthorization();
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseCors("AllowAll");
         app.UseAuthentication();
+        app.UseAuthorization();
         app.UseWatchDogExceptionLogger();
-        
+
         var watchdogCredentials = builder.Configuration.GetSection("WatchDog");
         app.UseWatchDog(opt =>
         {

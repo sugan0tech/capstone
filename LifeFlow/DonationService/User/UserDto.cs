@@ -1,6 +1,5 @@
 ﻿#nullable disable
 using System.Text.Json.Serialization;
-
 namespace DonationService.User;
 
 public record UserDto

@@ -27,7 +27,7 @@ public class TokenService : ITokenService
         {
             new(ClaimTypes.Name, user.UserId.ToString()),
             new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Role, user.Role)
+            new(ClaimTypes.Role, user.Role.ToString())
         };
         var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
         var myToken = new JwtSecurityToken(null, null, claims, expires: expiration,

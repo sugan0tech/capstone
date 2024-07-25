@@ -16,6 +16,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
+  isAuthenticated: boolean | false;
   login: (userData: User) => void;
   logout: () => void;
 }
@@ -28,12 +29,20 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | false>(
+    false
+  );
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+  }, []);
+
+  useEffect(() => {
+    const loggedStatus = localStorage.getItem("isAuthenticated");
+    setIsAuthenticated(loggedStatus != null);
   }, []);
 
   const login = (userData: User) => {
@@ -47,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

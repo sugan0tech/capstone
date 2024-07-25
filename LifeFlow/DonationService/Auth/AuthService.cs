@@ -1,10 +1,12 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using DonationService.Commons.Enums;
 using DonationService.Commons.Services;
 using DonationService.Exceptions;
 using DonationService.User;
 using DonationService.UserSession;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop.Infrastructure;
 using OtpNet;
 
 namespace DonationService.Auth;
@@ -128,6 +130,7 @@ public class AuthService(
                 AddressId = dto.AddressId,
                 Password = hasher.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)),
                 HashKey = hasher.Key,
+                Role = dto.Role,
                 IsVerified = false,
                 LoginAttempts = 0
             };
@@ -143,9 +146,8 @@ public class AuthService(
         catch (Exception e)
         {
             logger.LogError(e.Message);
+            throw new AuthenticationException("Not able to register at this moment" + e.Message);
         }
-
-        throw new AuthenticationException("Not able to register at this moment");
     }
 
     public async Task<bool> VerifyUserByOtp(int userId, string otp)

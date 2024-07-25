@@ -1,5 +1,6 @@
 ﻿#nullable disable
 using System.ComponentModel.DataAnnotations;
+using DonationService.Commons.Enums;
 
 namespace DonationService.User;
 
@@ -8,15 +9,17 @@ public record RegisterDTO
     [Required]
     [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")]
     [MaxLength(256)]
-    public string Email { get; init; }
+    public required string Email { get; init; }
 
-    [Required] [MaxLength(50)] public string Name { get; init; }
+    [MaxLength(50)] public required string Name { get; init; }
 
     [Required]
-    [MaxLength(10, ErrorMessage = "Phone number must be of 10 numbers")]
+    [MaxLength(14, ErrorMessage = "Phone number must be of 14 numbers")]
     public string PhoneNumber { get; init; }
 
-    [Required] public int AddressId { get; init; }
+    public required string Role { get; init; }
 
-    [Required] public string Password { get; init; }
+    public int AddressId { get; init; }
+
+    public required string Password { get; init; }
 }
