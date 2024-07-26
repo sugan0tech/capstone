@@ -15,6 +15,7 @@ import NotFound from "./Pages/NotFound";
 import MyDonations from "./Pages/MyDonations";
 import BloodCenterConsole from "./Pages/BloodCenterConsole";
 import BloodCentersInfo from "./Pages/BloodCentersInfo";
+import MyAccount from "./Pages/MyAccount";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -37,6 +38,16 @@ function App() {
             <AuthenticatedRoute>
               <DonorRoute>
                 <MyDonations />
+              </DonorRoute>
+            </AuthenticatedRoute>
+          }
+        ></Route>
+        <Route
+          path="/my-account"
+          element={
+            <AuthenticatedRoute>
+              <DonorRoute>
+                <MyAccount />
               </DonorRoute>
             </AuthenticatedRoute>
           }

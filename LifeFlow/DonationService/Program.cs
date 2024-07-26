@@ -117,6 +117,7 @@ public class Program
         builder.Services.AddScoped<IBaseService<UnitBag.UnitBag, UnitBagDto>, UnitBagService>();
         builder.Services.AddScoped<IBaseService<DonationSlot.DonationSlot, DonationSlotDto>, DonationSlotService>();
         builder.Services.AddScoped<BloodCenterService>();
+        builder.Services.AddScoped<GeocodingService>();
 
         // Commands and queries 
         builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
@@ -132,6 +133,7 @@ public class Program
         builder.Services.AddScoped<OtpService>();
         builder.Services.AddScoped<EmailService>();
 
+        builder.Services.AddHttpClient<GeocodingService>();
         #endregion
 
         #region AuthConfig

@@ -1,6 +1,6 @@
 import CentreCard from "../Components/CentreCard";
+import LocationSearchBar from "../Components/LocationSearchBar";
 import MapLeaflet from "../Components/MapLeaflet";
-import { OverAllStatus } from "../Components/OverAllStatus";
 import UserStatus from "../Components/UserStatus";
 
 function FindCenters() {
@@ -10,11 +10,7 @@ function FindCenters() {
         <div className="flex flex-col gap-x-96 items-center bg-base-300 h-48 rounded-box lg:flex-row">
           <div className="flex-1 lg:pl-24 ">
             <label className="input input-bordered flex items-center gap-2">
-              <input
-                type="text"
-                className="grow"
-                placeholder="Search centers"
-              />
+              <LocationSearchBar />
               <kbd className="kbd kbd-sm">⌘</kbd>
               <kbd className="kbd kbd-sm">K</kbd>
             </label>

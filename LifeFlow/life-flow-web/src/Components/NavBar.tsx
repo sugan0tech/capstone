@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import LifeFlowLogo from "../assets/LifeFlowLogo";
 import DropdownMenuSvg from "../assets/DropdownMenuSvg";
+import ThemeToggleBtn from "./ThemeToggleBtn";
 
 function NavBar() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -22,10 +23,10 @@ function NavBar() {
             setAuccontButtons(
               <>
                 <li>
-                  <Link to="/my-donations">Donation History</Link>
+                  <Link to="/my-donations">My Donations</Link>
                 </li>
                 <li>
-                  <a>Account Info</a>
+                  <Link to="/my-account">Account Info</Link>
                 </li>
               </>
             );
@@ -156,7 +157,10 @@ function NavBar() {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">{authButton}</div>
+      <div className="navbar-end gap-4">
+        <ThemeToggleBtn />
+        {authButton}
+      </div>
     </div>
   );
 }
