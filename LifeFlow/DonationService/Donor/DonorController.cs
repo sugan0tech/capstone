@@ -194,5 +194,10 @@ public class DonorController(
             WatchLogger.LogError(e.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
+        catch (InvalidUpdateOperationException e)
+        {
+            WatchLogger.LogError(e.Message);
+            return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
+        }
     }
 }

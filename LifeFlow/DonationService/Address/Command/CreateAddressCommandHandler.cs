@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using DonationService.BloodCenter.Commands;
+using DonationService.BloodCenter.Queries;
 using DonationService.Commons;
+using DonationService.Donor.Commands;
+using DonationService.Donor.Queries;
 using DonationService.Exceptions;
 using MediatR;
 
@@ -18,10 +22,26 @@ public class CreateAddressCommandHandler(IBaseRepo<Address> repository, IMediato
                 "Unable to create new address, Address for the user already exists. consider updating it");
         }
 
-        // var user = await mediator.Send(new GetUserQuery(command.UserId));
-
+        // validation for entity existance
         var address = mapper.Map<Address>(command.Address);
-
-        await repository.Add(address);
+        switch (command.Address.EntityType)
+        {
+            case "Donor":
+                var donor = await mediator.Send(new GetDonorQuery(command.Address.EntityId));
+                await repository.Add(address);
+                donor.AddressId = address.Id;
+                await mediator.Send(new UpdateDonorCommand(donor));
+                break;
+            case "BloodCenter":
+                var centre = await mediator.Send(new GetBloodCenterQuery(command.Address.EntityId));
+                await repository.Add(address);
+                centre.AddressId = address.Id;
+                await mediator.Send(new UpdateBloodCenterCommand(centre));
+                break;
+            case "Hospital":
+                break;
+            default:
+                throw new InvalidEntityTypeException($"{command.Address.EntityType} is not of accepted types");
+        }
     }
 }

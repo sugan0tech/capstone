@@ -63,11 +63,16 @@ public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper map
             }
 
             var address = mediator.Send(new GetAddressByIdRequest { AddressId = (int)d.AddressId }).Result;
+            var distance = GetDistance(address.Latitude, address.Longitude, lat, lon);
             if (IsCompatibleBloodType(d.BloodAntigenType, bloodType) &&
                 d.BloodAntigenType == bloodType &&
                 d.BloodSubtype == subtype &&
-                GetDistance(address.Latitude, address.Longitude, lat, lon) <= 50)
-                distancedNearbyDonors.Add(mapper.Map<DonorFetchDto>(d));
+                distance <= 50)
+            {
+                var donorFecable = mapper.Map<DonorFetchDto>(d);
+                donorFecable.distance = distance;
+                distancedNearbyDonors.Add(donorFecable);
+            }
         });
 
 
@@ -99,10 +104,19 @@ public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper map
     public async Task<DonorDto> Update(DonorDto donorDto)
     {
         var donor = await repo.GetById(donorDto.Id);
-        if (donor.AddressId != null)
+        if (donorDto.AddressId != null)
         {
-            donorDto.AddressId = donor.AddressId;
+            var address = await mediator.Send(new GetAddressByIdRequest { AddressId = (int)donorDto.AddressId });
+            if (address.EntityId == donor.Id && address.EntityType.Equals("Donor"))
+            {
+                donor.AddressId = donorDto.AddressId;
+            }
+            else
+            {
+                throw new InvalidUpdateOperationException("Donor already has address");
+            }
         }
+
         mapper.Map(donorDto, donor);
         donor = await repo.Update(donor);
         return mapper.Map<DonorDto>(donor);

@@ -13,7 +13,7 @@ namespace DonationService.Address;
 [ApiController]
 [Route("api/[controller]")]
 [EnableCors("AllowAll")]
-[Authorize]
+// [Authorize]
 public class AddressController(
     ILogger<AddressController> logger,
     ICommandHandler<CreateAddressCommand> createAddressHandler,
@@ -44,7 +44,7 @@ public class AddressController(
 
     [HttpGet]
     [ProducesResponseType(typeof(List<AddressDto>), StatusCodes.Status200OK)]
-    [Authorize(Policy = "AdminPolicy")]
+    // [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> GetAllAddresses()
     {
         var addresses = await getAllAddressesHandler.Handle(new GetAllAddressesQuery());
@@ -59,12 +59,20 @@ public class AddressController(
     {
         try
         {
-            validator.ValidateUserPrivilege(User.Claims, addressDto.EntityId);
+            // validator.ValidateUserPrivilege(User.Claims, addressDto.EntityId);
             logger.LogInformation(addressDto.ToString());
             await createAddressHandler.Handle(new CreateAddressCommand(addressDto));
             return StatusCode(201);
         }
         catch (AlreadyExistingEntityException e)
+        {
+            return BadRequest(new ErrorModel(400, e.Message));
+        }
+        catch (KeyNotFoundException e)
+        {
+            return StatusCode(404, new ErrorModel(404, e.Message));
+        }
+        catch (InvalidEntityTypeException e)
         {
             return BadRequest(new ErrorModel(400, e.Message));
         }
@@ -92,20 +100,20 @@ public class AddressController(
         }
     }
 
-    [HttpDelete("{id}")]
-    [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteAddressById(int id)
-    {
-        try
-        {
-            await deleteAddressHandler.Handle(new DeleteAddressCommand { Id = id });
-            return Ok();
-        }
-        catch (KeyNotFoundException e)
-        {
-            logger.LogError(e.Message);
-            return NotFound(new ErrorModel(404, e.Message));
-        }
-    }
+    // [HttpDelete("{id}")]
+    // [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
+    // [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+    // public async Task<IActionResult> DeleteAddressById(int id)
+    // {
+    //     try
+    //     {
+    //         await deleteAddressHandler.Handle(new DeleteAddressCommand { Id = id });
+    //         return Ok();
+    //     }
+    //     catch (KeyNotFoundException e)
+    //     {
+    //         logger.LogError(e.Message);
+    //         return NotFound(new ErrorModel(404, e.Message));
+    //     }
+    // }
 }
