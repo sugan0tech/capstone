@@ -30,4 +30,10 @@ Infra
 2. Kafka in VM
 3. KeyVault for creds
 4. Project Managemetn with azure devops board
-5.  CI/CD in azure pipelines 
+5.  CI/CD in azure pipelines
+
+
+## Calculating distance with Latitude and Longitude
+```
+acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon2-lon1))*6371 (6371 is Earth radius in km.)
+```
