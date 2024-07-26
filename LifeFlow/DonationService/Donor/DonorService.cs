@@ -63,7 +63,8 @@ public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper map
             }
 
             var address = mediator.Send(new GetAddressByIdRequest { AddressId = (int)d.AddressId }).Result;
-            if (d.BloodAntigenType == bloodType &&
+            if (IsCompatibleBloodType(d.BloodAntigenType, bloodType) &&
+                d.BloodAntigenType == bloodType &&
                 d.BloodSubtype == subtype &&
                 GetDistance(address.Latitude, address.Longitude, lat, lon) <= 50)
                 distancedNearbyDonors.Add(mapper.Map<DonorFetchDto>(d));
@@ -97,7 +98,12 @@ public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper map
 
     public async Task<DonorDto> Update(DonorDto donorDto)
     {
-        var donor = mapper.Map<Donor>(donorDto);
+        var donor = await repo.GetById(donorDto.Id);
+        if (donor.AddressId != null)
+        {
+            donorDto.AddressId = donor.AddressId;
+        }
+        mapper.Map(donorDto, donor);
         donor = await repo.Update(donor);
         return mapper.Map<DonorDto>(donor);
     }
@@ -116,5 +122,44 @@ public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper map
         var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
         return R * c / 1000; // distance in km
+    }
+
+
+    private static readonly Dictionary<AntigenType, List<AntigenType>> BloodTypeCompatibility = new()
+    {
+        {
+            AntigenType.OPositive,
+            new List<AntigenType>
+                { AntigenType.OPositive, AntigenType.APositive, AntigenType.BPositive, AntigenType.ABPositive }
+        },
+        {
+            AntigenType.ONegative,
+            new List<AntigenType>
+            {
+                AntigenType.OPositive, AntigenType.ONegative, AntigenType.APositive, AntigenType.ANegative,
+                AntigenType.BPositive, AntigenType.BNegative, AntigenType.ABPositive, AntigenType.ABNegative
+            }
+        },
+        { AntigenType.APositive, new List<AntigenType> { AntigenType.APositive, AntigenType.ABPositive } },
+        {
+            AntigenType.ANegative,
+            new List<AntigenType>
+                { AntigenType.APositive, AntigenType.ANegative, AntigenType.ABPositive, AntigenType.ABNegative }
+        },
+        { AntigenType.BPositive, new List<AntigenType> { AntigenType.BPositive, AntigenType.ABPositive } },
+        {
+            AntigenType.BNegative,
+            new List<AntigenType>
+                { AntigenType.BPositive, AntigenType.BNegative, AntigenType.ABPositive, AntigenType.ABNegative }
+        },
+        { AntigenType.ABPositive, new List<AntigenType> { AntigenType.ABPositive } },
+        { AntigenType.ABNegative, new List<AntigenType> { AntigenType.ABPositive, AntigenType.ABNegative } }
+    };
+
+
+    private bool IsCompatibleBloodType(AntigenType donorType, AntigenType recipientType)
+    {
+        return BloodTypeCompatibility.ContainsKey(donorType) &&
+               BloodTypeCompatibility[donorType].Contains(recipientType);
     }
 }

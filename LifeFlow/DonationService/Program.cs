@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using DonationService.Address;
 using DonationService.Address.Command;
 using DonationService.Address.Query;
@@ -29,7 +30,10 @@ public class Program
 
         // Add services to the container.
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -113,7 +117,7 @@ public class Program
         builder.Services.AddScoped<IBaseService<UnitBag.UnitBag, UnitBagDto>, UnitBagService>();
         builder.Services.AddScoped<IBaseService<DonationSlot.DonationSlot, DonationSlotDto>, DonationSlotService>();
         builder.Services.AddScoped<BloodCenterService>();
-        
+
         // Commands and queries 
         builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
         builder.Services.AddScoped<ICommandHandler<CreateAddressCommand>, CreateAddressCommandHandler>();
@@ -123,7 +127,7 @@ public class Program
         builder.Services
             .AddScoped<IQueryHandler<GetAllAddressesQuery, List<AddressDto>>, GetAllAddressesQueryHandler>();
         builder.Services.AddScoped<CustomControllerValidator>();
-        
+
         // todo to migrate to new service
         builder.Services.AddScoped<OtpService>();
         builder.Services.AddScoped<EmailService>();

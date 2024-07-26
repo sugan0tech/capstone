@@ -26,8 +26,8 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
             entity.Property(a => a.ZipCode).IsRequired().HasMaxLength(20);
             entity.Property(a => a.EntityId).IsRequired();
             entity.Property(a => a.EntityType).IsRequired().HasMaxLength(50);
-            
-            entity.HasIndex(a => new { a.EntityId, a.EntityType });
+
+            entity.HasIndex(a => new { a.EntityId, a.EntityType }).IsUnique();
         });
 
         #endregion
@@ -40,7 +40,7 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 
         #region Donors
 
-        modelBuilder.Entity<Donor.Donor>();
+        modelBuilder.Entity<Donor.Donor>().HasIndex(donor => donor.UserId).IsUnique();
 
         #endregion
 
@@ -65,9 +65,9 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
         #region UnitBags
 
         modelBuilder.Entity<UnitBag.UnitBag>();
-        
 
         #endregion
+
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             var enumProperties = entityType.ClrType.GetProperties()

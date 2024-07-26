@@ -4,7 +4,8 @@ namespace DonationService.Donor;
 
 public record DonorDto
 {
-    
+
+    public int Id { get; set; }
     public int UserId { get; init; }
     public AntigenType BloodAntigenType { get; init; }
     public BloodSubtype BloodSubtype { get; init; }
