@@ -138,12 +138,18 @@ public class BloodCenterController(
     [HttpGet("nearby")]
     [ProducesResponseType(typeof(List<BloodCenterDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetNearByCenters(double latitude, double longitude)
     {
         try
         {
             var nearbyCenters = await bloodCenterService.GetNearByCenters(latitude, longitude);
             return Ok(nearbyCenters);
+        }
+        catch (OutOfServiceException ex)
+        {
+            WatchLogger.LogError(ex.Message);
+            return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (Exception ex)
         {

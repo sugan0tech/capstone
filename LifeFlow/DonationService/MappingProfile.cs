@@ -45,6 +45,7 @@ public class MappingProfile : AutoMapper.Profile
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         CreateMap<BloodCenterDto, BloodCenter.BloodCenter>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+        CreateMap<BloodCenter.BloodCenter, BloodCenterFetchDto>().ReverseMap();
         
         CreateMap<DonationSlot.DonationSlot, DonationSlotDto>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

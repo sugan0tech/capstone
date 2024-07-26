@@ -13,12 +13,25 @@ public class BloodCenterService(
     IBaseRepo<Donor.Donor> donorRepo,
     IMapper mapper) : BaseService<BloodCenter, BloodCenterDto>(repo, mapper), IBloodCenterService
 {
-    public async Task<List<BloodCenterDto>> GetNearByCenters(double latitude, double longitude)
+    public async Task<List<BloodCenterFetchDto>> GetNearByCenters(double latitude, double longitude)
     {
         var bloodCenters = await repo.GetAll();
-        var nearbyCenters = bloodCenters.Where(c => GetDistance(c.Latitude, c.Longitude, latitude, longitude) <= 50)
-            .ToList();
-        return mapper.Map<List<BloodCenterDto>>(nearbyCenters);
+        var distancedCenters = new List<BloodCenterFetchDto>();
+        bloodCenters.ForEach(c =>
+        {
+            var distance = GetDistance(c.Latitude, c.Longitude, latitude, longitude);
+            if (distance <= 50)
+            {
+                var tmp = mapper.Map<BloodCenterFetchDto>(c);
+                tmp.Distance = distance;
+                distancedCenters.Add(tmp);
+            }
+        });
+        if (distancedCenters.Count == 0)
+        {
+            throw new OutOfServiceException("Sorry currently we are not serving in this region");
+        }
+        return distancedCenters;
     }
 
     public async Task<BloodCenterDto> GetCenterByName(string name)
