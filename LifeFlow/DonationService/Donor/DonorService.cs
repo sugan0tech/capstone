@@ -2,6 +2,7 @@ using AutoMapper;
 using DonationService.Address.Request;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
+using DonationService.Exceptions;
 using MediatR;
 
 namespace DonationService.Donor;
@@ -80,9 +81,18 @@ public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper map
 
     public async Task<DonorDto> Add(DonorDto donorDto)
     {
-        var donor = mapper.Map<Donor>(donorDto);
-        donor = await repo.Add(donor);
-        return mapper.Map<DonorDto>(donor);
+        try
+        {
+            await GetByUserId(donorDto.UserId);
+        }
+        catch (KeyNotFoundException)
+        {
+            var donor = mapper.Map<Donor>(donorDto);
+            donor = await repo.Add(donor);
+            return mapper.Map<DonorDto>(donor);
+        }
+
+        throw new DuplicateRequestException("This user already have donor profile");
     }
 
     public async Task<DonorDto> Update(DonorDto donorDto)

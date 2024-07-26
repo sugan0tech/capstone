@@ -21,12 +21,12 @@ public class BloodCenterService(
         return mapper.Map<List<BloodCenterDto>>(nearbyCenters);
     }
 
-    public async Task<List<BloodCenterDto>> GetCenterByName(string name)
+    public async Task<BloodCenterDto> GetCenterByName(string name)
     {
         var bloodCenters = await repo.GetAll();
-        var centersByName = bloodCenters.Where(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        return mapper.Map<List<BloodCenterDto>>(centersByName);
+        var centersByName = bloodCenters
+            .First(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        return mapper.Map<BloodCenterDto>(centersByName);
     }
 
 

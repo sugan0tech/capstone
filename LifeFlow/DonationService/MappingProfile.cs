@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DonationService.Address;
+using DonationService.BloodCenter;
+using DonationService.DonationSlot;
 using DonationService.Donor;
+using DonationService.UnitBag;
 using DonationService.User;
 using DonationService.UserSession;
 
@@ -28,6 +31,9 @@ public class MappingProfile : AutoMapper.Profile
         CreateMap<Donor.Donor, DonorDto>().ReverseMap();
         CreateMap<Donor.Donor, DonorFetchDto>().ReverseMap();
         CreateMap<Address.Address, AddressDto>().ReverseMap();
+        CreateMap<BloodCenter.BloodCenter, BloodCenterDto>().ReverseMap();
+        CreateMap<DonationSlot.DonationSlot, DonationSlotDto>().ReverseMap();
+        CreateMap<UnitBag.UnitBag, UnitBagDto>().ReverseMap();
 
         // User sessions
         CreateMap<UserSessionDto, UserSession.UserSession>()

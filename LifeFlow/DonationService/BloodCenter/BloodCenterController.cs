@@ -26,11 +26,20 @@ public class BloodCenterController(
     [HttpPost]
     [ProducesResponseType(typeof(BloodCenterDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
-    [Authorize(Policy = "AdminPolicy")]
+    // [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> Add([FromBody] BloodCenterDto bloodCenterDto)
     {
-        var createdBloodCenter = await bloodCenterService.Add(bloodCenterDto);
-        return StatusCode(StatusCodes.Status201Created, createdBloodCenter);
+        try
+        {
+            await bloodCenterService.GetCenterByName(bloodCenterDto.Name);
+        }
+        catch (InvalidOperationException)
+        {
+            var createdBloodCenter = await bloodCenterService.Add(bloodCenterDto);
+            return StatusCode(StatusCodes.Status201Created, createdBloodCenter);
+        }
+
+        return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, "Center name must be unique"));
     }
 
     /// <summary>
@@ -155,13 +164,13 @@ public class BloodCenterController(
     {
         try
         {
-            var centers = await bloodCenterService.GetCenterByName(name);
-            return Ok(centers);
+            var center = await bloodCenterService.GetCenterByName(name);
+            return Ok(center);
         }
-        catch (Exception ex)
+        catch (InvalidOperationException ex)
         {
             WatchLogger.LogError(ex.Message);
-            return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
+            return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, "No center present with the name"));
         }
     }
 

@@ -30,6 +30,7 @@ public class DonorController(
     {
         try
         {
+            validator.ValidateUserPrivilege(User.Claims, userId);
             var donor = await donorService.GetByUserId(userId);
             return Ok(donor);
         }
@@ -98,7 +99,8 @@ public class DonorController(
     /// <returns>A list of nearby donors with the specified blood type.</returns>
     [HttpGet("location/bloodType")]
     [ProducesResponseType(typeof(List<DonorFetchDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetByLocationAndBloodType(double lat, double lon, AntigenType bloodType, BloodSubtype subtype)
+    public async Task<IActionResult> GetByLocationAndBloodType(double lat, double lon, AntigenType bloodType,
+        BloodSubtype subtype)
     {
         var donors = await donorService.GetByLocationAndBloodType(lat, lon, bloodType, subtype);
         return Ok(donors);
@@ -140,11 +142,30 @@ public class DonorController(
     [HttpPost]
     [ProducesResponseType(typeof(DonorDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
-    [Authorize(Policy = "AdminPolicy")]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status403Forbidden)]
+    [Authorize(Policy = "Donor")]
     public async Task<IActionResult> Add([FromBody] DonorDto donorDto)
     {
-        var createdDonor = await donorService.Add(donorDto);
-        return StatusCode(StatusCodes.Status201Created, createdDonor);
+        var usedId = validator.ValidateAndGetUserId(User.Claims);
+        if (usedId != donorDto.UserId)
+        {
+            return StatusCode(403,
+                new ErrorModel(StatusCodes.Status403Forbidden, "You can't make donor profile for another user"));
+        }
+
+        try
+        {
+            var createdDonor = await donorService.Add(donorDto);
+            return StatusCode(StatusCodes.Status201Created, createdDonor);
+        }
+        catch (DuplicateRequestException e)
+        {
+            return StatusCode(400, new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(400, new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
+        }
     }
 
     /// <summary>
