@@ -23,7 +23,7 @@ public class BloodCenterService(
             if (distance <= 50)
             {
                 var tmp = mapper.Map<BloodCenterFetchDto>(c);
-                tmp.Distance = distance;
+                tmp.Distance = Math.Truncate(distance * 100)/100;
                 distancedCenters.Add(tmp);
             }
         });

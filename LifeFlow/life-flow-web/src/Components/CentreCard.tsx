@@ -1,4 +1,8 @@
-import { TimeSpan } from "../types/TimeSpan";
+import {
+  formatTimeSpan12Hour,
+  parseTimeSpan,
+  TimeSpan,
+} from "../types/TimeSpanAsserts";
 
 interface BloodCenterProps {
   name: string;
@@ -15,6 +19,8 @@ function CentreCard({
   rbc = 0,
   capacity = 1,
   address = "Kumarn stree, velumqani, chennai, tamilnadu. 73728",
+  openBy = parseTimeSpan("09:00:00"),
+  closeBy = parseTimeSpan("18:00:00"),
 }: BloodCenterProps) {
   return (
     <div className="card-body bg-base-100 h-fit rounded-btn">
@@ -23,13 +29,16 @@ function CentreCard({
         Located in {distance} from you. {address}
       </p>
       <div className="flex gap-2">
-        <div className="badge badge-info">{distance}</div>
         <div className="badge badge-info">
-          blood in stock: {rbc}/{capacity}
+          stock: {rbc}/{capacity}
+        </div>
+        <div className="badge badge-info">
+          {" "}
+          from {formatTimeSpan12Hour(openBy)}
+          to {formatTimeSpan12Hour(closeBy)}
         </div>
       </div>
       <div className="card-actions justify-end">
-        <button className="btn btn-secondary">See in map</button>
         <button className="btn btn-primary">
           Donate Here / Request for Blood ( if hospital login )
         </button>
