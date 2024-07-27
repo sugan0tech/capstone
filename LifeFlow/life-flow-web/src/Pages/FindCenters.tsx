@@ -5,35 +5,9 @@ import MapLeaflet from "../Components/MapLeaflet";
 import UserStatus from "../Components/UserStatus";
 import { useApplication } from "../contexts/ApplicationContext";
 import { get } from "../utils/apiService";
-import { parseTimeSpan, TimeSpan } from "../types/TimeSpanAsserts";
+import { parseTimeSpan } from "../types/TimeSpanAsserts";
+import {BloodCenter, BloodCenterApiResponse} from "../types/BloodCenter.ts";
 
-interface BloodCenterApiResponse {
-  id: number;
-  name: string;
-  latitude: string;
-  longitude: string;
-  unitsCapacity: number;
-  rbcUnits: number;
-  plateletsUnits: number;
-  plasmaUnits: number;
-  isCentralReserve: boolean;
-  slotsCapacity: number;
-  openByTime: string;
-  closeByTime: string;
-  distance: number;
-}
-
-interface BloodCenter {
-  id: number;
-  name: string;
-  distance: string;
-  rbc: number;
-  capacity: number;
-  openBy: TimeSpan;
-  closeBy: TimeSpan;
-  latitude: string;
-  longitude: string;
-}
 
 const findCenters = async (
   lat: string,

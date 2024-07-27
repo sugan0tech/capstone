@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
@@ -18,8 +17,6 @@ import BloodCentersInfo from "./Pages/BloodCentersInfo";
 import MyAccount from "./Pages/MyAccount";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <NavBar></NavBar>
@@ -28,10 +25,23 @@ function App() {
         <Route path="/home" element={<Home />}></Route>
         <Route path="/find-centers" element={<FindCenters />}></Route>
         <Route path="/blood-center-info" element={<BloodCentersInfo />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/register" element={<Register />}></Route>
         <Route path="/not-found" element={<NotFound />}></Route>
+        <Route
+          path="/login"
+          element={
+            <AuthenticatedRoute>
+              <Login />
+            </AuthenticatedRoute>
+          }
+        ></Route>
+        <Route
+          path="/register"
+          element={
+            <AuthenticatedRoute>
+              <Register />
+            </AuthenticatedRoute>
+          }
+        ></Route>
         <Route
           path="/my-donations"
           element={
@@ -76,13 +86,6 @@ function App() {
       <Footer></Footer>
     </>
   );
-  /*
-      <button className="btn btn-primary rounded-none">A button</button>
-      <button className="px-6 py-2 font-medium bg-indigo-500 rounded-none hover:bg-indigo-500 text-white w-fit transition-all shadow-[5px_5px_0px_black] active:shadow-none hover:translate-x-[3px] active:translate-y-[3px]">
-        Increase Count
-      </button>
-      <button className="btn w-64 rounded-full">Button</button>
-      */
 }
 
 export default App;

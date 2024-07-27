@@ -11,7 +11,7 @@ namespace DonationService.UserSession;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
-[Authorize]
+// [Authorize]
 public class UserSessionController(
     IUserSessionService userSessionService,
     CustomControllerValidator validator,
@@ -19,7 +19,7 @@ public class UserSessionController(
 {
     [HttpGet]
     [ProducesResponseType(typeof(List<UserSessionDto>), StatusCodes.Status200OK)]
-    [Authorize(Policy = "AdminPolicy")]
+    // [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> GetAll()
     {
         var sessions = await userSessionService.GetAll();

@@ -207,6 +207,11 @@ public class BloodCenterController(
             WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
+        catch (InvalidDonationRequestException ex)
+        {
+            WatchLogger.LogError(ex.Message);
+            return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
+        }
         catch (InvalidOperationException ex)
         {
             WatchLogger.LogError(ex.Message);

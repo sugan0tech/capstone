@@ -2,12 +2,13 @@ using AutoMapper;
 using DonationService.Address.Request;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
+using DonationService.DonationSlot;
 using DonationService.Exceptions;
 using MediatR;
 
 namespace DonationService.Donor;
 
-public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper mapper) : IDonorService
+public class DonorService(IBaseRepo<Donor> repo, IBaseRepo<DonationSlot.DonationSlot> slotRepo, IMediator mediator, IMapper mapper) : IDonorService
 {
     public Task<DonorDto> GetByUserId(int userId)
     {
@@ -120,6 +121,24 @@ public class DonorService(IBaseRepo<Donor> repo, IMediator mediator, IMapper map
         mapper.Map(donorDto, donor);
         donor = await repo.Update(donor);
         return mapper.Map<DonorDto>(donor);
+    }
+
+    public async Task<List<DonationSlotDto>> GetCompletedSlotsByDonor(int donorId)
+    {
+        var donationSlots = await slotRepo.GetAll();
+        var completedSlots = donationSlots.Where(s =>
+                s.DonorId == donorId && s.SlotStatus is SlotStatus.BloodAccepted or SlotStatus.BloodReceived)
+            .ToList();
+        return mapper.Map<List<DonationSlotDto>>(completedSlots);
+    }
+
+    public async Task<DonationSlotDto> GetCurrentSlotsByDonor(int donorId)
+    {
+        var donationSlots = await slotRepo.GetAll();
+        var currSlot = donationSlots.Find(s =>
+                s.DonorId == donorId && s.SlotStatus is SlotStatus.Pending);
+        return mapper.Map<DonationSlotDto>(currSlot);
+        
     }
 
     private double GetDistance(double lat1, double lon1, double lat2, double lon2)

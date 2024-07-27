@@ -1,4 +1,5 @@
 using DonationService.Commons.Enums;
+using DonationService.DonationSlot;
 
 namespace DonationService.Donor;
 
@@ -65,4 +66,7 @@ public interface IDonorService
     /// <param name="donor">The donor details to be updated.</param>
     /// <returns>A <see cref="Task{DonorDto}"/> representing the asynchronous operation, with a <see cref="DonorDto"/> result containing the updated donor's details.</returns>
     Task<DonorDto> Update(DonorDto donor);
+
+    public Task<List<DonationSlotDto>> GetCompletedSlotsByDonor(int donorId);
+    public Task<DonationSlotDto> GetCurrentSlotsByDonor(int donorId);
 }

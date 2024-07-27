@@ -7,21 +7,58 @@ import React, {
 } from "react";
 import useAuthHook from "../hooks/useAuthHook";
 
-export type Role =  "Donor" | "HospitalAdmin" | "CenterAdmin" | "PharmaAdmin" | "Admin";
+export type Role =
+  | "Donor"
+  | "HospitalAdmin"
+  | "CenterAdmin"
+  | "PharmaAdmin"
+  | "Admin";
 export interface User {
   id: number;
+  addressId: number;
   email: string;
   name: string;
   role: Role;
 }
 
+export interface Donor {
+  id: number;
+  userId: number;
+  bloodAntigenType: string;
+  bloodSubType: string;
+  lastDonationTime: string;
+  addressId: number;
+}
+
+export interface Address {
+  id: number;
+  street: string;
+  city: string;
+  state: string;
+  zipcode: string;
+  latitude: string;
+  longitude: string;
+  entityId: number;
+  entityType: string;
+}
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  address: Address | null;
   role: string | null;
-  login: (email: string, password: string, staySigned: boolean) => Promise<void>;
+  login: (
+    email: string,
+    password: string,
+    staySigned: boolean
+  ) => Promise<void>;
   logout: () => void;
-  register: (email: string, name: string, phone: string, password: string, role: string) => Promise<void>;
+  register: (
+    email: string,
+    name: string,
+    phone: string,
+    password: string,
+    role: string
+  ) => Promise<void>;
   verifyOtp: (email: string, otp: string) => Promise<void>;
 }
 
@@ -33,9 +70,12 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { authState, login, logout, register, verifyOtp } = useAuthHook();
-  const [isAuthenticated, setIsAuthenticated] = useState(authState.isAuthenticated);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    authState.isAuthenticated
+  );
   const [user, setUser] = useState<User | null>(authState.user);
   const [role, setRole] = useState<string | null>(authState.role);
+  const [address, setAddress] = useState<Address | null>(authState.address);
 
   useEffect(() => {
     setIsAuthenticated(authState.isAuthenticated);
@@ -44,9 +84,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [authState]);
 
   return (
-      <AuthContext.Provider value={{ user, isAuthenticated, role, login, logout, register, verifyOtp }}>
-        {children}
-      </AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        address,
+        role,
+        login,
+        logout,
+        register,
+        verifyOtp,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

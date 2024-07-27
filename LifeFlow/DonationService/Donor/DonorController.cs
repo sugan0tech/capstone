@@ -200,4 +200,48 @@ public class DonorController(
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+    [HttpGet("history/{donorId}")]
+    [ProducesResponseType(typeof(DonorDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> History(int donorId)
+    {
+        try
+        {
+            var slots = await donorService.GetCompletedSlotsByDonor(donorId);
+            return Ok(slots);
+        }
+        catch (KeyNotFoundException e)
+        {
+            WatchLogger.LogError(e.Message);
+            return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
+        }
+        catch (InvalidUpdateOperationException e)
+        {
+            WatchLogger.LogError(e.Message);
+            return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+    [HttpGet("current/{donorId}")]
+    [ProducesResponseType(typeof(DonorDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCurrentSlot(int donorId)
+    {
+        try
+        {
+            var slot = await donorService.GetCurrentSlotsByDonor(donorId);
+            return Ok(slot);
+        }
+        catch (KeyNotFoundException e)
+        {
+            WatchLogger.LogError(e.Message);
+            return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
+        }
+        catch (InvalidUpdateOperationException e)
+        {
+            WatchLogger.LogError(e.Message);
+            return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
 }

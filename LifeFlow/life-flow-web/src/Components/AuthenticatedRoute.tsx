@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useRoutes } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 interface Props {
@@ -7,8 +7,16 @@ interface Props {
 
 function AuthenticatedRoute({ children }: Props) {
   const { user } = useAuth();
-  console.log("yaaru pa nee");
-  return user ? children : <Navigate to="/login" />;
+  const location = useLocation();
+  if (user == null) {
+    return <Navigate to="/login" />;
+  }
+
+  if (location.pathname == "/login" || location.pathname == "/register") {
+    return <Navigate to="/home" />;
+  }
+
+  return children;
 }
 
 export default AuthenticatedRoute;

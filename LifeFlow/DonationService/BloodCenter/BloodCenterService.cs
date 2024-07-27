@@ -54,11 +54,15 @@ public class BloodCenterService(
     /// <exception cref="NoSlotAvailableException"></exception>
     public async Task<DonationSlotDto> BookAppointment(string centerName, int donorId)
     {
+        var donor = await donorRepo.GetById(donorId);
+        if (donor.LastDonationTime > DateTime.Today.AddMonths(-4))
+            throw new InvalidDonationRequestException("You already have donated blood within 4 past months");
+        
         var bloodCenters = await repo.GetAll();
         var center = bloodCenters.FirstOrDefault(c => c.Name.Equals(centerName, StringComparison.OrdinalIgnoreCase));
         if (center == null)
             throw new KeyNotFoundException($"Blood center with name {centerName} not found");
-        if (center.UnitsCapacity >= center.RBCUnits)
+        if (center.UnitsCapacity <= center.RBCUnits)
         {
             throw new CenterAtMaxCapacityException($"Thank God, {centerName} has enough to serve the humanity today");
         }
