@@ -1,6 +1,6 @@
 namespace DonationService.Exceptions;
 
-public class InvalidDonationRequestException: Exception
+public class InvalidDonationRequestException : Exception
 {
     public InvalidDonationRequestException()
     {

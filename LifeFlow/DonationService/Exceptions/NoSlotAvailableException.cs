@@ -1,6 +1,6 @@
 namespace DonationService.Exceptions;
 
-public class NoSlotAvailableException: Exception
+public class NoSlotAvailableException : Exception
 {
     public NoSlotAvailableException()
     {

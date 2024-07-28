@@ -1,8 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DonationService.Auth.Dto;
 using DonationService.Exceptions;
-using DonationService.User;
+using DonationService.Features.User;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DonationService.Auth;
@@ -11,7 +12,7 @@ public class TokenService : ITokenService
 {
     private readonly SymmetricSecurityKey _key;
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public TokenService(IConfiguration configuration)
     {
         var secretKey = configuration.GetSection("TokenKey").GetSection("JWT").Value;
@@ -20,14 +21,14 @@ public class TokenService : ITokenService
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public string GenerateToken(UserDto user, DateTime expiration)
     {
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.UserId.ToString()),
             new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Role, user.Role.ToString())
+            new(ClaimTypes.Role, user.Role)
         };
         var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
         var myToken = new JwtSecurityToken(null, null, claims, expires: expiration,
@@ -36,13 +37,13 @@ public class TokenService : ITokenService
         return token;
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public string GenerateAccessToken(UserDto user)
     {
         return GenerateToken(user, DateTime.Now.AddMinutes(1)); // Short-lived access token
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public string GenerateRefreshToken(UserDto user, bool shortLived)
     {
         var claims = new List<Claim>
@@ -59,7 +60,7 @@ public class TokenService : ITokenService
         return token;
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public AuthReturnDto GenerateTokens(UserDto user, bool shortLived)
     {
         var accessToken = GenerateToken(user, DateTime.Now.AddMinutes(300)); // Short-lived access token
@@ -67,7 +68,7 @@ public class TokenService : ITokenService
         return new AuthReturnDto { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public PayloadDto GetPayload(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

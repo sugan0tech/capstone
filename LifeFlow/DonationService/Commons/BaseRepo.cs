@@ -3,17 +3,17 @@
 namespace DonationService.Commons;
 
 /// <summary>
-/// A base repository implementation for entities.
-/// Repo version 2 , Async improvement from older version.
-/// Just changed all the .Result call with await and
-/// removed locks ( since not needed for EF )
+///     A base repository implementation for entities.
+///     Repo version 2 , Async improvement from older version.
+///     Just changed all the .Result call with await and
+///     removed locks ( since not needed for EF )
 /// </summary>
 /// <typeparam name="TBaseEntity">The type of the entity.</typeparam>
 public abstract class BaseRepo<TBaseEntity>(DonationServiceContext context)
     : IBaseRepo<TBaseEntity> where TBaseEntity : BaseEntity
 {
     /// <summary>
-    /// Retrieves an entity by its unique identifier asynchronously.
+    ///     Retrieves an entity by its unique identifier asynchronously.
     /// </summary>
     /// <param name="id">The unique identifier of the entity to retrieve.</param>
     /// <returns>The entity with the specified identifier.</returns>
@@ -28,7 +28,7 @@ public abstract class BaseRepo<TBaseEntity>(DonationServiceContext context)
     }
 
     /// <summary>
-    /// Retrieves all entities asynchronously.
+    ///     Retrieves all entities asynchronously.
     /// </summary>
     /// <returns>A list of all entities.</returns>
     public Task<List<TBaseEntity>> GetAll()
@@ -37,7 +37,7 @@ public abstract class BaseRepo<TBaseEntity>(DonationServiceContext context)
     }
 
     /// <summary>
-    /// Adds a new entity asynchronously.
+    ///     Adds a new entity asynchronously.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
     /// <returns>The added entity.</returns>
@@ -54,7 +54,7 @@ public abstract class BaseRepo<TBaseEntity>(DonationServiceContext context)
     }
 
     /// <summary>
-    /// Updates an existing entity asynchronously.
+    ///     Updates an existing entity asynchronously.
     /// </summary>
     /// <param name="updateEntity">The entity to update.</param>
     /// <returns>The updated entity.</returns>
@@ -75,7 +75,7 @@ public abstract class BaseRepo<TBaseEntity>(DonationServiceContext context)
     }
 
     /// <summary>
-    /// Deletes an entity by its unique identifier asynchronously.
+    ///     Deletes an entity by its unique identifier asynchronously.
     /// </summary>
     /// <param name="id">The unique identifier of the entity to delete.</param>
     public async Task<TBaseEntity> DeleteById(int id)

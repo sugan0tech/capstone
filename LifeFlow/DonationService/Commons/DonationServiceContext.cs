@@ -1,22 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DonationService.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DonationService.Commons;
 
 public class DonationServiceContext(DbContextOptions<DonationServiceContext> options) : DbContext(options)
 {
-    public DbSet<DonationService.User.User> Users { get; set; }
-    public DbSet<DonationService.Address.Address> Addresses { get; set; }
-    public DbSet<Donor.Donor> Donors { get; set; }
-    public DbSet<BloodCenter.BloodCenter> BloodCenters { get; set; }
-    public DbSet<DonationSlot.DonationSlot> DonationSlots { get; set; }
-    public DbSet<UnitBag.UnitBag> UnitBags { get; set; }
-    public DbSet<UserSession.UserSession> UserSessions { get; set; }
+    public DbSet<Entities.User> Users { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<Entities.Donor> Donors { get; set; }
+    public DbSet<Entities.BloodCenter> BloodCenters { get; set; }
+    public DbSet<Entities.DonationSlot> DonationSlots { get; set; }
+    public DbSet<Entities.UnitBag> UnitBags { get; set; }
+    public DbSet<Entities.UserSession> UserSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         #region Address
 
-        modelBuilder.Entity<Address.Address>(entity =>
+        modelBuilder.Entity<Address>(entity =>
         {
             entity.HasKey(a => a.Id);
             entity.Property(a => a.Street).IsRequired().HasMaxLength(255);
@@ -34,37 +35,37 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 
         #region User
 
-        modelBuilder.Entity<DonationService.User.User>();
+        modelBuilder.Entity<Entities.User>();
 
         #endregion
 
         #region Donors
 
-        modelBuilder.Entity<Donor.Donor>().HasIndex(donor => donor.UserId).IsUnique();
+        modelBuilder.Entity<Entities.Donor>().HasIndex(donor => donor.UserId).IsUnique();
 
         #endregion
 
         #region UserSession
 
-        modelBuilder.Entity<UserSession.UserSession>();
+        modelBuilder.Entity<Entities.UserSession>();
 
         #endregion
 
         #region BloodCenter
 
-        modelBuilder.Entity<BloodCenter.BloodCenter>().HasIndex(center => center.Name).IsUnique();
+        modelBuilder.Entity<Entities.BloodCenter>().HasIndex(center => center.Name).IsUnique();
 
         #endregion
 
         #region DonationSlot
 
-        modelBuilder.Entity<DonationSlot.DonationSlot>();
+        modelBuilder.Entity<Entities.DonationSlot>();
 
         #endregion
 
         #region UnitBags
 
-        modelBuilder.Entity<UnitBag.UnitBag>();
+        modelBuilder.Entity<Entities.UnitBag>();
 
         #endregion
 
@@ -74,11 +75,9 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
                 .Where(p => p.PropertyType.IsEnum);
 
             foreach (var property in enumProperties)
-            {
                 modelBuilder.Entity(entityType.Name)
                     .Property(property.Name)
                     .HasConversion<string>();
-            }
         }
     }
 }

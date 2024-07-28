@@ -1,24 +1,27 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using DonationService.Address;
-using DonationService.Address.Command;
-using DonationService.Address.Query;
 using DonationService.Auth;
-using DonationService.BloodCenter;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Commons.Services;
 using DonationService.Commons.Validations;
-using DonationService.DonationSlot;
-using DonationService.Donor;
-using DonationService.UnitBag;
-using DonationService.User;
-using DonationService.UserSession;
+using DonationService.Entities;
+using DonationService.Features.Address;
+using DonationService.Features.Address.Command;
+using DonationService.Features.Address.Query;
+using DonationService.Features.BloodCenter;
+using DonationService.Features.DonationSlot;
+using DonationService.Features.Donor;
+using DonationService.Features.GeoCoding;
+using DonationService.Features.UnitBag;
+using DonationService.Features.User;
+using DonationService.Features.UserSession;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WatchDog;
+using WatchDog.src.Enums;
 
 namespace DonationService;
 
@@ -41,7 +44,7 @@ public class Program
         builder.Services.AddLogging(l => l.AddLog4Net());
         builder.Services.AddSwaggerGen(option =>
         {
-            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
@@ -88,7 +91,7 @@ public class Program
         builder.Services.AddWatchDogServices(opt =>
         {
             opt.SetExternalDbConnString = builder.Configuration.GetConnectionString("eventStore");
-            opt.DbDriverOption = WatchDog.src.Enums.WatchDogDbDriverEnum.MSSQL;
+            opt.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
         });
 
         #endregion
@@ -96,13 +99,13 @@ public class Program
 
         #region repos
 
-        builder.Services.AddScoped<IBaseRepo<Address.Address>, AddressRepo>();
-        builder.Services.AddScoped<IBaseRepo<User.User>, UserRepo>();
-        builder.Services.AddScoped<IBaseRepo<UserSession.UserSession>, UserSessionRepo>();
-        builder.Services.AddScoped<IBaseRepo<Donor.Donor>, DonorRepo>();
-        builder.Services.AddScoped<IBaseRepo<BloodCenter.BloodCenter>, BloodCenterRepo>();
-        builder.Services.AddScoped<IBaseRepo<DonationSlot.DonationSlot>, DonationSlotRepo>();
-        builder.Services.AddScoped<IBaseRepo<UnitBag.UnitBag>, UnitBagRepo>();
+        builder.Services.AddScoped<IBaseRepo<Address>, AddressRepo>();
+        builder.Services.AddScoped<IBaseRepo<Entities.User>, UserRepo>();
+        builder.Services.AddScoped<IBaseRepo<Entities.UserSession>, UserSessionRepo>();
+        builder.Services.AddScoped<IBaseRepo<Entities.Donor>, DonorRepo>();
+        builder.Services.AddScoped<IBaseRepo<Entities.BloodCenter>, BloodCenterRepo>();
+        builder.Services.AddScoped<IBaseRepo<Entities.DonationSlot>, DonationSlotRepo>();
+        builder.Services.AddScoped<IBaseRepo<Entities.UnitBag>, UnitBagRepo>();
 
         #endregion
 
@@ -114,8 +117,8 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped<IBaseService<UnitBag.UnitBag, UnitBagDto>, UnitBagService>();
-        builder.Services.AddScoped<IBaseService<DonationSlot.DonationSlot, DonationSlotDto>, DonationSlotService>();
+        builder.Services.AddScoped<IBaseService<Entities.UnitBag, UnitBagDto>, UnitBagService>();
+        builder.Services.AddScoped<IBaseService<Entities.DonationSlot, DonationSlotDto>, DonationSlotService>();
         builder.Services.AddScoped<BloodCenterService>();
         builder.Services.AddScoped<GeocodingService>();
 
@@ -134,6 +137,7 @@ public class Program
         builder.Services.AddScoped<EmailService>();
 
         builder.Services.AddHttpClient<GeocodingService>();
+
         #endregion
 
         #region AuthConfig

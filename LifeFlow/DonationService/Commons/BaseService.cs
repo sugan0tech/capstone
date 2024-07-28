@@ -4,7 +4,7 @@ using WatchDog;
 namespace DonationService.Commons;
 
 /// <summary>
-/// A base service implementation for entities.
+///     A base service implementation for entities.
 /// </summary>
 /// <typeparam name="TBaseEntity">The type of the entity.</typeparam>
 public abstract class BaseService<TBaseEntity, TDTO>(
@@ -13,7 +13,7 @@ public abstract class BaseService<TBaseEntity, TDTO>(
     : IBaseService<TBaseEntity, TDTO> where TBaseEntity : BaseEntity
 {
     /// <summary>
-    /// Retrieves an entity by its unique identifier asynchronously.
+    ///     Retrieves an entity by its unique identifier asynchronously.
     /// </summary>
     /// <param name="id">The unique identifier of the entity to retrieve.</param>
     /// <returns>The entity with the specified identifier.</returns>
@@ -33,7 +33,7 @@ public abstract class BaseService<TBaseEntity, TDTO>(
     }
 
     /// <summary>
-    /// Retrieves all entities asynchronously.
+    ///     Retrieves all entities asynchronously.
     /// </summary>
     /// <returns>A list of all entities.</returns>
     public async Task<List<TDTO>> GetAll()
@@ -43,7 +43,7 @@ public abstract class BaseService<TBaseEntity, TDTO>(
     }
 
     /// <summary>
-    /// Adds a new entity asynchronously.
+    ///     Adds a new entity asynchronously.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
     /// <returns>The added entity.</returns>
@@ -55,7 +55,7 @@ public abstract class BaseService<TBaseEntity, TDTO>(
     }
 
     /// <summary>
-    /// Updates an existing entity asynchronously.
+    ///     Updates an existing entity asynchronously.
     /// </summary>
     /// <param name="updateEntity">The entity to update.</param>
     /// <returns>The updated entity.</returns>
@@ -74,7 +74,7 @@ public abstract class BaseService<TBaseEntity, TDTO>(
     }
 
     /// <summary>
-    /// Deletes an entity by its unique identifier asynchronously.
+    ///     Deletes an entity by its unique identifier asynchronously.
     /// </summary>
     /// <param name="id">The unique identifier of the entity to delete.</param>
     /// <returns>The deleted entity.</returns>

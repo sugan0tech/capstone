@@ -1,12 +1,11 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using DonationService.Commons.Enums;
+using DonationService.Auth.Dto;
 using DonationService.Commons.Services;
 using DonationService.Exceptions;
-using DonationService.User;
-using DonationService.UserSession;
+using DonationService.Features.User;
+using DonationService.Features.UserSession;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.JSInterop.Infrastructure;
 using OtpNet;
 
 namespace DonationService.Auth;
@@ -20,7 +19,7 @@ public class AuthService(
     IHttpContextAccessor httpContextAccessor,
     ILogger<AuthService> logger) : IAuthService
 {
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public async Task<AuthReturnDto> Login(LoginDTO loginDto)
     {
         try
@@ -83,13 +82,13 @@ public class AuthService(
             $"Your new password is {newPasswordPlain}. Please change it after logging in.");
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public async Task Logout(string accessToken)
     {
         await userSessionService.Invalidate(accessToken);
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public async Task<AuthReturnDto> GetAccessToken(string refreshToken)
     {
         try
@@ -117,7 +116,7 @@ public class AuthService(
         }
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public async Task<UserDto> Register(RegisterDTO dto)
     {
         try
@@ -161,7 +160,7 @@ public class AuthService(
         return status;
     }
 
-    /// <intheritdoc/>
+    /// <intheritdoc />
     public async Task<AuthReturnDto> ResetPassword(ResetPasswordDto resetPasswordDto)
     {
         try

@@ -1,6 +1,6 @@
 namespace DonationService.Exceptions;
 
-public class OutOfServiceException: Exception
+public class OutOfServiceException : Exception
 {
     public OutOfServiceException()
     {

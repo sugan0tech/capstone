@@ -1,6 +1,6 @@
 namespace DonationService.Exceptions;
 
-public class CenterAtMaxCapacityException: Exception
+public class CenterAtMaxCapacityException : Exception
 {
     public CenterAtMaxCapacityException()
     {

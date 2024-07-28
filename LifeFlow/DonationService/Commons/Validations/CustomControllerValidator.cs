@@ -1,17 +1,17 @@
 ﻿using System.Security.Claims;
 using DonationService.Exceptions;
-using DonationService.User;
+using DonationService.Features.User;
 
 namespace DonationService.Commons.Validations;
 
 /// <summary>
-/// Service provides validations with user token and api parameter, else throws respective exceptions.
+///     Service provides validations with user token and api parameter, else throws respective exceptions.
 /// </summary>
 /// <param name="userService"></param>
 public class CustomControllerValidator(IUserService userService)
 {
     /// <summary>
-    ///  Validates parameter User id with logged user privilege
+    ///     Validates parameter User id with logged user privilege
     /// </summary>
     /// <param name="claims"></param>
     /// <param name="parameterUserId"></param>
@@ -23,7 +23,7 @@ public class CustomControllerValidator(IUserService userService)
         var role = enumerable.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
         var email = enumerable.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
         if (role is "RefreshToken")
-            throw new AuthenticationException($"Using Refresh Token type is prohibitted");
+            throw new AuthenticationException("Using Refresh Token type is prohibitted");
         if (role is "Admin")
             return;
         if (usrId != null && parameterUserId.Equals(int.Parse(usrId)))
@@ -33,7 +33,7 @@ public class CustomControllerValidator(IUserService userService)
     }
 
     /// <summary>
-    ///  Validate User.
+    ///     Validate User.
     /// </summary>
     /// <param name="claims"></param>
     /// <param name="ids"></param>
@@ -53,7 +53,7 @@ public class CustomControllerValidator(IUserService userService)
     }
 
     /// <summary>
-    ///  Validate User.
+    ///     Validate User.
     /// </summary>
     /// <param name="claims"></param>
     /// <exception cref="AuthenticationException"></exception>
@@ -63,13 +63,13 @@ public class CustomControllerValidator(IUserService userService)
         var usrId = enumerable.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
         var role = enumerable.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
         if (role is "RefreshToken")
-            throw new AuthenticationException($"Using Refresh Token type is prohibited");
+            throw new AuthenticationException("Using Refresh Token type is prohibited");
         if (usrId != null)
         {
             var userId = int.Parse(usrId);
             return userId;
         }
 
-        throw new AuthenticationException($"Something fishy with the token, unable to verify at this moment");
+        throw new AuthenticationException("Something fishy with the token, unable to verify at this moment");
     }
 }

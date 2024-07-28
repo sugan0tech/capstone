@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DonationService.Auth.Dto;
 using DonationService.Commons;
 using DonationService.Exceptions;
-using DonationService.User;
+using DonationService.Features.User;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

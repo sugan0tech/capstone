@@ -1,11 +1,12 @@
-﻿using DonationService.User;
+﻿using DonationService.Auth.Dto;
+using DonationService.Features.User;
 
 namespace DonationService.Auth;
 
 public interface ITokenService
 {
     /// <summary>
-    ///  Generates JWT token with given user & expiration
+    ///     Generates JWT token with given user & expiration
     /// </summary>
     /// <param name="user"></param>
     /// <param name="expiration"></param>
@@ -13,14 +14,14 @@ public interface ITokenService
     public string GenerateToken(UserDto user, DateTime expiration);
 
     /// <summary>
-    ///  Generates Access Token
+    ///     Generates Access Token
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
     public string GenerateAccessToken(UserDto user);
 
     /// <summary>
-    ///  Generates Refersh Token
+    ///     Generates Refersh Token
     /// </summary>
     /// <param name="user"></param>
     /// <param name="shortLived"></param>
@@ -28,7 +29,7 @@ public interface ITokenService
     public string GenerateRefreshToken(UserDto user, bool shortLived);
 
     /// <summary>
-    /// Generates sets of JWT token ( access & refresh )
+    ///     Generates sets of JWT token ( access & refresh )
     /// </summary>
     /// <param name="user"></param>
     /// <param name="shortLived"></param>
@@ -36,7 +37,7 @@ public interface ITokenService
     public AuthReturnDto GenerateTokens(UserDto user, bool shortLived);
 
     /// <summary>
-    /// Extracts and returns payload of a token
+    ///     Extracts and returns payload of a token
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>

@@ -1,6 +1,6 @@
 namespace DonationService.Exceptions;
 
-public class InvalidEntityTypeException: Exception
+public class InvalidEntityTypeException : Exception
 {
     public InvalidEntityTypeException()
     {

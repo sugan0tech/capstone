@@ -1,6 +1,6 @@
 namespace DonationService.Exceptions;
 
-public class InvalidUpdateOperationException: Exception
+public class InvalidUpdateOperationException : Exception
 {
     public InvalidUpdateOperationException()
     {

@@ -1,16 +1,20 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DonationService.Address;
-using DonationService.BloodCenter;
-using DonationService.DonationSlot;
-using DonationService.Donor;
-using DonationService.UnitBag;
-using DonationService.User;
-using DonationService.UserSession;
+using AutoMapper;
+using DonationService.Auth;
+using DonationService.Auth.Dto;
+using DonationService.Entities;
+using DonationService.Features.Address;
+using DonationService.Features.BloodCenter;
+using DonationService.Features.DonationSlot;
+using DonationService.Features.Donor;
+using DonationService.Features.UnitBag;
+using DonationService.Features.User;
+using DonationService.Features.UserSession;
 
 namespace DonationService;
 
 [ExcludeFromCodeCoverage]
-public class MappingProfile : AutoMapper.Profile
+public class MappingProfile : Profile
 {
     public MappingProfile()
     {
@@ -18,48 +22,48 @@ public class MappingProfile : AutoMapper.Profile
         CreateMap<int?, int>().ConvertUsing((src, dest) => src ?? dest);
 
         // User mappings
-        CreateMap<User.User, UserDto>()
+        CreateMap<Entities.User, UserDto>()
             .ForMember(dto => dto.UserId, act => act.MapFrom(src => src.Id))
             .ForAllMembers(opts => { opts.Condition((src, dest, srcMember) => srcMember != null); });
-        CreateMap<UserDto, User.User>()
+        CreateMap<UserDto, Entities.User>()
             .ForMember(entity => entity.Id, act => act.MapFrom(dto => dto.UserId))
             .ForMember(entity => entity.Password, opt => opt.Condition(src => src.Password is { Length: > 0 }))
             .ForMember(entity => entity.HashKey, opt => opt.Condition(src => src.HashKey is { Length: > 0 }))
             .ForAllMembers(opts => { opts.Condition((src, dest, srcMember) => srcMember != null); });
 
-        CreateMap<User.User, RegisterDTO>().ReverseMap();
-        
-        CreateMap<Donor.Donor, DonorDto>()
+        CreateMap<Entities.User, RegisterDTO>().ReverseMap();
+
+        CreateMap<Entities.Donor, DonorDto>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<DonorDto, Donor.Donor>()
+        CreateMap<DonorDto, Entities.Donor>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        
-        CreateMap<Donor.Donor, DonorFetchDto>().ReverseMap();
-        
-        CreateMap<Address.Address, AddressDto>()
+
+        CreateMap<Entities.Donor, DonorFetchDto>().ReverseMap();
+
+        CreateMap<Address, AddressDto>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<AddressDto, Address.Address>()
+        CreateMap<AddressDto, Address>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        
-        CreateMap<BloodCenter.BloodCenter, BloodCenterDto>()
+
+        CreateMap<Entities.BloodCenter, BloodCenterDto>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<BloodCenterDto, BloodCenter.BloodCenter>()
+        CreateMap<BloodCenterDto, Entities.BloodCenter>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<BloodCenter.BloodCenter, BloodCenterFetchDto>().ReverseMap();
-        
-        CreateMap<DonationSlot.DonationSlot, DonationSlotDto>()
+        CreateMap<Entities.BloodCenter, BloodCenterFetchDto>().ReverseMap();
+
+        CreateMap<Entities.DonationSlot, DonationSlotDto>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<DonationSlotDto, DonationSlot.DonationSlot>()
+        CreateMap<DonationSlotDto, Entities.DonationSlot>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<UnitBag.UnitBag, UnitBagDto>()
+        CreateMap<Entities.UnitBag, UnitBagDto>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<UnitBagDto, UnitBag.UnitBag>()
+        CreateMap<UnitBagDto, Entities.UnitBag>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
         // User sessions
-        CreateMap<UserSessionDto, UserSession.UserSession>()
+        CreateMap<UserSessionDto, Entities.UserSession>()
             .ForMember(entity => entity.Id, act => act.MapFrom(dto => dto.SessionId));
-        CreateMap<UserSession.UserSession, UserSessionDto>()
+        CreateMap<Entities.UserSession, UserSessionDto>()
             .ForMember(dto => dto.SessionId, act => act.MapFrom(src => src.Id));
     }
 }
