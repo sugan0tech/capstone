@@ -1,13 +1,12 @@
 import { useState } from "react";
 import {
-  login as apiLogin,
   logout as apiLogout,
-  register as apiRegister,
-  verifyOtp as apiVerifyOtp,
   setAuthTokens,
   get,
 } from "../utils/apiService";
+import { login as apiLogin, register as apiRegister, verifyOtp as apiVerifyOtp } from "../utils/authApiService";
 import { Address, Donor, Role, User } from "../contexts/AuthContext.tsx";
+import axios from "axios";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -47,13 +46,11 @@ const useAuthHook = () => {
         const donor = await get<Donor>("Donor/" + data.user.userId);
         address = await get<Address>("Address/" + donor.addressId);
         localStorage.setItem("Donor", JSON.stringify(donor));
+        localStorage.setItem("address", JSON.stringify(address));
       }
-      // const role = parseJwt(data.accessToken)[
-      //     "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-      //     ];
+
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("address", JSON.stringify(address));
       setAuthState({
         isAuthenticated: true,
         role,
@@ -62,6 +59,14 @@ const useAuthHook = () => {
       });
     } catch (error) {
       console.error("Login failed:", error);
+      if (axios.isAxiosError(error) && error.response) {
+        throw {
+          status: error.response.status,
+          message: error.response.data.message || "Login failed",
+          data: error.response.data,
+        };
+      }
+
       throw error;
     }
   };

@@ -31,7 +31,7 @@ public class BloodCenterService(
         {
             throw new OutOfServiceException("Sorry currently we are not serving in this region");
         }
-        return distancedCenters;
+        return distancedCenters.OrderBy(c => c.Distance).Take(5).ToList();
     }
 
     public async Task<BloodCenterDto> GetCenterByName(string name)

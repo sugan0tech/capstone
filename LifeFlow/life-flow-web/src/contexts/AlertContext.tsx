@@ -15,9 +15,7 @@ interface AlertContextType {
 }
 
 // Create a Context for the alert
-const AlertContext = createContext<AlertContextType>((alert: Alert) => {
-  console.log("Alert Context");
-});
+const AlertContext = createContext<AlertContextType | undefined>(undefined);
 
 export const useAlert = () => useContext(AlertContext);
 

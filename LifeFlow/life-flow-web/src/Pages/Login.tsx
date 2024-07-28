@@ -20,11 +20,12 @@ function Login() {
       addAlert({ message: "Login successful!", type: "success" });
       navigate("/home");
     } catch (error) {
+
+      const msg = error.status == 404 ? "User Not found" : error.message;
       addAlert({
-        message: "Login failed. Please try again." + error,
-        type: "warning",
+        message: msg,
+        type: "error",
       });
-      console.log(error);
     }
   };
 

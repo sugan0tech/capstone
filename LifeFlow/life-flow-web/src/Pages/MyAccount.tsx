@@ -11,8 +11,6 @@ import { EditUserInfo } from "../Components/User/EditUserInfo";
 import { ResetPassword } from "../Components/User/ResetPassword";
 import LoggedInDevices from "../Components/User/LoggedInDevices";
 
-export interface Address {}
-
 function MyAccount() {
   const { user } = useAuth();
   const [donorInfo, setDonorInfo] = useState<Donor | null>(null);
