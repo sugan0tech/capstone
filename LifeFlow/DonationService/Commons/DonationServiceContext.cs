@@ -1,17 +1,28 @@
 ﻿using DonationService.Entities;
+using DonationService.Features.Client;
+using DonationService.Features.Orders;
+using DonationService.Features.Payment;
 using Microsoft.EntityFrameworkCore;
 
 namespace DonationService.Commons;
 
 public class DonationServiceContext(DbContextOptions<DonationServiceContext> options) : DbContext(options)
 {
-    public DbSet<Entities.User> Users { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Address> Addresses { get; set; }
-    public DbSet<Entities.Donor> Donors { get; set; }
-    public DbSet<Entities.BloodCenter> BloodCenters { get; set; }
-    public DbSet<Entities.DonationSlot> DonationSlots { get; set; }
-    public DbSet<Entities.UnitBag> UnitBags { get; set; }
-    public DbSet<Entities.UserSession> UserSessions { get; set; }
+    public DbSet<Donor> Donors { get; set; }
+    public DbSet<BloodCenter> BloodCenters { get; set; }
+    public DbSet<DonationSlot> DonationSlots { get; set; }
+    public DbSet<UnitBag> UnitBags { get; set; }
+    public DbSet<UserSession> UserSessions { get; set; }
+
+    #region OrderService
+
+    public DbSet<Client> Clients { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+
+    #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,37 +46,69 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 
         #region User
 
-        modelBuilder.Entity<Entities.User>();
+        modelBuilder.Entity<User>();
 
         #endregion
 
         #region Donors
 
-        modelBuilder.Entity<Entities.Donor>().HasIndex(donor => donor.UserId).IsUnique();
+        modelBuilder.Entity<Donor>().HasIndex(donor => donor.UserId).IsUnique();
 
         #endregion
 
         #region UserSession
 
-        modelBuilder.Entity<Entities.UserSession>();
+        modelBuilder.Entity<UserSession>();
 
         #endregion
 
         #region BloodCenter
 
-        modelBuilder.Entity<Entities.BloodCenter>().HasIndex(center => center.Name).IsUnique();
+        modelBuilder.Entity<BloodCenter>().HasIndex(center => center.Name).IsUnique();
 
         #endregion
 
         #region DonationSlot
 
-        modelBuilder.Entity<Entities.DonationSlot>();
+        modelBuilder.Entity<DonationSlot>();
 
         #endregion
 
         #region UnitBags
 
-        modelBuilder.Entity<Entities.UnitBag>();
+        modelBuilder.Entity<UnitBag>();
+
+        #endregion
+
+
+        #region OrderService
+
+        #region Clients
+
+        modelBuilder.Entity<Client>().HasIndex(client => client.Name).IsUnique();
+        modelBuilder.Entity<Client>().HasOne<User>(client => client.User);
+        modelBuilder.Entity<Client>().HasIndex(client => client.ManagedById).IsUnique();
+
+        #endregion
+
+        #region Orders
+
+        modelBuilder.Entity<Order>().HasOne<Client>(order => order.Client).WithMany(client => client.Orders)
+            .HasForeignKey(order => order.ClientId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Order>().HasMany<UnitBag>(order => order.Items);
+        modelBuilder.Entity<Order>().HasOne<Payment>(order => order.Payment).WithOne(payment => payment.Order);
+
+        #endregion
+
+        #region Payment
+
+        modelBuilder.Entity<Payment>()
+            .HasOne<Order>(payment => payment.Order)
+            .WithOne(order => order.Payment)
+            .HasForeignKey<Payment>(payment => payment.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        #endregion
 
         #endregion
 

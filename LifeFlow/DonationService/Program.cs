@@ -100,12 +100,12 @@ public class Program
         #region repos
 
         builder.Services.AddScoped<IBaseRepo<Address>, AddressRepo>();
-        builder.Services.AddScoped<IBaseRepo<Entities.User>, UserRepo>();
-        builder.Services.AddScoped<IBaseRepo<Entities.UserSession>, UserSessionRepo>();
-        builder.Services.AddScoped<IBaseRepo<Entities.Donor>, DonorRepo>();
-        builder.Services.AddScoped<IBaseRepo<Entities.BloodCenter>, BloodCenterRepo>();
-        builder.Services.AddScoped<IBaseRepo<Entities.DonationSlot>, DonationSlotRepo>();
-        builder.Services.AddScoped<IBaseRepo<Entities.UnitBag>, UnitBagRepo>();
+        builder.Services.AddScoped<IBaseRepo<User>, UserRepo>();
+        builder.Services.AddScoped<IBaseRepo<UserSession>, UserSessionRepo>();
+        builder.Services.AddScoped<IBaseRepo<Donor>, DonorRepo>();
+        builder.Services.AddScoped<IBaseRepo<BloodCenter>, BloodCenterRepo>();
+        builder.Services.AddScoped<IBaseRepo<DonationSlot>, DonationSlotRepo>();
+        builder.Services.AddScoped<IBaseRepo<UnitBag>, UnitBagRepo>();
 
         #endregion
 
@@ -117,8 +117,8 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped<IBaseService<Entities.UnitBag, UnitBagDto>, UnitBagService>();
-        builder.Services.AddScoped<IBaseService<Entities.DonationSlot, DonationSlotDto>, DonationSlotService>();
+        builder.Services.AddScoped<IBaseService<UnitBag, UnitBagDto>, UnitBagService>();
+        builder.Services.AddScoped<IBaseService<DonationSlot, DonationSlotDto>, DonationSlotService>();
         builder.Services.AddScoped<BloodCenterService>();
         builder.Services.AddScoped<GeocodingService>();
 
