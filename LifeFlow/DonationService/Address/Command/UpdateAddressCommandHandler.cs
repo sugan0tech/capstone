@@ -8,10 +8,10 @@ public class UpdateAddressCommandHandler(IBaseRepo<Address> repository, IMapper 
 {
     public async Task Handle(UpdateAddressCommand command)
     {
-        var address = await repository.GetById(command.Address.Id);
-        if (address == null) throw new KeyNotFoundException();
+        // var address = await repository.GetById(command.Address.Id);
+        // if (address == null) throw new KeyNotFoundException();
 
-        mapper.Map(address, command.Address);
+        var address = mapper.Map<Address>(command.Address);
 
         await repository.Update(address);
     }

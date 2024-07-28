@@ -71,8 +71,11 @@ const AlertProvider = ({ children }: AuthProviderProps) => {
             <div>
               {selectSvg(alert.type)}
               <span>{alert.message}</span>
-              <button onClick={removeAlert} className="float-right">
-                &times;
+              <button
+                onClick={removeAlert}
+                className={`btn btn-${alert.type} `}
+              >
+                X
               </button>
             </div>
           </div>

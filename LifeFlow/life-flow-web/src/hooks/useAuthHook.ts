@@ -4,9 +4,10 @@ import {
   logout as apiLogout,
   register as apiRegister,
   verifyOtp as apiVerifyOtp,
-  setAuthTokens, get,
+  setAuthTokens,
+  get,
 } from "../utils/apiService";
-import {Address, Donor, Role, User} from "../contexts/AuthContext.tsx";
+import { Address, Donor, Role, User } from "../contexts/AuthContext.tsx";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -26,7 +27,9 @@ const useAuthHook = () => {
     user: localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user")!)
       : null,
-    address: localStorage.getItem("address") ? JSON.parse(localStorage.getItem("address")!): null,
+    address: localStorage.getItem("address")
+      ? JSON.parse(localStorage.getItem("address")!)
+      : null,
   });
 
   const login = async (
@@ -38,11 +41,11 @@ const useAuthHook = () => {
       const data = await apiLogin(email, password, staySigned);
       setAuthTokens(data.accessToken, data.refreshToken);
       const role = data.user.role;
-      console.log(data.user)
-      let address: Address
-      if (role == "Donor"){
-        const donor = await get<Donor>("Donor/" + data.user.userId)
-        address = await get<Address>("Address/" + donor.addressId)
+      console.log(data.user);
+      let address: Address;
+      if (role == "Donor") {
+        const donor = await get<Donor>("Donor/" + data.user.userId);
+        address = await get<Address>("Address/" + donor.addressId);
         localStorage.setItem("Donor", JSON.stringify(donor));
       }
       // const role = parseJwt(data.accessToken)[
@@ -51,7 +54,12 @@ const useAuthHook = () => {
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("address", JSON.stringify(address));
-      setAuthState({ isAuthenticated: true, role, user: data.user, address: address });
+      setAuthState({
+        isAuthenticated: true,
+        role,
+        user: data.user,
+        address: address,
+      });
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -61,10 +69,13 @@ const useAuthHook = () => {
   const logout = async () => {
     try {
       await apiLogout();
-      localStorage.removeItem("user");
-      localStorage.removeItem("isAuthenticated");
-      localStorage.removeItem("address");
-      setAuthState({ isAuthenticated: false, role: null, user: null , address: null});
+      localStorage.clear();
+      setAuthState({
+        isAuthenticated: false,
+        role: null,
+        user: null,
+        address: null,
+      });
     } catch (error) {
       console.error("Logout failed:", error);
     }
