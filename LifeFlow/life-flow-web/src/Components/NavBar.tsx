@@ -34,13 +34,13 @@ function NavBar() {
             setAccountButtons(
               <>
                 <li>
-                  <Link to="/donation-slots">Donation Slots</Link>
+                  <Link to="/donations">Donations</Link>
                 </li>
                 <li>
                   <Link to="/my-account">Account Info</Link>
                 </li>
                 <li>
-                  <Link to="/my-center-info">Center Info</Link>
+                  <Link to="/center-console">Center Console</Link>
                 </li>
               </>
             );

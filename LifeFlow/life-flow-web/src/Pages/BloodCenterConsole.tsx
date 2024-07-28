@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Center, useCenter } from "../contexts/CenterContext";
 import { post } from "../utils/apiService";
 import CenterList from "../Components/Center/CenterList";
+import DonationSlots from "../Components/Center/DonationSlots";
+import AddCenter from "../Components/Center/AddCenter";
 
 const BloodCenterConsole: React.FC = () => {
-  const { selectedCenter } = useCenter();
+  const { selectedCenter, setSelectedCenter } = useCenter();
   const [newCenter, setNewCenter] = useState<Center>({
     id: 0,
     name: "",
@@ -33,7 +35,19 @@ const BloodCenterConsole: React.FC = () => {
 
   return (
     <div>
-      <CenterList />
+      <div>
+        {selectedCenter && (
+          <div>
+            <h2>Selected Center: {selectedCenter.name}</h2>
+            <DonationSlots centerId={selectedCenter.id} />
+          </div>
+        )}
+      </div>
+      <div>
+        <h1>Blood Centers</h1>
+        <CenterList onSelectCenter={setSelectedCenter} />
+      </div>
+      <AddCenter />
     </div>
   );
 };
