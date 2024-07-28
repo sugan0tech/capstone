@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import LifeFlowLogo from "../assets/LifeFlowLogo";
 import DropdownMenuSvg from "../assets/DropdownMenuSvg";
 import ThemeToggleBtn from "./ThemeToggleBtn";
@@ -9,18 +9,17 @@ function NavBar() {
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
 
-  const [authButton, setAuthButton] = useState<JSX.Element | null>(null);
-  const [accountButtons, setAuccontButtons] = useState<JSX.Element | null>(
+  const [authButton, setAuthButton] = useState<ReactElement | null>(null);
+  const [accountButtons, setAccountButtons] = useState<ReactElement | null>(
     null
   );
 
   useEffect(() => {
     const renderSubMenu = () => {
-      const status = localStorage.getItem("isAuthenticated");
-      if (status) {
+      if (isAuthenticated) {
         switch (user?.role) {
           case "Donor":
-            setAuccontButtons(
+            setAccountButtons(
               <>
                 <li>
                   <Link to="/my-donations">My Donations</Link>
@@ -32,53 +31,57 @@ function NavBar() {
             );
             break;
           case "Admin":
-            setAuccontButtons(
+            setAccountButtons(
               <>
                 <li>
-                  <a>Donation Slots</a>
+                  <Link to="/donation-slots">Donation Slots</Link>
                 </li>
                 <li>
-                  <a>Account Info</a>
+                  <Link to="/my-account">Account Info</Link>
                 </li>
                 <li>
-                  <a>Center Info</a>
+                  <Link to="/my-center-info">Center Info</Link>
                 </li>
               </>
             );
             break;
           case "HospitalAdmin":
-            setAuccontButtons(
+            setAccountButtons(
               <>
                 <li>
-                  <a>Orders</a>
+                  <Link to="/orders">Orders</Link>
                 </li>
                 <li>
-                  <a>Find Donors</a>
+                  <Link to="/find-donors">Find Donors</Link>
                 </li>
                 <li>
-                  <a>Account Info</a>
+                  <Link to="/my-account">Account Info</Link>
                 </li>
               </>
             );
             break;
           case "PharmaAdmin":
-            setAuccontButtons(
+            setAccountButtons(
               <>
                 <li>
-                  <a>Orders</a>
+                  <Link to="/orders">Orders</Link>
                 </li>
                 <li>
-                  <a>Account Info</a>
+                  <Link to="/my-account">Account Info</Link>
                 </li>
               </>
             );
             break;
+          default:
+            setAccountButtons(null);
         }
+      } else {
+        setAccountButtons(null);
       }
     };
+
     const updateAuthButton = (path: string) => {
-      const status = localStorage.getItem("isAuthenticated");
-      if (status) {
+      if (isAuthenticated) {
         setAuthButton(
           <button className="btn btn-warning" onClick={logout}>
             Logout
@@ -112,7 +115,9 @@ function NavBar() {
 
     updateAuthButton(location.pathname);
     renderSubMenu();
-  }, [isAuthenticated, location.pathname, logout]);
+  }, [isAuthenticated, location.pathname, logout, user?.role]);
+
+  console.log(isAuthenticated);
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -127,10 +132,14 @@ function NavBar() {
             <li>
               <Link to="/home">Home</Link>
             </li>
-            <li>
-              <a>Account</a>
-              <ul className="p-2">{accountButtons}</ul>
-            </li>
+            {isAuthenticated && (
+              <li>
+                <details>
+                  <summary>Account</summary>
+                  <ul className="p-2">{accountButtons}</ul>
+                </details>
+              </li>
+            )}
             <li>
               <Link to="/find-centers">Find Centers</Link>
             </li>
@@ -146,12 +155,14 @@ function NavBar() {
           <li>
             <Link to="/home">Home</Link>
           </li>
-          <li>
-            <details className="z-40">
-              <summary>Account</summary>
-              <ul className="p-2">{accountButtons}</ul>
-            </details>
-          </li>
+          {isAuthenticated && (
+            <li>
+              <details className="z-40">
+                <summary>Account</summary>
+                <ul className="p-2">{accountButtons}</ul>
+              </details>
+            </li>
+          )}
           <li>
             <Link to="/find-centers">Find Centers</Link>
           </li>

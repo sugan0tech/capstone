@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import AlertProvider from "./contexts/AlertContext.tsx";
 import { ApplicationProvider } from "./contexts/ApplicationContext.tsx";
+import { CenterProvider } from "./contexts/CenterContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <AlertProvider>
           <ApplicationProvider>
-            <App />
+            <CenterProvider>
+              <App />
+            </CenterProvider>
           </ApplicationProvider>
         </AlertProvider>
       </AuthProvider>

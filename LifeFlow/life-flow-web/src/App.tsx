@@ -13,7 +13,6 @@ import FindCenters from "./Pages/FindCenters";
 import NotFound from "./Pages/NotFound";
 import MyDonations from "./Pages/MyDonations";
 import BloodCenterConsole from "./Pages/BloodCenterConsole";
-import BloodCentersInfo from "./Pages/BloodCentersInfo";
 import MyAccount from "./Pages/MyAccount";
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/home" element={<Home />}></Route>
         <Route path="/find-centers" element={<FindCenters />}></Route>
-        <Route path="/blood-center-info" element={<BloodCentersInfo />}></Route>
         <Route path="/not-found" element={<NotFound />}></Route>
         <Route
           path="/login"
@@ -73,7 +71,7 @@ function App() {
           }
         ></Route>
         <Route
-          path="/my-centers-info"
+          path="/my-center-info"
           element={
             <AuthenticatedRoute>
               <BloodCenterRoute>

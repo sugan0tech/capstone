@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthHook from "../hooks/useAuthHook";
 import { useAlert } from "../contexts/AlertContext";
 import EmailLogo from "../assets/EmailLogo";
 import PasswordSvg from "../assets/PasswordSvg";
+import {useAuth} from "../contexts/AuthContext.tsx";
 
 function Login() {
-  const { login } = useAuthHook();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [staySigned, setStaySigned] = useState(false);
