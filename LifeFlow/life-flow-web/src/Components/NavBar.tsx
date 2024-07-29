@@ -4,6 +4,7 @@ import { ReactElement, useEffect, useState } from "react";
 import LifeFlowLogo from "../assets/LifeFlowLogo";
 import DropdownMenuSvg from "../assets/DropdownMenuSvg";
 import ThemeToggleBtn from "./ThemeToggleBtn";
+import NotificationButton from "./NotificationButton";
 
 function NavBar() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -13,6 +14,7 @@ function NavBar() {
   const [accountButtons, setAccountButtons] = useState<ReactElement | null>(
     null
   );
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
   useEffect(() => {
     const renderSubMenu = () => {
@@ -22,10 +24,14 @@ function NavBar() {
             setAccountButtons(
               <>
                 <li>
-                  <Link to="/my-donations">My Donations</Link>
+                  <Link to="/my-donations" onClick={muteAccountDropdown}>
+                    My Donations
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/my-account">Account Info</Link>
+                  <Link to="/my-account" onClick={muteAccountDropdown}>
+                    Account Info
+                  </Link>
                 </li>
               </>
             );
@@ -34,13 +40,19 @@ function NavBar() {
             setAccountButtons(
               <>
                 <li>
-                  <Link to="/donations">Donations</Link>
+                  <Link to="/donations" onClick={muteAccountDropdown}>
+                    Donations
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/my-account">Account Info</Link>
+                  <Link to="/my-account" onClick={muteAccountDropdown}>
+                    Account Info
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/center-console">Center Console</Link>
+                  <Link to="/center-console" onClick={muteAccountDropdown}>
+                    Center Console
+                  </Link>
                 </li>
               </>
             );
@@ -49,13 +61,19 @@ function NavBar() {
             setAccountButtons(
               <>
                 <li>
-                  <Link to="/orders">Orders</Link>
+                  <Link to="/orders" onClick={muteAccountDropdown}>
+                    Orders
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/find-donors">Find Donors</Link>
+                  <Link to="/find-donors" onClick={muteAccountDropdown}>
+                    Find Donors
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/my-account">Account Info</Link>
+                  <Link to="/my-account" onClick={muteAccountDropdown}>
+                    Account Info
+                  </Link>
                 </li>
               </>
             );
@@ -64,10 +82,14 @@ function NavBar() {
             setAccountButtons(
               <>
                 <li>
-                  <Link to="/orders">Orders</Link>
+                  <Link to="/orders" onClick={muteAccountDropdown}>
+                    Orders
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/my-account">Account Info</Link>
+                  <Link to="/my-account" onClick={muteAccountDropdown}>
+                    Account Info
+                  </Link>
                 </li>
               </>
             );
@@ -117,6 +139,13 @@ function NavBar() {
     renderSubMenu();
   }, [isAuthenticated, location.pathname, logout, user?.role]);
 
+  const toggleAccountDropdown = () => {
+    setIsAccountDropdownOpen(!isAccountDropdownOpen);
+  };
+  const muteAccountDropdown = () => {
+    setIsAccountDropdownOpen(false);
+  };
+
   console.log(isAuthenticated);
   return (
     <div className="navbar bg-base-100">
@@ -156,11 +185,23 @@ function NavBar() {
             <Link to="/home">Home</Link>
           </li>
           {isAuthenticated && (
-            <li>
-              <details className="z-40">
-                <summary>Account</summary>
-                <ul className="p-2">{accountButtons}</ul>
-              </details>
+            <li className="dropdown">
+              <div
+                tabIndex={0}
+                role="button"
+                className=""
+                onClick={toggleAccountDropdown}
+              >
+                Account
+              </div>
+              {isAccountDropdownOpen && (
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                >
+                  {accountButtons}
+                </ul>
+              )}
             </li>
           )}
           <li>
@@ -169,6 +210,7 @@ function NavBar() {
         </ul>
       </div>
       <div className="navbar-end gap-4">
+        <NotificationButton />
         <ThemeToggleBtn />
         {authButton}
       </div>
