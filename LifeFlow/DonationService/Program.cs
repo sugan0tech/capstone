@@ -10,9 +10,12 @@ using DonationService.Features.Address;
 using DonationService.Features.Address.Command;
 using DonationService.Features.Address.Query;
 using DonationService.Features.BloodCenter;
+using DonationService.Features.Client;
 using DonationService.Features.DonationSlot;
 using DonationService.Features.Donor;
 using DonationService.Features.GeoCoding;
+using DonationService.Features.Orders;
+using DonationService.Features.Payment;
 using DonationService.Features.UnitBag;
 using DonationService.Features.User;
 using DonationService.Features.UserSession;
@@ -107,6 +110,10 @@ public class Program
         builder.Services.AddScoped<IBaseRepo<DonationSlot>, DonationSlotRepo>();
         builder.Services.AddScoped<IBaseRepo<UnitBag>, UnitBagRepo>();
 
+        builder.Services.AddScoped<IBaseRepo<Client>, ClientRepo>();
+        builder.Services.AddScoped<IBaseRepo<Order>, OrderRepo>();
+        builder.Services.AddScoped<IBaseRepo<Payment>, PaymentRepo>();
+
         #endregion
 
         #region services
@@ -131,6 +138,11 @@ public class Program
         builder.Services
             .AddScoped<IQueryHandler<GetAllAddressesQuery, List<AddressDto>>, GetAllAddressesQueryHandler>();
         builder.Services.AddScoped<CustomControllerValidator>();
+
+        // OrderServices
+        builder.Services.AddScoped<OrderService>();
+        builder.Services.AddScoped<PaymentService>();
+        builder.Services.AddScoped<ClientService>();
 
         // todo to migrate to new service
         builder.Services.AddScoped<OtpService>();

@@ -45,13 +45,13 @@ function NavBar() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/my-account" onClick={muteAccountDropdown}>
-                    Account Info
+                  <Link to="/center-console" onClick={muteAccountDropdown}>
+                    Center Console
                   </Link>
                 </li>
                 <li>
-                  <Link to="/center-console" onClick={muteAccountDropdown}>
-                    Center Console
+                  <Link to="/my-account" onClick={muteAccountDropdown}>
+                    Account Info
                   </Link>
                 </li>
               </>
@@ -61,7 +61,7 @@ function NavBar() {
             setAccountButtons(
               <>
                 <li>
-                  <Link to="/orders" onClick={muteAccountDropdown}>
+                  <Link to="/my-orders" onClick={muteAccountDropdown}>
                     Orders
                   </Link>
                 </li>

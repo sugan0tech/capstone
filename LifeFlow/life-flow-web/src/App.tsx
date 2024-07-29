@@ -15,6 +15,8 @@ import MyDonations from "./Pages/MyDonations";
 import BloodCenterConsole from "./Pages/BloodCenterConsole";
 import MyAccount from "./Pages/MyAccount";
 import Donations from "./Pages/Donations";
+import FindDonors from "./Pages/FindeDonors";
+import MyOrders from "./Pages/MyOrders";
 
 function App() {
   return (
@@ -55,9 +57,7 @@ function App() {
           path="/my-account"
           element={
             <AuthenticatedRoute>
-              <DonorRoute>
-                <MyAccount />
-              </DonorRoute>
+              <MyAccount />
             </AuthenticatedRoute>
           }
         ></Route>
@@ -67,6 +67,26 @@ function App() {
             <AuthenticatedRoute>
               <HospitalRoute>
                 <MyDonations />
+              </HospitalRoute>
+            </AuthenticatedRoute>
+          }
+        ></Route>
+        <Route
+          path="/find-donors"
+          element={
+            <AuthenticatedRoute>
+              <HospitalRoute>
+                <FindDonors />
+              </HospitalRoute>
+            </AuthenticatedRoute>
+          }
+        ></Route>
+        <Route
+          path="/my-orders"
+          element={
+            <AuthenticatedRoute>
+              <HospitalRoute>
+                <MyOrders />
               </HospitalRoute>
             </AuthenticatedRoute>
           }

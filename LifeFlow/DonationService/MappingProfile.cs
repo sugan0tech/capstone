@@ -68,7 +68,7 @@ public class MappingProfile : Profile
         CreateMap<UserSession, UserSessionDto>()
             .ForMember(dto => dto.SessionId, act => act.MapFrom(src => src.Id));
 
-        #region OrderService
+        #region BloodOrders
 
         CreateMap<Order, OrderDto>().ReverseMap();
         CreateMap<Payment, PaymentDto>().ReverseMap();

@@ -1,4 +1,6 @@
 using DonationService.Commons.Enums;
+using DonationService.Features.Orders;
+using Newtonsoft.Json;
 
 namespace DonationService.Features.UnitBag;
 
@@ -11,5 +13,10 @@ public record UnitBagDto
     public DateTime Expiry { get; set; }
     public required int DonorId { get; set; }
     public required int CenterId { get; set; }
+    public int? OrderId { get; set; }
+
+    [JsonIgnore] public OrderDto? Order { get; set; }
+
     public bool IsRare { get; set; } = false;
+    public bool IsSold { get; set; } = false;
 }

@@ -4,6 +4,7 @@ using DonationService.Commons;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DonationService.Migrations
 {
     [DbContext(typeof(DonationServiceContext))]
-    partial class DonationServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20240729082627_ReduceOrderRelation2")]
+    partial class ReduceOrderRelation2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,6 +156,9 @@ namespace DonationService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ManagedById")
@@ -160,6 +166,8 @@ namespace DonationService.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Clients");
                 });
@@ -248,9 +256,6 @@ namespace DonationService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -276,8 +281,8 @@ namespace DonationService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -295,8 +300,7 @@ namespace DonationService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId")
-                        .IsUnique();
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Payments");
                 });
@@ -442,8 +446,8 @@ namespace DonationService.Migrations
             modelBuilder.Entity("DonationService.Entities.Client", b =>
                 {
                     b.HasOne("DonationService.Entities.User", "User")
-                        .WithOne()
-                        .HasForeignKey("DonationService.Entities.Client", "ManagedById")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -464,8 +468,8 @@ namespace DonationService.Migrations
             modelBuilder.Entity("DonationService.Entities.Payment", b =>
                 {
                     b.HasOne("DonationService.Entities.Order", "Order")
-                        .WithOne("Payment")
-                        .HasForeignKey("DonationService.Entities.Payment", "OrderId")
+                        .WithMany("Payments")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -474,11 +478,9 @@ namespace DonationService.Migrations
 
             modelBuilder.Entity("DonationService.Entities.UnitBag", b =>
                 {
-                    b.HasOne("DonationService.Entities.Order", "Order")
+                    b.HasOne("DonationService.Entities.Order", null)
                         .WithMany("Items")
                         .HasForeignKey("OrderId");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("DonationService.Entities.Client", b =>
@@ -490,8 +492,7 @@ namespace DonationService.Migrations
                 {
                     b.Navigation("Items");
 
-                    b.Navigation("Payment")
-                        .IsRequired();
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

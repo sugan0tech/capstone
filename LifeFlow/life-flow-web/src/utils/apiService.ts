@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAlert } from "../contexts/AlertContext";
 
 const baseURL = "http://localhost:5226/api/";
 
@@ -60,9 +61,6 @@ function setAuthTokens(accessToken: string, refreshToken: string) {
   localStorage.setItem("refreshToken", refreshToken);
   localStorage.setItem("isAuthenticated", "true");
 }
-
-
-
 
 async function logout() {
   const token = localStorage.getItem("refreshToken");

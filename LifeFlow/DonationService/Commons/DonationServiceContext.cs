@@ -65,18 +65,18 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 
         #region UnitBags
 
-        modelBuilder.Entity<UnitBag>();
+        modelBuilder.Entity<UnitBag>().HasOne<Order>(bag => bag.Order).WithMany(order => order.Items)
+            .HasForeignKey(bag => bag.OrderId);
 
         #endregion
 
 
-        #region OrderService
+        #region BloodOrders
 
         #region Clients
 
         modelBuilder.Entity<Client>().HasIndex(client => client.Name).IsUnique();
-        modelBuilder.Entity<Client>().HasOne<User>(client => client.User);
-        modelBuilder.Entity<Client>().HasIndex(client => client.ManagedById).IsUnique();
+        modelBuilder.Entity<Client>().HasOne<User>(client => client.User).WithOne().HasForeignKey<Client>(client => client.ManagedById);
 
         #endregion
 
@@ -112,7 +112,7 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
         }
     }
 
-    #region OrderService
+    #region BloodOrders
 
     public DbSet<Client> Clients { get; set; }
     public DbSet<Order> Orders { get; set; }

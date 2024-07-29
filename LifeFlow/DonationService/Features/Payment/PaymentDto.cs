@@ -1,4 +1,5 @@
 using DonationService.Entities;
+using Newtonsoft.Json;
 
 namespace DonationService.Features.Payment;
 
@@ -6,7 +7,9 @@ public class PaymentDto
 {
     public int Id { get; set; }
     public int OrderId { get; set; }
-    public Order? Order { get; set; }
+
+    [JsonIgnore] public Order? Order { get; set; }
+
     public decimal Amount { get; set; }
     public DateTime PaymentDate { get; set; }
     public string PaymentMethod { get; set; } = "NetBanking";

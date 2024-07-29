@@ -1,5 +1,4 @@
 using DonationService.Commons.Enums;
-using DonationService.Entities;
 
 namespace DonationService.Features.Orders;
 
