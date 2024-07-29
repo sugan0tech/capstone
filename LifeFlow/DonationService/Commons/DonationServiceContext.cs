@@ -1,7 +1,4 @@
 ﻿using DonationService.Entities;
-using DonationService.Features.Client;
-using DonationService.Features.Orders;
-using DonationService.Features.Payment;
 using Microsoft.EntityFrameworkCore;
 
 namespace DonationService.Commons;
@@ -15,14 +12,6 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
     public DbSet<DonationSlot> DonationSlots { get; set; }
     public DbSet<UnitBag> UnitBags { get; set; }
     public DbSet<UserSession> UserSessions { get; set; }
-
-    #region OrderService
-
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<Payment> Payments { get; set; }
-
-    #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -96,7 +85,6 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
         modelBuilder.Entity<Order>().HasOne<Client>(order => order.Client).WithMany(client => client.Orders)
             .HasForeignKey(order => order.ClientId).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<Order>().HasMany<UnitBag>(order => order.Items);
-        modelBuilder.Entity<Order>().HasOne<Payment>(order => order.Payment).WithOne(payment => payment.Order);
 
         #endregion
 
@@ -123,4 +111,12 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
                     .HasConversion<string>();
         }
     }
+
+    #region OrderService
+
+    public DbSet<Client> Clients { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+
+    #endregion
 }

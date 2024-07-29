@@ -15,6 +15,4 @@ public class OrderDto
     public OrderType OrderType { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime? DeliveryDate { get; set; }
-    public int PaymentId { get; set; }
-    public Entities.Payment Payment { get; set; }
 }
