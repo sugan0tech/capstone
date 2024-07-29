@@ -7,6 +7,9 @@ interface Props {
 
 function DonorRoute({ children }: Props) {
   const { user } = useAuth();
+  if (localStorage.getItem("Donor") == null) {
+    <Navigate to="/create-donor" />;
+  }
   console.log("Donor route validation");
   return user ? children : <Navigate to="/not-found" />;
 }

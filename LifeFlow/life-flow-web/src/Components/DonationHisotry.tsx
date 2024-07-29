@@ -16,32 +16,27 @@ export function DonationHistory({history}: HistoryProps) {
             ) : (
                 <ul className="timeline timeline-vertical">
                     {history.map((donation, index) => (
-                        <li>
+                        <li key={index}>
+                            {index != 0 && <hr className="bg-accent"/>}
                             <div className="timeline-middle">
-                                <TimeLineTickSvg/>
+                                <TimeLineTickSvg />
                             </div>
-                            <div className="timeline-start timeline-box">
-                                <p>
-                                    Donated on {formatDateToIST(donation.slotTime)} at {donation.centerName}
-                                    <div className="badge badge-secondary">{donation.slotStatus}</div>
-                                </p>
-                            </div>
-                            <hr className="bg-accent"/>
-                        </li>
-                    ))}
-                    {history.map((donation, index) => (
-                        <li>
-                            <hr className="bg-accent"/>
-                            <div className="timeline-middle">
-                                <TimeLineTickSvg/>
-                            </div>
-                            <div className="timeline-end timeline-box">
-                                <p>
-                                    Donated on {formatDateToIST(donation.slotTime)} at {donation.centerName}
-                                    <div className="badge badge-secondary">{donation.slotStatus}</div>
-                                </p>
-                            </div>
-                            <hr className="bg-accent"/>
+                            {index % 2 === 0 ? (
+                                <div className="timeline-start timeline-box">
+                                    <p>
+                                        Donated on {formatDateToIST(donation.slotTime)} at {donation.centerName}
+                                        <div className="badge badge-secondary">{donation.slotStatus}</div>
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="timeline-end timeline-box">
+                                    <p>
+                                        Donated on {formatDateToIST(donation.slotTime)} at {donation.centerName}
+                                        <div className="badge badge-secondary">{donation.slotStatus}</div>
+                                    </p>
+                                </div>
+                            )}
+                            <hr className="bg-accent" />
                         </li>
                     ))}
                 </ul>

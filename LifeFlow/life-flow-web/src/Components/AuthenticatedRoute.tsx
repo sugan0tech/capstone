@@ -11,13 +11,13 @@ function AuthenticatedRoute({ children }: Props) {
   const { user } = useAuth();
   const location = useLocation();
   if (user == null) {
-    // return <Navigate to={location.pathname} />;
-    // s
     switch (location.pathname) {
       case "/login":
         return <Login />;
       case "/register":
         return <Register />;
+      default:
+        return <Navigate to="/home" />;
     }
   }
 

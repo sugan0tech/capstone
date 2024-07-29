@@ -1,5 +1,8 @@
-export function OngoingSlot({ slot, onCancel }) {
-  if (!slot || !slot.centerName) {
+import { get } from "../utils/apiService";
+
+export function OngoingSlot({ slot , onCancel }) {
+
+  if (!slot) {
     return (
       <div className="card bg-base-300 h-fit rounded-btn">
         <div className="card-body">
@@ -9,6 +12,12 @@ export function OngoingSlot({ slot, onCancel }) {
       </div>
     );
   }
+
+  const centerResponse = get("BloodCenter/" + slot.centerId);
+  centerResponse.then((value) => {
+    console.log(value)
+    slot.centerName = value.name
+  })
 
   return (
     <div className="card bg-base-300 h-fit rounded-btn">

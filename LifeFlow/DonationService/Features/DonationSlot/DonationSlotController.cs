@@ -25,7 +25,7 @@ public class DonationSlotController(
     [HttpPost]
     [ProducesResponseType(typeof(DonationSlotDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
-    [Authorize(Policy = "AdminPolicy")]
+    // [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> Add([FromBody] DonationSlotDto donationSlotDto)
     {
         var createdDonationSlot = await donationSlotService.Add(donationSlotDto);

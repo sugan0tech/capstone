@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { get } from "../utils/apiService";
 import { useApplication } from "../contexts/ApplicationContext";
 
-interface GeocodeResult {
+export interface GeocodeResult {
   place_id: number;
   display_name: string;
   lat: string;

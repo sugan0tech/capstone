@@ -14,8 +14,8 @@ const Client = () => {
   const [client, setClient] = useState(null);
 
   const fetchClientInfo = async () => {
-    if (user.role === "PharmaAdmin" || user.role === "HospitalAdmin") {
-      const clientData = await get(`/client/${user.clientId}`);
+    if (user?.role === "PharmaAdmin" || user?.role === "HospitalAdmin") {
+      const clientData = await get(`/client/${user?.clientId}`);
       setClient(clientData);
       if (!clientData.addressId) {
         addAlert("No address found for client", "warning");

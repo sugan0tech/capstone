@@ -60,7 +60,7 @@ public class UserController(
     {
         try
         {
-            validator.ValidateUserPrivilege(User.Claims, user.UserId);
+            validator.ValidateUserPrivilege(User.Claims, user.Id);
             var updatedUser = await userService.Update(user);
             return Ok(updatedUser);
         }

@@ -26,7 +26,7 @@ public class TokenService : ITokenService
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.UserId.ToString()),
+            new(ClaimTypes.Name, user.Id.ToString()),
             new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.Role, user.Role)
         };
@@ -48,7 +48,7 @@ public class TokenService : ITokenService
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.UserId.ToString()),
+            new(ClaimTypes.Name, user.Id.ToString()),
             new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.Role, "RefreshToken")
         };

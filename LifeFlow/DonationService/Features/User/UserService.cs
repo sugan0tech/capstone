@@ -45,7 +45,7 @@ public class UserService(
         try
         {
             // var user = mapper.Map<User>(dto);
-            var user = await repo.GetById(dto.UserId);
+            var user = await repo.GetById(dto.Id);
             var pswd = user.Password;
             var hashkey = user.HashKey;
             user = mapper.Map(dto, user);

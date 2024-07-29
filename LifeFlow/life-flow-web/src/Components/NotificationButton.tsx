@@ -44,10 +44,16 @@ function NotificationButton() {
 
   return (
     <div className="relative">
-      <button tabIndex={0} className="btn" onClick={toggleDropdown}>
-        <NotificationIcon />
-        <div className="badge">+{notifications.length}</div>
-      </button>
+      <div className="indicator">
+        {notifications.length > 0 && (
+          <span className="indicator-item indicator-bottom indicator-right badge badge-secondary">
+            {notifications.length}
+          </span>
+        )}
+        <button tabIndex={0} className="btn" onClick={toggleDropdown}>
+          <NotificationIcon />
+        </button>
+      </div>
       {isDropdownOpen && (
         <div
           tabIndex={0}

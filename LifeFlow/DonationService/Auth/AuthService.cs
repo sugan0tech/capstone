@@ -36,13 +36,13 @@ public class AuthService(
             var isPasswordSame = ComparePassword(hash, user.Password);
             if (isPasswordSame)
             {
-                logger.LogInformation($"Successfully logged as Id :{user.UserId}");
+                logger.LogInformation($"Successfully logged as Id :{user.Id}");
                 // if staySigned => long lived token
                 var tokens = tokenService.GenerateTokens(user, !loginDto.staySigned);
                 tokens.User = user;
                 var newSession = new UserSessionDto
                 {
-                    UserId = user.UserId,
+                    UserId = user.Id,
                     CreatedAt = DateTime.Now,
                     ExpiresAt = DateTime.Now.AddMonths(6),
                     DeviceType = GetDeviceType(GetUserAgent()),
@@ -127,7 +127,6 @@ public class AuthService(
                 Email = dto.Email,
                 Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
-                AddressId = dto.AddressId,
                 Password = hasher.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)),
                 HashKey = hasher.Key,
                 Role = dto.Role,
@@ -155,7 +154,7 @@ public class AuthService(
         var user = await userService.GetByEmail(email);
         var status = otpService.VerifyOtp(email, otp);
         if (status)
-            await userService.Validate(user.UserId, true);
+            await userService.Validate(user.Id, true);
 
         return status;
     }
@@ -176,11 +175,11 @@ public class AuthService(
             await userService.Update(user);
 
             // logs out from all other devices
-            await userSessionService.InvalidateAllPerUser(user.UserId);
+            await userSessionService.InvalidateAllPerUser(user.Id);
             var tokens = tokenService.GenerateTokens(user, false);
             var newSession = new UserSessionDto
             {
-                UserId = user.UserId,
+                UserId = user.Id,
                 CreatedAt = DateTime.Now,
                 ExpiresAt = DateTime.Now.AddMonths(6),
                 DeviceType = GetDeviceType(GetUserAgent()),

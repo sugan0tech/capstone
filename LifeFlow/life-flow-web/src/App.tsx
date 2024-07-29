@@ -17,6 +17,7 @@ import MyAccount from "./Pages/MyAccount";
 import Donations from "./Pages/Donations";
 import FindDonors from "./Pages/FindeDonors";
 import MyOrders from "./Pages/MyOrders";
+import CreateDonor from "./Pages/CreateDonor";
 
 function App() {
   return (
@@ -40,6 +41,14 @@ function App() {
           element={
             <AuthenticatedRoute>
               <Register />
+            </AuthenticatedRoute>
+          }
+        ></Route>
+        <Route
+          path="/create-donor"
+          element={
+            <AuthenticatedRoute>
+              <CreateDonor />
             </AuthenticatedRoute>
           }
         ></Route>

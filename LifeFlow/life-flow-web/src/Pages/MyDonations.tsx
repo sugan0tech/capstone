@@ -5,11 +5,17 @@ import { Donor } from "../contexts/AuthContext";
 import { DonationSlot } from "../types/DonationTypes";
 import { DonationHistory } from "../Components/DonationHisotry.tsx";
 import { OngoingSlot } from "../Components/OgoingSlot.tsx";
+import { useAlert } from "../contexts/AlertContext.tsx";
 
 function MyDonations() {
   const donor = localStorage.getItem("Donor");
+  const { addAlert } = useAlert();
   if (donor == null) {
-    return <Navigate to="/donor-create" />;
+    addAlert({
+      message: "Create Donor Profile to continue",
+      status: "warning",
+    });
+    return <Navigate to="/create-donor" />;
   }
   const parsedDonor: Donor = JSON.parse(donor);
   const [ongoingSlot, setOngoingSlot] = useState<DonationSlot | null>(null);
@@ -36,12 +42,14 @@ function MyDonations() {
       const response = await get<DonationSlot>(
         "Donor/current/" + parsedDonor.id
       );
+      console.log("mgididi");
+      console.log(response);
       setOngoingSlot(response);
     };
 
     fetchHistory();
     fetchOngoingSlot();
-  }, [parsedDonor.id]);
+  }, []);
 
   const handleCancelSlot = async () => {
     // API call to cancel the ongoing slot should be made here

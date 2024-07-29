@@ -6,19 +6,19 @@ import {
   ReactNode,
 } from "react";
 import useAuthHook from "../hooks/useAuthHook";
-import {Simulate} from "react-dom/test-utils";
+import { Simulate } from "react-dom/test-utils";
 import compositionStart = Simulate.compositionStart;
 
 export type Role =
-    | "Donor"
-    | "HospitalAdmin"
-    | "CenterAdmin"
-    | "PharmaAdmin"
-    | "Admin";
+  | "Donor"
+  | "HospitalAdmin"
+  | "CenterAdmin"
+  | "PharmaAdmin"
+  | "Admin";
 export interface User {
   id: number;
-  addressId: number;
   email: string;
+  phoneNumber: string;
   name: string;
   role: Role;
 }
@@ -49,17 +49,17 @@ interface AuthContextType {
   address: Address | null;
   role: string | null;
   login: (
-      email: string,
-      password: string,
-      staySigned: boolean
+    email: string,
+    password: string,
+    staySigned: boolean
   ) => Promise<void>;
   logout: () => void;
   register: (
-      email: string,
-      name: string,
-      phone: string,
-      password: string,
-      role: string
+    email: string,
+    name: string,
+    phone: string,
+    password: string,
+    role: string
   ) => Promise<void>;
   verifyOtp: (email: string, otp: string) => Promise<void>;
 }
@@ -71,9 +71,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const { authState, setAuthState, login, logout, register, verifyOtp } = useAuthHook();
+  const { authState, setAuthState, login, logout, register, verifyOtp } =
+    useAuthHook();
   const [isAuthenticated, setIsAuthenticated] = useState(
-      authState.isAuthenticated
+    authState.isAuthenticated
   );
   const [user, setUser] = useState<User | null>(authState.user);
   const [role, setRole] = useState<string | null>(authState.role);
@@ -88,20 +89,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [authState, setAuthState]);
 
   return (
-      <AuthContext.Provider
-          value={{
-            user,
-            isAuthenticated,
-            address,
-            role,
-            login,
-            logout,
-            register,
-            verifyOtp,
-          }}
-      >
-        {children}
-      </AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        address,
+        role,
+        login,
+        logout,
+        register,
+        verifyOtp,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 
