@@ -4,6 +4,7 @@ import { post } from "../utils/apiService";
 import CenterList from "../Components/Center/CenterList";
 import DonationSlots from "../Components/Center/DonationSlots";
 import AddCenter from "../Components/Center/AddCenter";
+import CenterInfo from "../Components/Center/CenterInfo.tsx";
 
 const BloodCenterConsole: React.FC = () => {
   const { selectedCenter, setSelectedCenter } = useCenter();
@@ -34,20 +35,19 @@ const BloodCenterConsole: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="pb-24">
       <div>
         {selectedCenter && (
           <div>
-            <h2>Selected Center: {selectedCenter.name}</h2>
-            <DonationSlots centerId={selectedCenter.id} />
+            <CenterInfo></CenterInfo>
           </div>
         )}
       </div>
+      <AddCenter />
       <div>
         <h1>Blood Centers</h1>
         <CenterList onSelectCenter={setSelectedCenter} />
       </div>
-      <AddCenter />
     </div>
   );
 };

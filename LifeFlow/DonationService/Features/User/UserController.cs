@@ -32,6 +32,22 @@ public class UserController(
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
     }
+    
+    [HttpGet("{userId}")]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int userId)
+    {
+        try
+        {
+            var user = await userService.GetById(userId);
+            return Ok(user);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
+        }
+    }
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]

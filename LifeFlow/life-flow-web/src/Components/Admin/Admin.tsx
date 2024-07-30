@@ -1,9 +1,9 @@
-import LoggedInDevices from "../User/LoggedInDevices.tsx";
+import CenterList from "../Center/CenterList.tsx";
+import CenterInfo from "../Center/CenterInfo.tsx";
 
 export const AdminComponent = () => {
-    return (
-        <>
-            <LoggedInDevices />
-        </>
-    );
+  return <>
+    <CenterInfo></CenterInfo>
+    <CenterList></CenterList>
+  </>;
 };

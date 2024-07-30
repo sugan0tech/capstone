@@ -125,7 +125,7 @@ public class Program
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IBaseService<UnitBag, UnitBagDto>, UnitBagService>();
-        builder.Services.AddScoped<IBaseService<DonationSlot, DonationSlotDto>, DonationSlotService>();
+        builder.Services.AddScoped<DonationSlotService>();
         builder.Services.AddScoped<BloodCenterService>();
         builder.Services.AddScoped<GeocodingService>();
 

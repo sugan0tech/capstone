@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { post, put, get } from "../utils/apiService";
+import { post, put} from "../utils/apiService";
 import { useAuth, User } from "../contexts/AuthContext";
 import { UserInfo } from "../Components/User/UserInfo";
 import { EditUserInfo } from "../Components/User/EditUserInfo";
@@ -7,6 +7,7 @@ import { ResetPassword } from "../Components/User/ResetPassword";
 import { DonorComponent } from "../Components/Donor/Donor";
 import { AdminComponent } from "../Components/Admin/Admin";
 import Client from "../Components/Client/Client";
+import LoggedInDevices from "../Components/User/LoggedInDevices.tsx";
 
 function MyAccount() {
   const { user } = useAuth();
@@ -27,7 +28,7 @@ function MyAccount() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pb-24">
       <div className="flex flex-col gap-x-96 items-center bg-base-300 h-48 rounded-box lg:flex-row">
         <div className="flex-1 lg:pl-24">
           <h1 className="text-2xl font-bold">My Account</h1>
@@ -69,6 +70,7 @@ function MyAccount() {
           <Client />
         )}
         {user?.role === "Admin" && <AdminComponent />}
+        <LoggedInDevices />
       </div>
     </div>
   );

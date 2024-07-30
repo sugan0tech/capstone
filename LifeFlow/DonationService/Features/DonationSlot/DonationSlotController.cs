@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using DonationService.Commons;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WatchDog;
@@ -14,7 +13,7 @@ namespace DonationService.Features.DonationSlot;
 [EnableCors("AllowAll")]
 // [Authorize]
 public class DonationSlotController(
-    IBaseService<Entities.DonationSlot, DonationSlotDto> donationSlotService,
+    DonationSlotService donationSlotService,
     CustomControllerValidator validator) : ControllerBase
 {
     /// <summary>
@@ -114,11 +113,23 @@ public class DonationSlotController(
     ///     Gets all donation slots.
     /// </summary>
     /// <returns>A list of donation slots.</returns>
-    [HttpGet("all")]
+    [HttpGet("all/")]
     [ProducesResponseType(typeof(List<DonationSlotDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
         var donationSlots = await donationSlotService.GetAll();
+        return Ok(donationSlots);
+    }
+    
+    /// <summary>
+    ///     Gets all donation slots for a center.
+    /// </summary>
+    /// <returns>A list of donation slots.</returns>
+    [HttpGet("all/{centerId}")]
+    [ProducesResponseType(typeof(List<DonationSlotDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll(int centerId)
+    {
+        var donationSlots = await donationSlotService.GetAllByCenterId(centerId);
         return Ok(donationSlots);
     }
 }
