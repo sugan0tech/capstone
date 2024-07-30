@@ -5,7 +5,6 @@ export const ViewClient = ({ client, onEdit }) => {
 
   return (
     <div>
-      <p className="card-title">Client Information:</p>
       <p>Name: {client.name}</p>
       <p>Type: {client.type}</p>
       {/* Add other fields as needed */}

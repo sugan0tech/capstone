@@ -84,4 +84,26 @@ public class ClientController(ClientService clientService, CustomControllerValid
                 new ErrorModel(StatusCodes.Status403Forbidden, ex.Message));
         }
     }
+
+    [HttpGet("user/{userId}")]
+    [ProducesResponseType(typeof(ClientDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> GetByUserId(int userId)
+    {
+        try
+        {
+            var client = await clientService.getByUserId(userId);
+            return Ok(client);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
+        }
+        catch (AuthenticationException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden,
+                new ErrorModel(StatusCodes.Status403Forbidden, ex.Message));
+        }
+    }
 }

@@ -15,7 +15,7 @@ const Client = () => {
 
   const fetchClientInfo = async () => {
     if (user?.role === "PharmaAdmin" || user?.role === "HospitalAdmin") {
-      const clientData = await get(`/client/${user?.clientId}`);
+      const clientData = await get(`/client/user/${user?.id}`);
       setClient(clientData);
       if (!clientData.addressId) {
         addAlert("No address found for client", "warning");
@@ -63,12 +63,15 @@ const Client = () => {
             />
           )
         ) : (
-          <button
-            className="btn btn-primary mt-4"
-            onClick={() => setIsCreatingClient(true)}
-          >
-            Create Client
-          </button>
+          <div>
+            <div>No Client Profile found</div>
+            <button
+              className="btn btn-primary mt-4"
+              onClick={() => setIsCreatingClient(true)}
+            >
+              Create Client
+            </button>
+          </div>
         )}
       </div>
     </div>
