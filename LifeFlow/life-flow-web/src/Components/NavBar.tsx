@@ -5,6 +5,7 @@ import LifeFlowLogo from "../assets/LifeFlowLogo";
 import DropdownMenuSvg from "../assets/DropdownMenuSvg";
 import ThemeToggleBtn from "./ThemeToggleBtn";
 import NotificationButton from "./NotificationButton";
+import LanguaguSelector from "./LanguaguSelector.tsx";
 
 function NavBar() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -210,7 +211,10 @@ function NavBar() {
         </ul>
       </div>
       <div className="navbar-end gap-4">
+        <LanguaguSelector />
+        {isAuthenticated &&
         <NotificationButton />
+        }
         <ThemeToggleBtn />
         {authButton}
       </div>

@@ -32,6 +32,12 @@ export interface Donor {
   addressId: number;
 }
 
+export interface Client {
+  id: number;
+  managedById: number;
+  name: string;
+  addressId: number;
+}
 export interface Address {
   id: number;
   street: string;

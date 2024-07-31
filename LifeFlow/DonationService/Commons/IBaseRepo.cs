@@ -1,4 +1,6 @@
-﻿namespace DonationService.Commons;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace DonationService.Commons;
 
 public interface IBaseRepo<T>
 {
@@ -7,4 +9,5 @@ public interface IBaseRepo<T>
     public Task<T> Update(T entity);
     public Task<T> GetById(int id);
     public Task<List<T>> GetAll();
+    Task<IDbContextTransaction> BeginTransactionAsync();
 }

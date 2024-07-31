@@ -34,7 +34,6 @@ const AlertProvider = ({ children }: AuthProviderProps) => {
   const addAlert = useCallback((alert: Alert) => {
     setAlert(alert);
 
-    console.log("Alert Type :" + alert?.type)
     // Auto-remove the alert after 3 seconds
     setTimeout(() => {
       setAlert(null);
@@ -55,7 +54,6 @@ const AlertProvider = ({ children }: AuthProviderProps) => {
         return <WarningSvg />;
       case "info":
         return <InfoSvg />;
-
       default:
         return <InfoSvg />;
     }

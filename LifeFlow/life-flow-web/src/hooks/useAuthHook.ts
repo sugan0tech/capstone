@@ -5,7 +5,7 @@ import {
   register as apiRegister,
   verifyOtp as apiVerifyOtp,
 } from "../utils/authApiService";
-import { Address, Donor, Role, User } from "../contexts/AuthContext.tsx";
+import {Address, Client, Donor, Role, User} from "../contexts/AuthContext.tsx";
 import axios from "axios";
 
 interface AuthState {
@@ -81,12 +81,24 @@ const useAuthHook = () => {
         return error;
       }
     }
+    else if ( role == "HospitalAdmin" || role == "PharmaAdmin" ){
+      try {
+        const client = await get<Client>("Client/user/" + data.user.id);
+        localStorage.setItem("Client", JSON.stringify(client))
+        address = await get<Address>("Address/" + client.addressId);
+        localStorage.setItem("address", JSON.stringify(address));
+      } catch (error) {
+        console.error(error);
+        return error;
+      }
+    }
   };
 
   const logout = async () => {
     try {
       await apiLogout();
       localStorage.clear();
+      location.reload();
       setAuthState({
         isAuthenticated: false,
         role: null,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DonationService.Commons;
 
@@ -86,5 +87,11 @@ public abstract class BaseRepo<TBaseEntity>(DonationServiceContext context)
         context.Entry(entity).State = EntityState.Detached;
 
         return entity;
+    }
+
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
+    {
+        return await context.Database.BeginTransactionAsync();
     }
 }

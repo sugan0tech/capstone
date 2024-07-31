@@ -7,6 +7,7 @@ import { AuthProvider } from "./contexts/AuthContext.tsx";
 import AlertProvider from "./contexts/AlertContext.tsx";
 import { ApplicationProvider } from "./contexts/ApplicationContext.tsx";
 import { CenterProvider } from "./contexts/CenterContext.tsx";
+import "./i18n.ts"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

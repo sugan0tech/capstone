@@ -3,9 +3,9 @@ import Footer from "./Components/Footer";
 import NavBar from "./Components/NavBar";
 import { Route, Routes } from "react-router-dom";
 import AuthenticatedRoute from "./Components/AuthenticatedRoute";
-import DonorRoute from "./Components/DonorRoute";
+import DonorRoute from "./Components/Donor/DonorRoute.tsx";
 import BloodCenterRoute from "./Components/BloodCenterRoute";
-import HospitalRoute from "./Components/HospitalRoute";
+import ClientRoute from "./Components/ClientRoute.tsx";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
@@ -74,9 +74,9 @@ function App() {
           path="/orders"
           element={
             <AuthenticatedRoute>
-              <HospitalRoute>
+              <ClientRoute>
                 <MyDonations />
-              </HospitalRoute>
+              </ClientRoute>
             </AuthenticatedRoute>
           }
         ></Route>
@@ -84,9 +84,9 @@ function App() {
           path="/find-donors"
           element={
             <AuthenticatedRoute>
-              <HospitalRoute>
+              <ClientRoute>
                 <FindDonors />
-              </HospitalRoute>
+              </ClientRoute>
             </AuthenticatedRoute>
           }
         ></Route>
@@ -94,9 +94,9 @@ function App() {
           path="/my-orders"
           element={
             <AuthenticatedRoute>
-              <HospitalRoute>
+              <ClientRoute>
                 <MyOrders />
-              </HospitalRoute>
+              </ClientRoute>
             </AuthenticatedRoute>
           }
         ></Route>

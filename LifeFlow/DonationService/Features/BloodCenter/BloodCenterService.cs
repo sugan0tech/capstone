@@ -3,6 +3,8 @@ using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Exceptions;
 using DonationService.Features.DonationSlot;
+using DonationService.Features.Notification;
+using DonationService.Features.UnitBag;
 
 namespace DonationService.Features.BloodCenter;
 
@@ -11,6 +13,7 @@ public class BloodCenterService(
     IBaseRepo<Entities.DonationSlot> slotRepo,
     IBaseRepo<Entities.UnitBag> unitBagRepo,
     IBaseRepo<Entities.Donor> donorRepo,
+    NotificationService notificationService,
     IMapper mapper) : BaseService<Entities.BloodCenter, BloodCenterDto>(repo, mapper), IBloodCenterService
 {
     public async Task<List<BloodCenterFetchDto>> GetNearByCenters(double latitude, double longitude)
@@ -124,6 +127,7 @@ public class BloodCenterService(
     {
         var slot = await slotRepo.GetById(slotId);
         var donor = await donorRepo.GetById(slot.DonorId);
+        var center = await repo.GetById(slot.CenterId);
         switch (status)
         {
             case SlotStatus.BloodAccepted:
@@ -162,7 +166,6 @@ public class BloodCenterService(
                 await unitBagRepo.Add(plateletUnit);
                 await unitBagRepo.Add(plasmaUnit);
 
-                var center = await repo.GetById(slot.CenterId);
                 center.PlasmaUnits++;
                 center.RBCUnits++;
                 center.PlateletsUnits++;
@@ -170,12 +173,55 @@ public class BloodCenterService(
 
                 break;
             case SlotStatus.BloodRejected:
-                // todo to notify the donor with reason
+                await notificationService.SendNotification(new NotificationDto
+                {
+                    Message = $"Your donation at {center.Name} has be rejected", receiverKind = "Donor",
+                    receiverId = slot.DonorId
+                });
                 break;
         }
 
         slot.SlotStatus = status;
         await slotRepo.Update(slot);
+    }
+
+    public async Task<UnitBagDto> GetUnitBag(int unitBagId)
+    {
+        using var transaction = await unitBagRepo.BeginTransactionAsync();
+        try
+        {
+            var unitBag = await unitBagRepo.GetById(unitBagId);
+            var bloodCenter = await repo.GetById(unitBag.CenterId);
+
+            // Decrementing blood stats of center
+            switch (unitBag.BloodType)
+            {
+                case BloodType.Plasma:
+                    if (bloodCenter.PlasmaUnits > 0)
+                        bloodCenter.PlasmaUnits--;
+                    break;
+                case BloodType.Platelet:
+                    if (bloodCenter.PlateletsUnits > 0)
+                        bloodCenter.PlateletsUnits--;
+                    break;
+                case BloodType.RBC:
+                    if (bloodCenter.RBCUnits > 0)
+                        bloodCenter.RBCUnits--;
+                    break;
+            }
+
+            unitBag.IsSold = true;
+            await unitBagRepo.Update(unitBag);
+            await repo.Update(bloodCenter);
+
+            await transaction.CommitAsync();
+            return mapper.Map<UnitBagDto>(unitBag);
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     private double GetDistance(double lat1, double lon1, double lat2, double lon2)

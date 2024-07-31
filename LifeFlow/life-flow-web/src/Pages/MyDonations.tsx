@@ -5,7 +5,7 @@ import { Donor } from "../contexts/AuthContext";
 import { DonationSlot } from "../types/DonationTypes";
 import { useAlert } from "../contexts/AlertContext";
 import {OngoingSlot} from "../Components/OgoingSlot.tsx";
-import {DonationHistory} from "../Components/DonationHisotry.tsx";
+import {DonationHistory} from "../Components/Donor/DonationHisotry.tsx";
 
 function MyDonations() {
   const donor = localStorage.getItem("Donor");

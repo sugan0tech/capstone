@@ -84,4 +84,27 @@ public class OrderController(OrderService orderService, CustomControllerValidato
                 new ErrorModel(StatusCodes.Status403Forbidden, ex.Message));
         }
     }
+
+    [HttpPost("makeOrder")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> MakeOrder([FromBody] OrderRequestDto order)
+    {
+        try
+        {
+            var createdOrder = await orderService.MakeOrder(order);
+            return StatusCode(StatusCodes.Status201Created, createdOrder);
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(404,
+                new ErrorModel(404, e.Message));
+        }
+        catch (InvalidOperationException e)
+        {
+            return StatusCode(400,
+                new ErrorModel(400, e.Message));
+        }
+    }
 }

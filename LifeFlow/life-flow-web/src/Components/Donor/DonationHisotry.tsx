@@ -1,5 +1,5 @@
-import {DonationSlot, formatDateToIST} from "../types/DonationTypes.ts";
-import {TimeLineTickSvg} from "../assets/TimeLineTickSvg.tsx";
+import {DonationSlot, formatDateToIST} from "../../types/DonationTypes.ts";
+import {TimeLineTickSvg} from "../../assets/TimeLineTickSvg.tsx";
 
 interface HistoryProps {
     history: DonationSlot[];

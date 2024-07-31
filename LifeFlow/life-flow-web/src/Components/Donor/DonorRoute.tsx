@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext.tsx";
 
 interface Props {
   children: JSX.Element;
@@ -8,7 +8,7 @@ interface Props {
 function DonorRoute({ children }: Props) {
   const { user } = useAuth();
   if (localStorage.getItem("Donor") == null) {
-    <Navigate to="/create-donor" />;
+    return <Navigate to="/create-donor" />;
   }
   console.log("Donor route validation");
   return user ? children : <Navigate to="/not-found" />;
