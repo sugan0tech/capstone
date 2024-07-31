@@ -14,15 +14,18 @@ using DonationService.Features.Client;
 using DonationService.Features.DonationSlot;
 using DonationService.Features.Donor;
 using DonationService.Features.GeoCoding;
+using DonationService.Features.Notification;
 using DonationService.Features.Orders;
 using DonationService.Features.Payment;
 using DonationService.Features.UnitBag;
 using DonationService.Features.User;
 using DonationService.Features.UserSession;
+using DonationService.Jobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Quartz;
 using WatchDog;
 using WatchDog.src.Enums;
 
@@ -113,6 +116,7 @@ public class Program
         builder.Services.AddScoped<IBaseRepo<Client>, ClientRepo>();
         builder.Services.AddScoped<IBaseRepo<Order>, OrderRepo>();
         builder.Services.AddScoped<IBaseRepo<Payment>, PaymentRepo>();
+        builder.Services.AddScoped<IBaseRepo<Notification>, NotificationRepo>();
 
         #endregion
 
@@ -129,6 +133,7 @@ public class Program
         builder.Services.AddScoped<PaymentService>();
         builder.Services.AddScoped<BloodCenterService>();
         builder.Services.AddScoped<GeocodingService>();
+        builder.Services.AddScoped<NotificationService>();
 
         // Commands and queries 
         builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
@@ -150,6 +155,55 @@ public class Program
         builder.Services.AddScoped<EmailService>();
 
         builder.Services.AddHttpClient<GeocodingService>();
+        
+        
+        // SignalR
+        builder.Services.AddSignalR();
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("NotificationPolicy", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+            });
+        });
+
+        #endregion
+
+        #region Jobs
+
+        builder.Services.AddQuartz(q =>
+        {
+            q.UseMicrosoftDependencyInjectionJobFactory();
+            // q.UsePersistentStore(s =>
+            // {
+            //     s.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
+            // });
+
+            q.AddJob<CheckExpiryJob>(opts => opts.WithIdentity("CheckExpiryJob"));
+            q.AddTrigger(opts => opts.ForJob("CheckExpiryJob")
+                .WithIdentity("CheckExpiryJob-trigger")
+                .WithCronSchedule("0 0 6 * * ?"));
+
+            q.AddJob<EarlyExpiryNotificationJob>(opts => opts.WithIdentity("EarlyExpiryNotificationJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("EarlyExpiryNotificationJob")
+                .WithIdentity("EarlyExpiryNotificationJob-trigger")
+                .WithCronSchedule("0 0 6 * * ?"));
+
+            // If slot reaches time
+            q.AddJob<SlotNotificationJob>(opts => opts.WithIdentity("SlotNotificationJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("SlotNotificationJob")
+                .WithIdentity("SlotNotificationJob-trigger")
+                .WithCronSchedule("0 0/30 * * * ?"));
+
+            // If send notification, if donor can donate blood
+            q.AddJob<SlotNotificationJob>(opts => opts.WithIdentity("DonationRequestJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("DonationRequestJob")
+                .WithIdentity("DonationRequestJob-trigger")
+                .WithCronSchedule("0 0 8 1 * ?"));
+        });
 
         #endregion
 
@@ -191,6 +245,7 @@ public class Program
 
         #endregion
 
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -203,6 +258,13 @@ public class Program
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseCors("AllowAll");
+
+        #region Hub
+
+        app.MapHub<NotificationHub>("/notificationHub");
+
+        #endregion
+
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseWatchDogExceptionLogger();

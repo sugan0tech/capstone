@@ -76,7 +76,8 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
         #region Clients
 
         modelBuilder.Entity<Client>().HasIndex(client => client.Name).IsUnique();
-        modelBuilder.Entity<Client>().HasOne<User>(client => client.User).WithOne().HasForeignKey<Client>(client => client.ManagedById);
+        modelBuilder.Entity<Client>().HasOne<User>(client => client.User).WithOne()
+            .HasForeignKey<Client>(client => client.ManagedById);
 
         #endregion
 
@@ -97,6 +98,12 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
             .OnDelete(DeleteBehavior.Cascade);
 
         #endregion
+
+        #endregion
+
+        #region Notification
+
+        modelBuilder.Entity<Notification>();
 
         #endregion
 

@@ -7,6 +7,7 @@ using DonationService.Features.BloodCenter;
 using DonationService.Features.Client;
 using DonationService.Features.DonationSlot;
 using DonationService.Features.Donor;
+using DonationService.Features.Notification;
 using DonationService.Features.Orders;
 using DonationService.Features.Payment;
 using DonationService.Features.UnitBag;
@@ -66,6 +67,7 @@ public class MappingProfile : Profile
         CreateMap<UserSession, UserSessionDto>()
             .ForMember(dto => dto.SessionId, act => act.MapFrom(src => src.Id));
 
+        CreateMap<Notification, NotificationDto>().ReverseMap();
         #region BloodOrders
 
         CreateMap<Order, OrderDto>().ReverseMap();

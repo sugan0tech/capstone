@@ -1,12 +1,11 @@
 ## Technical stuffs & decisions that are included & made in this application
 
-
 ## Infra plan
-- Auth -> Keycloak
-- Main Api Service -> dotnet
-- Deidcated Notification Service -> pipeline with kafka
-- Frontend -> React 
 
+-   Auth -> Keycloak
+-   Main Api Service -> dotnet
+-   Deidcated Notification Service -> pipeline with kafka
+-   Frontend -> React
 
 ## Frotend Todo
 
@@ -20,9 +19,8 @@
 2. MediatR
 3. Log As events ( EventHog )
 4. Ordering ( typing ordering scheme ), with transaction
-	1. Orders will be events and streamed to dedicated service.
+    1. Orders will be events and streamed to dedicated service.
 5. Blood tracing ( to the root donor )
-
 
 Infra
 
@@ -30,10 +28,14 @@ Infra
 2. Kafka in VM
 3. KeyVault for creds
 4. Project Managemetn with azure devops board
-5.  CI/CD in azure pipelines
-
+5. CI/CD in azure pipelines
 
 ## Calculating distance with Latitude and Longitude
+
 ```
 acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon2-lon1))*6371 (6371 is Earth radius in km.)
 ```
+
+## Soft Delete pattern
+
+[ref](https://blog.jetbrains.com/dotnet/2023/06/14/how-to-implement-a-soft-delete-strategy-with-entity-framework-core/)

@@ -68,7 +68,10 @@ public class BloodCenterService(
             .Where(s => s.CenterId == center.Id && s.SlotTime.TimeOfDay > DateTime.Today.TimeOfDay).ToList();
 
         var groupedSlots = new Dictionary<TimeSpan, List<Entities.DonationSlot>>();
-        for (var time = center.OpenByTime; time < center.CloseByTime; time = time.Add(TimeSpan.FromMinutes(20)))
+        var currentTime = DateTime.Now.TimeOfDay;
+
+        var startTime = currentTime > center.OpenByTime ? currentTime : center.OpenByTime;
+        for (var time = startTime; time < center.CloseByTime; time = time.Add(TimeSpan.FromMinutes(20)))
         {
             groupedSlots[time] = todaySlots.Where(s =>
                 s.SlotTime.TimeOfDay >= time && s.SlotTime.TimeOfDay < time.Add(TimeSpan.FromMinutes(20))).ToList();
