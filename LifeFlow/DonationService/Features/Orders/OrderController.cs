@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using DonationService.Commons;
+using DonationService.Commons.Enums;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
+using DonationService.Features.Address.Command;
+using DonationService.Features.Orders.Commands;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +13,10 @@ namespace DonationService.Features.Orders;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
-public class OrderController(OrderService orderService, CustomControllerValidator validator)
+public class OrderController(
+    OrderService orderService,
+    ICommandHandler<UpdateOrderStatusCommand> commandHandler,
+    CustomControllerValidator validator)
     : ControllerBase
 {
     [HttpGet("{id}")]
@@ -94,6 +100,35 @@ public class OrderController(OrderService orderService, CustomControllerValidato
         {
             var createdOrder = await orderService.MakeOrder(order);
             return StatusCode(StatusCodes.Status201Created, createdOrder);
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(404,
+                new ErrorModel(404, e.Message));
+        }
+        catch (OutOfServiceException e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(404,
+                new ErrorModel(404, e.Message));
+        }
+        catch (InvalidOperationException e)
+        {
+            return StatusCode(400,
+                new ErrorModel(400, e.Message));
+        }
+    }
+
+    [HttpPut("{orderId}/{status}")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateOrderStatus(int orderId, OrderStatus status)
+    {
+        try
+        {
+            await commandHandler.Handle(new UpdateOrderStatusCommand(orderId, status));
+            return StatusCode(StatusCodes.Status201Created, orderService.GetById(orderId));
         }
         catch (KeyNotFoundException e)
         {

@@ -84,4 +84,22 @@ public class PaymentController(PaymentService paymentService, CustomControllerVa
                 new ErrorModel(StatusCodes.Status403Forbidden, ex.Message));
         }
     }
+
+    [HttpPost("make")]
+    [ProducesResponseType(typeof(PaymentDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> MakePayment([FromBody] MakePaymentDto payment)
+    {
+        try
+        {
+            var createdPayment = await paymentService.MakePayment(payment.PaymentId, payment.Amount, payment.Method);
+            return StatusCode(StatusCodes.Status201Created, createdPayment);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(400,
+                new ErrorModel(400, e.Message));
+        }
+    }
 }

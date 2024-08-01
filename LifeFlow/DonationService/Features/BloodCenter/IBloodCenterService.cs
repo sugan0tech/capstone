@@ -13,5 +13,7 @@ public interface IBloodCenterService
     public Task<List<DonationSlotDto>> GetCompletedSlots(string centerName);
     public Task ProcessSlot(int slotId, SlotStatus status);
 
+    public Task<List<UnitBagDto>> GetAvailableUnitBags(int centerId);
+    public Task<List<UnitBagDto>> GetSoldUnitBags(int centerId);
     public Task<UnitBagDto> GetUnitBag(int unitBagId);
 }

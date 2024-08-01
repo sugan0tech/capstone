@@ -185,6 +185,22 @@ public class BloodCenterService(
         await slotRepo.Update(slot);
     }
 
+    public async Task<List<UnitBagDto>> GetAvailableUnitBags(int centerId)
+    {
+        var bloodCenter = await repo.GetById(centerId);
+        var unitBags = await unitBagRepo.GetAll();
+        return mapper.Map<List<UnitBagDto>>(
+            unitBags.Where(bag => bag.CenterId.Equals(centerId) && !bag.IsSold).ToList());
+    }
+
+    public async Task<List<UnitBagDto>> GetSoldUnitBags(int centerId)
+    {
+        var bloodCenter = await repo.GetById(centerId);
+        var unitBags = await unitBagRepo.GetAll();
+        return mapper.Map<List<UnitBagDto>>(unitBags.Where(bag => bag.CenterId.Equals(centerId) && bag.IsSold)
+            .ToList());
+    }
+
     public async Task<UnitBagDto> GetUnitBag(int unitBagId)
     {
         using var transaction = await unitBagRepo.BeginTransactionAsync();

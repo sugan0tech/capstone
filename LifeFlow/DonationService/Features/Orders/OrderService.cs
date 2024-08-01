@@ -2,6 +2,7 @@ using AutoMapper;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Entities;
+using DonationService.Exceptions;
 using DonationService.Features.Address.Request;
 using DonationService.Features.BloodCenter;
 using DonationService.Features.Client;
@@ -9,6 +10,7 @@ using DonationService.Features.Notification;
 using DonationService.Features.Payment;
 using DonationService.Features.UnitBag;
 using MediatR;
+using WatchDog;
 
 namespace DonationService.Features.Orders;
 
@@ -55,6 +57,19 @@ public class OrderService(
                             "Only RBC of specified type permitted for Emergency orders");
 
                     fetchedBags = ProcessForEmergency(nearbyCenters, request);
+                    if (fetchedBags.Count == 0)
+                    {
+                        await notificationService.SendNotification(new NotificationDto
+                        {
+                            receiverId = request.ClientId,
+                            receiverKind = "Client",
+                            Message =
+                                $"We are out of stock for {request.AntigenTypes.First().ToString()}, please look out for donors instead"
+                        });
+                        throw new OutOfServiceException(
+                            "Sorry we are out of stock right now, please search for donors directly!!!");
+                    }
+
                     order = MakeOrder(fetchedBags, request.OrderType, client.Type);
                     break;
                 case OrderType.RecurringTransfusion:
@@ -76,13 +91,7 @@ public class OrderService(
             if (order == null)
                 throw new InvalidOperationException("Some error occured");
 
-            var payment = new PaymentDto
-            {
-                OrderId = order.Id,
-                Amount = (decimal)order.TotalPrice,
-                PaymentDate = DateTime.UtcNow
-            };
-            var updatedPayment = await paymentService.Add(payment);
+            var updatedPayment = await paymentService.CreatePayment(order.Id, order.TotalPrice, "InAppPayment");
             order.PaymentId = updatedPayment.Id;
             await repo.Update(order);
 
@@ -205,6 +214,12 @@ public class OrderService(
 
     public Order MakeOrder(List<UnitBagDto> bags, OrderType type, ClientType clientType)
     {
+        if (bags.Count == 0)
+        {
+            WatchLogger.LogError("Invalid No Blood Found with Given types");
+            throw new OutOfServiceException("Wfff!! We are out of service, there is not stock left near by you");
+        }
+
         var order = new Order();
         double totalPrice = 0;
         order.Quantity = bags.Count;

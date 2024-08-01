@@ -16,6 +16,7 @@ using DonationService.Features.Donor;
 using DonationService.Features.GeoCoding;
 using DonationService.Features.Notification;
 using DonationService.Features.Orders;
+using DonationService.Features.Orders.Commands;
 using DonationService.Features.Payment;
 using DonationService.Features.UnitBag;
 using DonationService.Features.User;
@@ -144,6 +145,7 @@ public class Program
         builder.Services
             .AddScoped<IQueryHandler<GetAllAddressesQuery, List<AddressDto>>, GetAllAddressesQueryHandler>();
         builder.Services.AddScoped<CustomControllerValidator>();
+        builder.Services.AddScoped<ICommandHandler<UpdateOrderStatusCommand>, UpdateOrderCommandHandler>();
 
         // OrderServices
         builder.Services.AddScoped<OrderService>();
@@ -155,16 +157,13 @@ public class Program
         builder.Services.AddScoped<EmailService>();
 
         builder.Services.AddHttpClient<GeocodingService>();
-        
-        
+
+
         // SignalR
         builder.Services.AddSignalR();
         builder.Services.AddAuthorization(options =>
         {
-            options.AddPolicy("NotificationPolicy", policy =>
-            {
-                policy.RequireAuthenticatedUser();
-            });
+            options.AddPolicy("NotificationPolicy", policy => { policy.RequireAuthenticatedUser(); });
         });
 
         #endregion
@@ -203,6 +202,18 @@ public class Program
                 .ForJob("DonationRequestJob")
                 .WithIdentity("DonationRequestJob-trigger")
                 .WithCronSchedule("0 0 8 1 * ?"));
+
+            q.AddJob<OrderPaymentNotifyJob>(opts => opts.WithIdentity("OrderPaymentNotifyJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("OrderPaymentNotifyJob")
+                .WithIdentity("OrderPaymentNotifyJob-trigger")
+                .WithCronSchedule("0 0 8 * * ?")); // works for every day 8 am
+
+            q.AddJob<OrderDeliveredNotifyJob>(opts => opts.WithIdentity("OrderDeliveredNotifyJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("OrderDeliveredNotifyJob")
+                .WithIdentity("OrderDeliveredNotifyJob-trigger")
+                .WithCronSchedule("0 0 8 * * ?")); // works for every day 8 am
         });
 
         #endregion
