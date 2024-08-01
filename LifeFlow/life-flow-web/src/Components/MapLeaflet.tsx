@@ -33,6 +33,8 @@ function MapLeaflet({ locations }: MapLeafletProps) {
       ? convertToLatLng(locations[0].lat, locations[0].lon)
       : [51.505, -0.09];
 
+  console.log(locations)
+
   return (
     <div className="box-content w-11/12 p-2 z-0" style={{ height: "550px" }}>
       <MapContainer center={defaultCenter} zoom={16} scrollWheelZoom={false}>

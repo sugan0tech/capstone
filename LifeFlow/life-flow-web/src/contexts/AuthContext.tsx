@@ -6,8 +6,6 @@ import {
   ReactNode,
 } from "react";
 import useAuthHook from "../hooks/useAuthHook";
-import { Simulate } from "react-dom/test-utils";
-import compositionStart = Simulate.compositionStart;
 
 export type Role =
   | "Donor"
@@ -36,6 +34,7 @@ export interface Client {
   id: number;
   managedById: number;
   name: string;
+  type: "Hospital" | "Pharma";
   addressId: number;
 }
 export interface Address {

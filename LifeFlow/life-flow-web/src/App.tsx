@@ -15,7 +15,7 @@ import MyDonations from "./Pages/MyDonations";
 import BloodCenterConsole from "./Pages/BloodCenterConsole";
 import MyAccount from "./Pages/MyAccount";
 import Donations from "./Pages/Donations";
-import FindDonors from "./Pages/FindeDonors";
+import FindDonors from "./Pages/FindDonors.tsx";
 import MyOrders from "./Pages/MyOrders";
 import CreateDonor from "./Pages/CreateDonor";
 

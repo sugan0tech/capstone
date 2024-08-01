@@ -36,13 +36,13 @@ function NotificationButton() {
                 transport: HttpTransportType.WebSockets,
                 accessTokenFactory: () => localStorage.getItem("accessToken"),
             })
-            .configureLogging(LogLevel.Information)
             .withAutomaticReconnect()
             .build();
+        // .configureLogging(LogLevel.Information)
 
         connection.start()
             .then(() => {
-                console.log("Connected to SignalR");
+                // console.log("Connected to SignalR");
 
                 connection.on("ReceiveNotification", (message) => {
                     console.log("From Socket")
@@ -55,7 +55,7 @@ function NotificationButton() {
                 });
             })
             .catch((err) => {
-                console.error("SignalR connection failed: ", err);
+                // console.error("SignalR connection failed: ", err);
             });
 
         return () => {

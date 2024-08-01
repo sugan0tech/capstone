@@ -1,30 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { put, post } from "../../utils/apiService.ts";
-import { Address, useAuth } from "../../contexts/AuthContext.tsx";
+import {put, post, get} from "../../utils/apiService.ts";
+import {Address, Client as ClientType, useAuth} from "../../contexts/AuthContext.tsx";
 import { useAlert } from "../../contexts/AlertContext.tsx";
-import { EditAddress } from "../Address/EditAddress.tsx";
-import { ViewAddress } from "../Address/ViewAddress.tsx";
-import { CreateAddress } from "../Address/CreateAddress.tsx";
+import { EditAddress } from "./EditAddress.tsx";
+import { ViewAddress } from "./ViewAddress.tsx";
+import { CreateAddress } from "./CreateAddress.tsx";
 
 interface AddressViewProps {
   initialAddress: Address | null;
 }
 
-export const AddressView: React.FC<AddressViewProps> = ({ initialAddress }) => {
+export const AddressView: React.FC<AddressViewProps> = () => {
   const { user } = useAuth();
   const { addAlert } = useAlert();
-  const [addressInfo, setAddressInfo] = useState<Address | null>(
-    initialAddress
-  );
+  const [addressInfo, setAddressInfo] = useState<Address | null>(null);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [isCreatingAddress, setIsCreatingAddress] = useState(false);
-  const [hasAddress, setHasAddress] = useState(!!initialAddress);
+  const [hasAddress, setHasAddress] = useState(false);
 
   useEffect(() => {
-    if (!initialAddress) {
-      addAlert({ message: "Please create an address", type: "warning" });
+    const localAddress = localStorage.getItem("address");
+    if (localAddress) {
+      setAddressInfo(JSON.parse(localAddress));
+      setHasAddress(true);
+    } else {
+
+      const response = get<ClientType>(`/client/user/${user?.id}`);
+      response.then(val => {
+        console.log(val)
+        if (!val.addressId) {
+          addAlert({ message: "Please create an address", type: "warning" });
+        } else {
+          const response = get<Address>(`address/${val.addressId}`)
+          response.then((addr) => {
+            localStorage.setItem("address", JSON.stringify(addr));
+            setAddressInfo(addr)
+            setHasAddress(true);
+          })
+        }
+      })
+
     }
-  }, [initialAddress]);
+  }, [])
 
   const handleUpdateAddressInfo = async (updatedInfo: Address) => {
     await put(`/address`, updatedInfo);

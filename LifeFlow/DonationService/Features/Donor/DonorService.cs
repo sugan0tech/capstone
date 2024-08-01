@@ -75,8 +75,15 @@ public class DonorService(
             if (d.AddressId == null) return;
 
             var address = mediator.Send(new GetAddressByIdRequest { AddressId = (int)d.AddressId }).Result;
-            if (GetDistance(address.Latitude, address.Longitude, lat, lon) <= 50)
-                distancedNearbyDonors.Add(mapper.Map<DonorFetchDto>(d));
+            var distance = GetDistance(address.Latitude, address.Longitude, lat, lon);
+            if (distance <= 50)
+            {
+                var donorFetch = mapper.Map<DonorFetchDto>(d);
+                donorFetch.Latitude = address.Latitude;
+                donorFetch.Longitude = address.Longitude;
+                donorFetch.distance = Math.Truncate(distance*100)/100;
+                distancedNearbyDonors.Add(donorFetch);
+            }
         });
 
 
@@ -95,12 +102,13 @@ public class DonorService(
             var address = mediator.Send(new GetAddressByIdRequest { AddressId = (int)d.AddressId }).Result;
             var distance = GetDistance(address.Latitude, address.Longitude, lat, lon);
             if (IsCompatibleBloodType(d.BloodAntigenType, bloodType) &&
-                d.BloodAntigenType == bloodType &&
                 d.BloodSubtype == subtype &&
                 distance <= 50)
             {
                 var donorFecable = mapper.Map<DonorFetchDto>(d);
-                donorFecable.distance = distance;
+                donorFecable.Latitude = address.Latitude;
+                donorFecable.Longitude = address.Longitude;
+                donorFecable.distance = Math.Truncate(distance*100)/100;
                 distancedNearbyDonors.Add(donorFecable);
             }
         });

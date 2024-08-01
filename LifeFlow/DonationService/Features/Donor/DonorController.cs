@@ -79,19 +79,19 @@ public class DonorController(
         return Ok(donors);
     }
 
-    /// <summary>
-    ///     Gets donors by location.
-    /// </summary>
-    /// <param name="lat">Latitude of the location.</param>
-    /// <param name="lon">Longitude of the location.</param>
-    /// <returns>A list of nearby donors.</returns>
-    [HttpGet("location")]
-    [ProducesResponseType(typeof(List<DonorFetchDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetByLocation(double lat, double lon)
-    {
-        var donors = await donorService.GetByLocation(lat, lon);
-        return Ok(donors);
-    }
+    // /// <summary>
+    // ///     Gets donors by location.
+    // /// </summary>
+    // /// <param name="lat">Latitude of the location.</param>
+    // /// <param name="lon">Longitude of the location.</param>
+    // /// <returns>A list of nearby donors.</returns>
+    // [HttpGet("nearby")]
+    // [ProducesResponseType(typeof(List<DonorFetchDto>), StatusCodes.Status200OK)]
+    // public async Task<IActionResult> GetByLocation(double lat, double lon)
+    // {
+    //     var donors = await donorService.GetByLocation(lat, lon);
+    //     return Ok(donors);
+    // }
 
     /// <summary>
     ///     Gets donors by location and blood type.
@@ -101,7 +101,7 @@ public class DonorController(
     /// <param name="bloodType">The blood type of the donor.</param>
     /// <param name="subtype">The blood subtype of the donor.</param>
     /// <returns>A list of nearby donors with the specified blood type.</returns>
-    [HttpGet("location/bloodType")]
+    [HttpGet("nearby")]
     [ProducesResponseType(typeof(List<DonorFetchDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByLocationAndBloodType(double lat, double lon, string bloodType,
         string subtype)

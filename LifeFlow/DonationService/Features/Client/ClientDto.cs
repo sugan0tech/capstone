@@ -5,6 +5,7 @@ namespace DonationService.Features.Client;
 
 public class ClientDto
 {
+    public int Id { get; set; }
     public int ManagedById { get; set; }
     public Entities.User? User { get; set; }
     public ClientType Type { get; set; }

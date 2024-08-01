@@ -75,6 +75,7 @@ function FindCenters() {
                 className="grid grid-cols-2 gap-2 overflow-y-scroll pl-2 pb-2"
                 style={{ height: "550px" }}
             >
+              {centers.length == 0 && "Search for centers to see"}
               {centers.map((center) => (
                   <CentreCard
                       key={center.id}

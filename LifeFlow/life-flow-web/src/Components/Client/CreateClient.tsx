@@ -12,7 +12,7 @@ interface Client {
 export const CreateClient = ({ onSave, onCancel, currentUserId }) => {
   const [formState, setFormState] = useState<Client>({
     name: "",
-    type: "",
+    type: "Hospital",
     managedById: currentUserId,
   });
 

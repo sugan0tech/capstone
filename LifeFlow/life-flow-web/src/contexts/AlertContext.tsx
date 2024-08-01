@@ -32,7 +32,9 @@ const AlertProvider = ({ children }: AuthProviderProps) => {
   const [alert, setAlert] = useState<Alert | null>(null);
 
   const addAlert = useCallback((alert: Alert) => {
-    setAlert(alert);
+    if (alert.type && alert.message){
+        setAlert(alert);
+    }
 
     // Auto-remove the alert after 3 seconds
     setTimeout(() => {
@@ -63,16 +65,17 @@ const AlertProvider = ({ children }: AuthProviderProps) => {
     <AlertContext.Provider value={{ addAlert }}>
       {children}
       {alert && (
-        <div className="fixed top-4 right-4 w-80 z-40">
-          <div className={`alert alert-${alert.type} p-4 mb-4`} role="alert">
+        <div className="fixed bottom-4 right-4 w-80 z-40">
+          <div role="alert" className={`alert alert-${alert.type} p-4 mb-4`} >
             <div>
               {selectSvg(alert.type)}
               <span>{alert.message}</span>
+              <br />
               <button
                 onClick={removeAlert}
                 className={`btn btn-${alert.type} `}
               >
-                X
+                close X
               </button>
             </div>
           </div>

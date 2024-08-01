@@ -3,6 +3,8 @@ using DonationService.Commons;
 using DonationService.Exceptions;
 using DonationService.Features.BloodCenter.Commands;
 using DonationService.Features.BloodCenter.Queries;
+using DonationService.Features.Client.Commands;
+using DonationService.Features.Client.Queries;
 using DonationService.Features.Donor.Commands;
 using DonationService.Features.Donor.Queries;
 using MediatR;
@@ -36,7 +38,11 @@ public class CreateAddressCommandHandler(IBaseRepo<Entities.Address> repository,
                 centre.AddressId = address.Id;
                 await mediator.Send(new UpdateBloodCenterCommand(centre));
                 break;
-            case "Hospital":
+            case "Client":
+                var client = await mediator.Send(new GetClientQuery(command.Address.EntityId));
+                await repository.Add(address);
+                client.AddressId = address.Id;
+                await mediator.Send(new UpdateClientCommand(client));
                 break;
             default:
                 throw new InvalidEntityTypeException($"{command.Address.EntityType} is not of accepted types");

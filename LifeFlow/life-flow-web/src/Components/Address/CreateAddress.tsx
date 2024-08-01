@@ -7,13 +7,13 @@ import MapPickerLeaflet from "../MapPickerLeaflet";
 import {GeocodeResult} from "../LocationSearchBar.tsx";
 
 export interface AddressCreate {
-  userId: number;
-  addressLine1: string;
-  addressLine2?: string;
+  entityId: number;
+  entityType: string;
+  street: string;
   city: string;
   state: string;
   country: string;
-  postalCode: string;
+  zipCode: string;
   latitude: number;
   longitude: number;
 }
@@ -23,20 +23,43 @@ const geocode = (query: string) => {
 };
 
 export function CreateAddress() {
+  const navigate = useNavigate();
+  const { addAlert } = useAlert();
+  const { user , role} = useAuth();
+  const entityType = role == "Donor" ? "Donor": "Client";
+  let entityId = 0 ;
+  if (entityType === "Donor") {
+    const donorData = localStorage.getItem("Donor");
+    console.log("hereeee donor")
+    console.log(donorData)
+    if (donorData) {
+      const donor = JSON.parse(donorData);
+      entityId = donor.id;
+    }
+  } else if (entityType === "Client") {
+    const clientData = localStorage.getItem("Client");
+    console.log("hereeee client")
+    console.log(clientData)
+    if (clientData) {
+      const client = JSON.parse(clientData);
+      entityId = client.id;
+    }
+  }
   const [address, setAddress] = useState<AddressCreate>({
-    userId: 0,
-    addressLine1: "",
-    addressLine2: "",
+    entityId: entityId,
+    entityType: entityType,
+    street: "",
     city: "",
     state: "",
     country: "",
-    postalCode: "",
+    zipCode: "",
     latitude: 0,
     longitude: 0,
   });
-  const navigate = useNavigate();
-  const { addAlert } = useAlert();
-  const { user } = useAuth();
+
+  useEffect(() => {
+    console.log(address)
+  }, [address]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -107,24 +130,14 @@ export function CreateAddress() {
     <div className="flex flex-col items-center gap-4">
       <form className="w-full max-w-xs" onSubmit={handleSubmit}>
         <div className="form-control">
-          <label className="label">Address Line 1</label>
+          <label className="label">Street</label>
           <input
             type="text"
-            name="addressLine1"
+            name="street"
             className="input input-bordered"
-            value={address.addressLine1}
+            value={address.street}
             onChange={handleChange}
             required
-          />
-        </div>
-        <div className="form-control">
-          <label className="label">Address Line 2</label>
-          <input
-            type="text"
-            name="addressLine2"
-            className="input input-bordered"
-            value={address.addressLine2}
-            onChange={handleChange}
           />
         </div>
         <div className="form-control">
@@ -164,9 +177,9 @@ export function CreateAddress() {
           <label className="label">Postal Code</label>
           <input
             type="text"
-            name="postalCode"
+            name="zipCode"
             className="input input-bordered"
-            value={address.postalCode}
+            value={address.zipCode}
             onChange={handleChange}
             required
           />

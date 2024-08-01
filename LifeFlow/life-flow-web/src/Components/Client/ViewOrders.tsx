@@ -20,15 +20,16 @@ interface UnitBag {
     type: string;
 }
 
-interface Client {
-    // Define the properties of Client according to your application
+export interface Client {
     id: number;
+    managedById: number;
     name: string;
+    type: string;
+    addressId: number;
 }
 
 interface OrderDto {
     ClientId: number;
-    Client: Client;
     Status: OrderStatus;
     Items: UnitBag[];
     Quantity: number;
@@ -58,7 +59,6 @@ function ViewOrders() {
                 const dummyData: OrderDto[] = [
                     {
                         ClientId: 1,
-                        Client: { id: 1, name: "Dummy Client" },
                         Status: OrderStatus.Delivered,
                         Items: [],
                         Quantity: 10,

@@ -14,6 +14,10 @@ function ClientRoute({ children }: Props) {
     addAlert({message: "Create Client Profile first", type: "error"})
     return <Navigate to="/my-account" />;
   }
+  if(localStorage.getItem("address") == null){
+    addAlert({message: "Create Address for client", type: "error"})
+    return <Navigate to="/my-account" />;
+  }
   console.log("Hospital/Pharma route validation");
   return user ? children : <Navigate to="/not-found" />;
 }
