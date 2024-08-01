@@ -203,9 +203,6 @@ public class BloodCenterService(
 
     public async Task<UnitBagDto> GetUnitBag(int unitBagId)
     {
-        using var transaction = await unitBagRepo.BeginTransactionAsync();
-        try
-        {
             var unitBag = await unitBagRepo.GetById(unitBagId);
             var bloodCenter = await repo.GetById(unitBag.CenterId);
 
@@ -230,14 +227,7 @@ public class BloodCenterService(
             await unitBagRepo.Update(unitBag);
             await repo.Update(bloodCenter);
 
-            await transaction.CommitAsync();
             return mapper.Map<UnitBagDto>(unitBag);
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
     }
 
     private double GetDistance(double lat1, double lon1, double lat2, double lon2)

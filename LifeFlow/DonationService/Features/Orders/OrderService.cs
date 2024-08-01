@@ -10,6 +10,7 @@ using DonationService.Features.Notification;
 using DonationService.Features.Payment;
 using DonationService.Features.UnitBag;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using WatchDog;
 
 namespace DonationService.Features.Orders;
@@ -22,6 +23,7 @@ public class OrderService(
     BloodCenterService bloodCenterService,
     PaymentService paymentService,
     NotificationService notificationService,
+    DonationServiceContext context,
     IMediator mediator)
     : BaseService<Order, OrderDto>(repo, mapper), IOrderService
 {
@@ -31,6 +33,9 @@ public class OrderService(
         var client = await clientService.GetById(request.ClientId);
         var addressId = client.AddressId ?? 0;
         if (addressId != 0)
+        {
+        using var transaction = await repo.BeginTransactionAsync();
+        try
         {
             var address = await mediator.Send(new GetAddressByIdRequest { AddressId = addressId });
             var nearbyCenters = await bloodCenterService.GetNearByCenters(address.Latitude, address.Longitude);
@@ -56,7 +61,7 @@ public class OrderService(
                         throw new InvalidOperationException(
                             "Only RBC of specified type permitted for Emergency orders");
 
-                    fetchedBags = ProcessForEmergency(nearbyCenters, request);
+                    fetchedBags = await ProcessForEmergency(nearbyCenters, request);
                     if (fetchedBags.Count == 0)
                     {
                         await notificationService.SendNotification(new NotificationDto
@@ -70,149 +75,163 @@ public class OrderService(
                             "Sorry we are out of stock right now, please search for donors directly!!!");
                     }
 
-                    order = MakeOrder(fetchedBags, request.OrderType, client.Type);
+                    order = await MakeOrder(fetchedBags, request.OrderType, client.Type, request);
                     break;
                 case OrderType.RecurringTransfusion:
-                    fetchedBags = ProcessForRecurringTransfusion(nearbyCenters, request);
-                    order = MakeOrder(fetchedBags, request.OrderType, client.Type);
+                    fetchedBags = await ProcessForRecurringTransfusion(nearbyCenters, request);
+                    order = await MakeOrder(fetchedBags, request.OrderType, client.Type, request);
                     break;
                 case OrderType.HospitalStockUpdate:
                     if (request.Subtypes.Contains(BloodSubtype.Ro))
                         throw new InvalidOperationException("Ro is a rare blood, not meant for Stock updates");
-                    fetchedBags = ProcessForHospitalStockUpdate(nearbyCenters, request);
-                    order = MakeOrder(fetchedBags, request.OrderType, client.Type);
+                    fetchedBags = await ProcessForHospitalStockUpdate(nearbyCenters, request);
+                    order = await MakeOrder(fetchedBags, request.OrderType, client.Type, request);
                     break;
                 case OrderType.RecurringAPI:
-                    fetchedBags = ProcessForRecurringApi(nearbyCenters, request);
-                    order = MakeOrder(fetchedBags, request.OrderType, client.Type);
+                    fetchedBags = await ProcessForRecurringApi(nearbyCenters, request);
+                    order = await MakeOrder(fetchedBags, request.OrderType, client.Type, request);
                     break;
             }
 
             if (order == null)
                 throw new InvalidOperationException("Some error occured");
 
+            WatchLogger.Log(order.ToString());
             var updatedPayment = await paymentService.CreatePayment(order.Id, order.TotalPrice, "InAppPayment");
             order.PaymentId = updatedPayment.Id;
             await repo.Update(order);
 
+            await transaction.CommitAsync();
             return mapper.Map<OrderDto>(order);
+        }
+        catch (Exception e)
+        {
+            WatchLogger.LogError(e.Message);
+            await transaction.RollbackAsync();
+            throw;
+        }
         }
 
         throw new InvalidOperationException("Client Must have defined address");
     }
 
-    public List<OrderDto> PendingOrders(string centerName)
+    public async Task<List<OrderDto>> PendingOrders(string centerName)
     {
-        var orders = repo.GetAll().Result.Where(order => order.Status.Equals(OrderStatus.Pending)).ToList();
-        return mapper.Map<List<OrderDto>>(orders);
+        var orders = await repo.GetAll();
+        return mapper.Map<List<OrderDto>>(orders.Where(order => order.Status.Equals(OrderStatus.Pending)).ToList());
     }
 
-    public List<UnitBagDto> ProcessForEmergency(List<BloodCenterFetchDto> centers, OrderRequestDto request)
+    public async Task<List<UnitBagDto>> ProcessForEmergency(List<BloodCenterFetchDto> centers, OrderRequestDto request)
     {
         var bags = new List<UnitBagDto>();
-        centers.ForEach(center =>
+        foreach (var center in centers)
         {
-            var unitBagDtos = unitBagService.GetAll().Result.Where(bag =>
+            var unitBags = await unitBagService.GetAll();
+            var unitBagDtos = unitBags.Where(bag =>
                 bag.CenterId.Equals(center.Id) && !bag.IsSold && Equals(request.AntigenTypes.First())).ToList();
-            unitBagDtos.ForEach(unitbag =>
+            foreach (var unitbag in unitBagDtos)
             {
-                if (request.MaxQuantity == 0) return;
+                if (request.MaxQuantity == 0) continue;
                 // For emergency only RBC needed & subtype should be Rhd, Ro not needed for emergency transfussion
                 if (unitbag.BloodType.Equals(BloodType.RBC) && unitbag.BloodSubtype.Equals(BloodSubtype.Rhd))
                 {
-                    bags.Add(bloodCenterService.GetUnitBag(unitbag.Id).Result);
+                    bags.Add(await bloodCenterService.GetUnitBag(unitbag.Id));
                     request.MaxQuantity--;
                 }
-            });
-        });
+            }
+        }
 
         return bags;
     }
 
-    public List<UnitBagDto> ProcessForRecurringTransfusion(List<BloodCenterFetchDto> centers, OrderRequestDto request)
+    public async Task<List<UnitBagDto>> ProcessForRecurringTransfusion(List<BloodCenterFetchDto> centers, OrderRequestDto request)
     {
         var bags = new List<UnitBagDto>();
         // looping through each antigen & type and stock piling it
-        request.types.ForEach(type =>
+        foreach (var type in request.types)
         {
-            request.AntigenTypes.ForEach(antigen =>
+            foreach (var antigen in request.AntigenTypes)
             {
                 var quantity = request.MaxQuantity;
-                centers.ForEach(center =>
+                foreach (var center in centers)
                 {
-                    var unitBagDtos = unitBagService.GetAll().Result.Where(bag =>
+                    var unitBags = await unitBagService.GetAll();
+                    var unitBagDtos = unitBags.Where(bag =>
                         bag.CenterId.Equals(center.Id) && !bag.IsSold && bag.Type.Equals(antigen)).ToList();
-                    unitBagDtos.ForEach(unitbag =>
+                    foreach (var unitbag in unitBagDtos)
                     {
-                        if (quantity == 0) return;
+                        if (quantity == 0) continue;
                         if (unitbag.BloodType.Equals(type))
                         {
-                            bags.Add(bloodCenterService.GetUnitBag(unitbag.Id).Result);
+                            bags.Add(await bloodCenterService.GetUnitBag(unitbag.Id));
                             quantity--;
                         }
-                    });
-                });
-            });
-        });
+                    }
+                }
+            }
+        }
 
         return bags;
     }
 
-    public List<UnitBagDto> ProcessForHospitalStockUpdate(List<BloodCenterFetchDto> centers, OrderRequestDto request)
+    public async Task<List<UnitBagDto>> ProcessForHospitalStockUpdate(List<BloodCenterFetchDto> centers, OrderRequestDto request)
     {
         var bags = new List<UnitBagDto>();
         // looping through each antigen & type and stock piling it & filling will be based on weightage
-        request.types.ForEach(type =>
+        foreach (var type in request.types)
         {
-            request.AntigenTypes.ForEach(antigen =>
+            foreach (var antigen in request.AntigenTypes)
             {
-                centers.ForEach(center =>
+                foreach (var center in centers)
                 {
-                    var unitBagDtos = unitBagService.GetAll().Result.Where(bag =>
+                    var unitBags = await unitBagService.GetAll();
+                    var unitBagDtos = unitBags.Where(bag =>
                         bag.CenterId.Equals(center.Id) && !bag.IsSold && bag.Type.Equals(antigen)).ToList();
                     // 1/8 of priority for stock updates
                     var availableQuantity = unitBagDtos.Count / 8;
                     var quantity = request.MaxQuantity <= availableQuantity ? request.MaxQuantity : availableQuantity;
-                    unitBagDtos.ForEach(unitbag =>
+                    foreach (var unitbag in unitBagDtos)
                     {
-                        if (quantity <= 0) return;
+                        if (quantity <= 0) continue;
                         // Ro type is only for Recurring Transfusion
                         if (unitbag.BloodType.Equals(type) && unitbag.BloodSubtype.Equals(BloodSubtype.Rhd))
                         {
-                            bags.Add(bloodCenterService.GetUnitBag(unitbag.Id).Result);
+                            bags.Add(await bloodCenterService.GetUnitBag(unitbag.Id));
                             quantity--;
                         }
-                    });
-                });
-            });
-        });
+                    }
+                }
+            }
+        }
 
         return bags;
     }
 
-    public List<UnitBagDto> ProcessForRecurringApi(List<BloodCenterFetchDto> centers, OrderRequestDto request)
+    public async Task<List<UnitBagDto>> ProcessForRecurringApi(List<BloodCenterFetchDto> centers, OrderRequestDto request)
     {
         var bags = new List<UnitBagDto>();
-        centers.ForEach(center =>
+        foreach (var center in centers)
         {
-            var unitBagDtos = unitBagService.GetAll().Result.Where(bag =>
+            var unitBags = await unitBagService.GetAll();
+            var unitBagDtos     = unitBags.Where(bag =>
                 bag.CenterId.Equals(center.Id) && !bag.IsSold && Equals(request.AntigenTypes.First())).ToList();
-            unitBagDtos.ForEach(unitbag =>
+            foreach (var unitbag in unitBagDtos)
             {
-                if (request.MaxQuantity == 0) return;
+                if (request.MaxQuantity == 0) continue;
                 // For emergency only Plasma needed for API ( active pharmaceutical ingredient
                 if (unitbag.BloodType.Equals(BloodType.Plasma))
                 {
-                    bags.Add(bloodCenterService.GetUnitBag(unitbag.Id).Result);
+                    var unitBag = await bloodCenterService.GetUnitBag(unitbag.Id);
+                    bags.Add(unitBag);
                     request.MaxQuantity--;
                 }
-            });
-        });
+            }
+        }
 
         return bags;
     }
 
-    public Order MakeOrder(List<UnitBagDto> bags, OrderType type, ClientType clientType)
+    public Task<Order> MakeOrder(List<UnitBagDto> bags, OrderType type, ClientType clientType, OrderRequestDto request)
     {
         if (bags.Count == 0)
         {
@@ -226,6 +245,15 @@ public class OrderService(
         order.Items = mapper.Map<List<Entities.UnitBag>>(bags);
         order.OrderDate = DateTime.UtcNow;
         order.Status = OrderStatus.Pending;
+        order.Description = request.Description;
+        order.ClientId = request.ClientId;
+        
+        // Set the state of existing UnitBags to Unchanged
+        foreach (var bag in order.Items)
+        {
+            context.Entry(bag).State = EntityState.Unchanged;
+        }
+        
         switch (type)
         {
             case OrderType.Emergency:
@@ -233,15 +261,19 @@ public class OrderService(
                 break;
             case OrderType.RecurringTransfusion:
             case OrderType.HospitalStockUpdate:
-                bags.ForEach(bag =>
+                foreach (var bag in bags)
                 {
-                    if (bag.Type.Equals(BloodType.RBC))
+                    WatchLogger.Log(totalPrice.ToString());
+                    WatchLogger.Log(bag.Type.ToString());
+                    if (bag.BloodType.Equals(BloodType.RBC))
                         totalPrice += clientType.Equals(ClientType.GovtHospital) ? 1100 : 1550;
-                    if (bag.Type.Equals(BloodType.Plasma))
+                    if (bag.BloodType.Equals(BloodType.Plasma))
                         totalPrice += clientType.Equals(ClientType.GovtHospital) ? 300 : 400;
-                    if (bag.Type.Equals(BloodType.Platelet))
+                    if (bag.BloodType.Equals(BloodType.Platelet))
                         totalPrice += clientType.Equals(ClientType.GovtHospital) ? 300 : 400;
-                });
+                    WatchLogger.Log(totalPrice.ToString());
+                }
+
                 break;
             case OrderType.RecurringAPI:
                 totalPrice += bags.Count * 2000;
@@ -250,7 +282,6 @@ public class OrderService(
 
         order.TotalPrice = totalPrice;
 
-        repo.Add(order);
-        return order;
+        return repo.Add(order);
     }
 }

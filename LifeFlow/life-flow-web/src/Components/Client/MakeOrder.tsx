@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "../../contexts/AuthContext.tsx";
+import { post } from "../../utils/apiService.ts";
+import { useAlert } from "../../contexts/AlertContext";
 
 enum OrderType {
     HospitalStockUpdate = "HospitalStockUpdate",
@@ -38,58 +40,76 @@ enum OrderStatus {
 
 interface OrderRequestDto {
     ClientId: number;
+    orderType: string;
     Status: OrderStatus;
     types: BloodType[];
     AntigenTypes: AntigenType[];
     Subtypes: BloodSubtype[];
     MaxQuantity: number;
     Description: string;
-    OrderType: OrderType;
-    OrderDate: Date;
-    DeliveryDate: Date | null;
+}
+
+interface OrderResponseDto {
+    id: number;
+    clientId: number;
+    status: OrderStatus;
+    quantity: number;
+    orderDate: Date;
+    orderType: string;
+    description: string;
+    paymentId: number;
+    totalPrice: number;
 }
 
 interface Payment {
+    id: number;
     OrderId: number;
     Amount: number;
     PaymentDate: Date;
-    PaymentMethod: string;
+    Method: string;
     TransactionId: string;
 }
 
 function MakeOrder() {
-    const {t} = useTranslation();
-    const {role} = useAuth();
+    const { t } = useTranslation();
+    const { role } = useAuth();
+    const { addAlert } = useAlert();
+    const client = JSON.parse(localStorage.getItem("Client"));
 
     const [orderData, setOrderData] = useState<OrderRequestDto>({
-        ClientId: 0, // Will be set from context
+        ClientId: client.id,
         Status: OrderStatus.Pending,
         types: [],
         AntigenTypes: [],
         Subtypes: [],
         MaxQuantity: 0,
         Description: "",
-        OrderType: role === "PharmaAdmin" ? OrderType.RecurringAPI : OrderType.HospitalStockUpdate,
-        OrderDate: new Date(),
-        DeliveryDate: null,
+        orderType: "HospitalStockUpdate",
     });
 
     const [isLoading, setIsLoading] = useState(false);
     const [paymentData, setPaymentData] = useState<Payment | null>(null);
+    const [paymentMethod, setPaymentMethod] = useState("NetBanking");
 
     useEffect(() => {
-        if (orderData.OrderType === OrderType.RecurringTransfusion || orderData.OrderType === OrderType.Emergency) {
-            if (orderData.MaxQuantity > 10) {
-                setOrderData((prevData) => ({
-                    ...prevData,
-                    MaxQuantity: 10,
-                }));
-            }
+        if (orderData.orderType === OrderType.Emergency) {
+            setOrderData((prevData) => ({
+                ...prevData,
+                types: [BloodType.RBC],
+                AntigenTypes: prevData.AntigenTypes.slice(0, 1),
+            }));
         }
-    }, [orderData.OrderType, orderData.MaxQuantity]);
+
+        if (orderData.orderType === OrderType.RecurringAPI) {
+            setOrderData((prevData) => ({
+                ...prevData,
+                types: [BloodType.Plasma],
+            }));
+        }
+    }, [orderData.orderType]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setOrderData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -97,10 +117,17 @@ function MakeOrder() {
     };
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setOrderData((prevData) => ({
             ...prevData,
             [name]: value,
+        }));
+    };
+
+    const handleRadioChange = (name: string, value: string) => {
+        setOrderData((prevData) => ({
+            ...prevData,
+            [name]: [value],
         }));
     };
 
@@ -118,25 +145,44 @@ function MakeOrder() {
         setIsLoading(true);
 
         try {
-            // Mock API call to create the order
-            const response = await new Promise<OrderRequestDto>((resolve) =>
-                setTimeout(() => resolve(orderData), 2000)
-            );
+            const orderResponse = await post<OrderResponseDto>("/order/make", orderData);
 
-            // Mock API call to fetch payment details
-            const paymentResponse = await new Promise<Payment>((resolve) =>
-                setTimeout(() => resolve({
-                    OrderId: response.ClientId,
-                    Amount: 100.0,
+            console.log("orderResponse")
+            console.log(orderResponse)
+            setTimeout(() => {
+                setPaymentData({
+                    id: orderResponse.paymentId,
+                    OrderId: orderResponse.id,
+                    Amount: orderResponse.totalPrice,
                     PaymentDate: new Date(),
-                    PaymentMethod: "NetBanking",
-                    TransactionId: "Nil",
-                }), 2000)
-            );
-
-            setPaymentData(paymentResponse);
+                    Method: "",
+                    TransactionId: "",
+                });
+            }, 3000);
         } catch (error) {
             console.error("Error submitting order:", error);
+            addAlert({ message: t("orders.error_submitting_order"), type: "error" });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handlePayment = async () => {
+        setIsLoading(true);
+
+        try {
+            const paymentResponse = await post<Payment>("/payment/make", {
+                PaymentId: paymentData!.id,
+                Amount: paymentData!.Amount,
+                Method: paymentMethod,
+                OrderId: paymentData!.OrderId,
+            });
+
+            setPaymentData(paymentResponse);
+            addAlert({ message: t("orders.payment_successful"), type: "success" });
+        } catch (error) {
+            console.error("Error making payment:", error);
+            addAlert({ message: t("orders.error_making_payment"), type: "error" });
         } finally {
             setIsLoading(false);
         }
@@ -150,33 +196,37 @@ function MakeOrder() {
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">{t('orders.new_order')}</h3>
+                    {console.log("PaymentData")}
+                    {console.log(paymentData)}
                     {isLoading ? (
                         <span className="loading loading-spinner text-primary">{t('orders.loading')}</span>
                     ) : paymentData ? (
                         <div>
                             <p>{t('orders.order_created')}</p>
-                            <p>{t('orders.amount', { amount: paymentData.Amount })}</p>
-                            <button className="btn btn-primary" onClick={() => alert(t('orders.proceed_to_payment'))}>
+                            <p>{t('orders.amount', { amount: paymentData.Amount})} </p>
+                            <label className="form-control w-full max-w-xs">
+                                <div className="label">
+                                    <span className="label-text">{t('orders.payment_method')}</span>
+                                    <span className="label-text-alt">Required</span>
+                                </div>
+                                <select
+                                    name="PaymentMethod"
+                                    value={paymentMethod}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="select select-bordered"
+                                >
+                                    <option value="NetBanking">Net Banking</option>
+                                    <option value="CreditCard">Credit Card</option>
+                                    <option value="DebitCard">Debit Card</option>
+                                    <option value="UPI">UPI</option>
+                                </select>
+                            </label>
+                            <button className="btn btn-primary mt-4" onClick={handlePayment}>
                                 {t('orders.pay_now')}
                             </button>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit}>
-                            <label className="form-control w-full max-w-xs">
-                                <div className="label">
-                                    <span className="label-text">Client ID</span>
-                                    <span className="label-text-alt">Required</span>
-                                </div>
-                                <input
-                                    type="number"
-                                    name="ClientId"
-                                    value={orderData.ClientId}
-                                    onChange={handleInputChange}
-                                    placeholder="Client ID"
-                                    className="input input-bordered"
-                                />
-                            </label>
-
                             <label className="form-control w-full max-w-xs">
                                 <div className="label">
                                     <span className="label-text">Max Quantity</span>
@@ -190,8 +240,8 @@ function MakeOrder() {
                                     placeholder="Max Quantity"
                                     className="input input-bordered"
                                     max={
-                                        orderData.OrderType === OrderType.RecurringTransfusion ||
-                                        orderData.OrderType === OrderType.Emergency
+                                        orderData.orderType === OrderType.RecurringTransfusion ||
+                                        orderData.orderType === OrderType.Emergency
                                             ? 10
                                             : undefined
                                     }
@@ -219,8 +269,8 @@ function MakeOrder() {
                                         <span className="label-text-alt">Required</span>
                                     </div>
                                     <select
-                                        name="OrderType"
-                                        value={orderData.OrderType}
+                                        name="orderType"
+                                        value={orderData.orderType}
                                         onChange={handleSelectChange}
                                         className="select select-bordered"
                                     >
@@ -241,6 +291,7 @@ function MakeOrder() {
                                         <span className="label-text">Order Type</span>
                                         <span className="label-text-alt">Fixed</span>
                                     </div>
+
                                     <input
                                         type="text"
                                         name="OrderType"
@@ -266,12 +317,13 @@ function MakeOrder() {
                                                     checked={orderData.types.includes(type)}
                                                     onChange={() => handleCheckboxChange("types", type)}
                                                     className="checkbox checkbox-success"
+                                                    disabled={orderData.orderType === OrderType.RecurringAPI || (orderData.orderType === OrderType.Emergency && type !== BloodType.RBC)}
                                                 />
                                             </label>
                                         ))}
                                     </div>
 
-                                    <div className="form-control">
+                                    <label className="form-control w-full max-w-xs">
                                         <div className="label">
                                             <span className="label-text">{t('orders.antigen_types')}</span>
                                             <span className="label-text-alt">Required</span>
@@ -284,35 +336,43 @@ function MakeOrder() {
                                                     checked={orderData.AntigenTypes.includes(type)}
                                                     onChange={() => handleCheckboxChange("AntigenTypes", type)}
                                                     className="checkbox checkbox-success"
+                                                    disabled={
+                                                        orderData.orderType === OrderType.Emergency && orderData.AntigenTypes.length > 0
+                                                    }
                                                 />
                                             </label>
                                         ))}
-                                    </div>
-
-                                    <div className="form-control">
-                                        <div className="label">
-                                            <span className="label-text">{t('orders.blood_subtypes')}</span>
-                                            <span className="label-text-alt">Required</span>
-                                        </div>
-                                        {Object.values(BloodSubtype).map((type) => (
-                                            <label key={type} className="cursor-pointer label">
-                                                <span className="label-text">{type}</span>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={orderData.Subtypes.includes(type)}
-                                                    onChange={() => handleCheckboxChange("Subtypes", type)}
-                                                    className="checkbox checkbox-success"
-                                                />
-                                            </label>
-                                        ))}
-                                    </div>
+                                    </label>
                                 </>
                             )}
 
+                            {role !== "PharmaAdmin" && (
+                                <div className="form-control">
+                                    <div className="label">
+                                        <span className="label-text">{t('orders.blood_subtypes')}</span>
+                                    </div>
+                                    {Object.values(BloodSubtype).map((subtype) => (
+                                        <label key={subtype} className="cursor-pointer label">
+                                            <span className="label-text">{subtype}</span>
+                                            <input
+                                                type="radio"
+                                                name="Subtypes"
+                                                value={subtype}
+                                                checked={orderData.Subtypes.includes(subtype)}
+                                                onChange={() => handleRadioChange("Subtypes", subtype)}
+                                                className="radio radio-success"
+                                            />
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+
                             <div className="modal-action">
-                                <button type="submit" className="btn btn-primary">{t('orders.submit')}</button>
-                                <button type="button" className="btn"
-                                        onClick={() => document.getElementById("my_modal_1").close()}>{t('orders.close')}
+                                <button type="submit" className="btn btn-primary">
+                                    {t('orders.submit')}
+                                </button>
+                                <button className="btn" onClick={() => document.getElementById("my_modal_1").close()}>
+                                    {t('orders.close')}
                                 </button>
                             </div>
                         </form>

@@ -1,6 +1,6 @@
+using System.Text.Json.Serialization;
 using DonationService.Commons.Enums;
 using DonationService.Features.Orders;
-using Newtonsoft.Json;
 
 namespace DonationService.Features.UnitBag;
 

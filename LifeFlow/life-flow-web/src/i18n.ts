@@ -85,9 +85,11 @@ i18n.use(LanguageDetector)
                         close: "Close",
                         loading: "Loading",
                         order_created: "Order created successfully!",
-                        amount: "Amount: ${{amount}}",
+                        amount: "Amount: ₹{{amount}}",
                         proceed_to_payment: "Proceed to payment gateway",
-                        pay_now: "Pay Now"
+                        payment_successful: "Payment Successful",
+                        pay_now: "Pay Now",
+                        error_submitting_order: "Error Submitting Order"
                     }
                 },
             },

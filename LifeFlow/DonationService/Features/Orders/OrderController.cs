@@ -91,7 +91,7 @@ public class OrderController(
         }
     }
 
-    [HttpPost("makeOrder")]
+    [HttpPost("make")]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> MakeOrder([FromBody] OrderRequestDto order)
@@ -99,6 +99,7 @@ public class OrderController(
         try
         {
             var createdOrder = await orderService.MakeOrder(order);
+            // var createdOrder = await orderService.GetById(18);
             return StatusCode(StatusCodes.Status201Created, createdOrder);
         }
         catch (KeyNotFoundException e)

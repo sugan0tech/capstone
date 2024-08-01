@@ -20,4 +20,11 @@ public class Order : BaseEntity
     [ForeignKey("PaymentId")] public int PaymentId { get; set; }
 
     public Payment Payment { get; set; }
+    public override string ToString()
+    {
+        return $"Order {{ Id = {Id}, ClientId = {ClientId}, Status = {Status}, Quantity = {Quantity}, " +
+               $"TotalPrice = {TotalPrice:C}, Description = {Description}, OrderType = {OrderType}, " +
+               $"OrderDate = {OrderDate}, DeliveryDate = {DeliveryDate}, PaymentId = {PaymentId}, " +
+               $"ItemsCount = {Items?.Count ?? 0} }}";
+    }
 }

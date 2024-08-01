@@ -11,4 +11,8 @@ public class Payment : BaseEntity
     public DateTime PaymentDate { get; set; } = DateTime.Now;
     public string PaymentMethod { get; set; } = "NetBanking";
     public string TransactionId { get; set; } = "Nil";
+    public override string ToString()
+    {
+        return $"Payment {{ Id = {Id}, OrderId = {OrderId}, Amount = {Amount:C}, PaymentDate = {PaymentDate}, PaymentMethod = {PaymentMethod}, TransactionId = {TransactionId} }}";
+    }
 }

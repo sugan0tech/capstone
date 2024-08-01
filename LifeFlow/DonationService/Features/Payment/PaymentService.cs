@@ -3,6 +3,7 @@ using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Features.Address.Command;
 using DonationService.Features.Orders.Commands;
+using WatchDog;
 
 namespace DonationService.Features.Payment;
 
@@ -21,6 +22,7 @@ public class PaymentService(
             PaymentDate = DateTime.UtcNow,
             PaymentMethod = method
         };
+        WatchLogger.Log(payment.ToString());
         payment = await repo.Add(payment);
         return mapper.Map<PaymentDto>(payment);
     }
