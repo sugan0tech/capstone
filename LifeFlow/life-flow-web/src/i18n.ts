@@ -172,6 +172,22 @@ i18n.use(LanguageDetector)
                         companyName: "LifeFlow Blood Bank Service Ltd.",
                         tagline: "Helping Humanity since 2024",
                     },
+                    centreCard: {
+                        donateHere: "Donate Here",
+                        orderFromHere: "Order From Here",
+                        away: "Away",
+                        stock: "Stock",
+                        from: "from",
+                        to: "to"
+                    },
+                    locationSearchBar: {
+                        placeholder: "Search for a location",
+                        noLocationsFound: "No Locations found",
+                        clearButton: "Clear",
+                    },
+                    findCenters: {
+                        noCentersFound: "Search for centers to see",
+                    },
                 },
 
             },
@@ -258,6 +274,22 @@ i18n.use(LanguageDetector)
                     footer: {
                         companyName: "LifeFlow Service de Banque de Sang Ltée.",
                         tagline: "Aider l'humanité depuis 2024",
+                    },
+                    centreCard: {
+                        donateHere: "Faire un don ici",
+                        orderFromHere: "Commander d'ici",
+                        away: "loin",
+                        stock: "Stock",
+                        from: "de",
+                        to: "à"
+                    },
+                    locationSearchBar: {
+                        placeholder: "Rechercher un lieu",
+                        noLocationsFound: "Aucun lieu trouvé",
+                        clearButton: "Effacer",
+                    },
+                    findCenters: {
+                        noCentersFound: "Recherchez des centres à voir",
                     },
 
                 }
@@ -401,6 +433,22 @@ i18n.use(LanguageDetector)
                         companyName: "லைஃப்ஃப்ளோ ரத்த வங்கி சேவை லிமிடெட்.",
                         tagline: "2024 முதல் மனிதகுலத்திற்கு உதவுகிறது",
                     },
+                    centreCard: {
+                        donateHere: "இங்கு நன்கொடை அளிக்கவும்",
+                        orderFromHere: "இங்கிருந்து ஆர்டர் செய்யவும்",
+                        away: "தொலைவில்",
+                        stock: "கையிருப்பு",
+                        from: "இருந்து",
+                        to: "வரை"
+                    },
+                    locationSearchBar: {
+                        placeholder: "ஒரு இடத்தைத் தேடுங்கள்",
+                        noLocationsFound: "இடங்கள் இல்லை",
+                        clearButton: "நீக்கு",
+                    },
+                    findCenters: {
+                        noCentersFound: "மையங்களை காண தேடுங்கள்",
+                    },
                 }
             }
             , hi: {
@@ -486,6 +534,22 @@ i18n.use(LanguageDetector)
                     footer: {
                         companyName: "लाइफफ्लो ब्लड बैंक सेवा लिमिटेड.",
                         tagline: "2024 से मानवता की सेवा में",
+                    },
+                    centreCard: {
+                        donateHere: "यहां दान करें",
+                        orderFromHere: "यहां से ऑर्डर करें",
+                        away: "दूर",
+                        stock: "स्टॉक",
+                        from: "से",
+                        to: "तक"
+                    },
+                    locationSearchBar: {
+                        placeholder: "स्थान खोजें",
+                        noLocationsFound: "कोई स्थान नहीं मिला",
+                        clearButton: "साफ करें",
+                    },
+                    findCenters: {
+                        noCentersFound: "केंद्रों को देखने के लिए खोजें",
                     },
 
                 }

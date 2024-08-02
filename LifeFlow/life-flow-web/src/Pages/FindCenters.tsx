@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import CentreCard from "../Components/CentreCard";
 import LocationSearchBar from "../Components/LocationSearchBar";
 import MapLeaflet from "../Components/MapLeaflet";
-import UserStatus from "../Components/UserStatus";
 import { useApplication } from "../contexts/ApplicationContext";
 import { get } from "../utils/apiService";
 import { parseTimeSpan } from "../types/TimeSpanAsserts";
 import { BloodCenter, BloodCenterApiResponse } from "../types/BloodCenter";
+import { useTranslation } from "react-i18next"; // Import useTranslation from i18next
 
 const findCenters = async (lat: string, lon: string): Promise<BloodCenter[]> => {
   const response = await get<BloodCenterApiResponse[]>(
@@ -27,6 +27,7 @@ const findCenters = async (lat: string, lon: string): Promise<BloodCenter[]> => 
 
 function FindCenters() {
   const { pickedLocation } = useApplication();
+  const { t } = useTranslation(); // Use the translation hook
   const [centers, setCenters] = useState<BloodCenter[]>([]);
 
   useEffect(() => {
@@ -55,14 +56,15 @@ function FindCenters() {
   return (
       <>
         <div className="flex flex-col">
-          <div className="flex flex-col gap-x-96 items-center bg-base-300 h-48 rounded-box lg:flex-row">
+          <div className="flex flex-col gap-x-96 items-center bg-base-200 h-48 rounded-box lg:flex-row">
             <div className="flex-1 lg:pl-24">
               <label className="input input-bordered flex items-center gap-2">
                 <LocationSearchBar />
               </label>
             </div>
             <div className="flex-1">
-              <UserStatus />
+              {/* Uncomment and use if needed */}
+              {/* <UserStatus /> */}
             </div>
           </div>
         </div>
@@ -70,12 +72,12 @@ function FindCenters() {
         <div className="divider"></div>
 
         <div className="flex flex-col lg:flex-row">
-          <div className="card bg-base-300 rounded-box grid flex-1 place-items-center gap-2 h-fill">
+          <div className="card bg-base-200 rounded-box grid flex-1 place-items-center gap-2 h-fill">
             <div
                 className="grid grid-cols-2 gap-2 overflow-y-scroll pl-2 pb-2"
                 style={{ height: "550px" }}
             >
-              {centers.length == 0 && "Search for centers to see"}
+              {centers.length === 0 && t("findCenters.noCentersFound")} {/* Translated "Search for centers to see" */}
               {centers.map((center) => (
                   <CentreCard
                       key={center.id}
