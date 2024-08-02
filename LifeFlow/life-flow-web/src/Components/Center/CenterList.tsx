@@ -28,44 +28,48 @@ const CenterList: React.FC = () => {
   };
 
   return (
-    <div className="card bg-base-300 h-fit rounded-btn">
-      <div className="card-body">
-        <h2 className="card-title">Centers:</h2>
-        <div className="overflow-y-scroll" style={{ maxHeight: "300px" }}>
-          {centers.map((center) => (
-            <div
-              key={center.id}
-              className={`card bg-base-200 h-fit rounded-btn mb-2 ${
-                center.isCentralReserve ? "border-2 border-primary" : ""
-              }`}
-            >
-              <div className="card-body">
-                <h3 className="card-title">{center.name}</h3>
-                <p>
-                  opens At :{" "}
-                  {formatTimeSpan12Hour(parseTimeSpan(center.openByTime))}
-                </p>
-                <p>
-                  closes At :{" "}
-                  {formatTimeSpan12Hour(parseTimeSpan(center.closeByTime))}
-                </p>
-                <div className="card-actions justify-end">
-                  {!center.isCentralReserve && (
-                    <div className="badge badge-success">Central reserve</div>
-                  )}
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => handleSelectCenter(center)}
-                  >
-                    select
-                  </button>
+      <div className="card bg-base-200 h-fit rounded-btn">
+        <div className="card-body">
+          <h2 className="card-title">Centers:</h2>
+          <div
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-scroll"
+              style={{ maxHeight: "450px" }}
+          >
+            {centers.map((center) => (
+                <div
+                    key={center.id}
+                    className={`card bg-base-300 flex-1 h-fill rounded-btn mb-2 shadow-lg ${
+                        !center.isCentralReserve ? "border-2 border-success" : ""
+                    }`}
+                >
+                  <div className="card-body">
+                    <h3 className="card-title">{center.name}</h3>
+                    <p>
+                      Opens at:{" "}
+                      {formatTimeSpan12Hour(parseTimeSpan(center.openByTime))}
+                    </p>
+                    <p>
+                      Closes at:{" "}
+                      {formatTimeSpan12Hour(parseTimeSpan(center.closeByTime))}
+                    </p>
+                    <div className="card-actions justify-end">
+                      {!center.isCentralReserve && (
+                          <div className="badge badge-success">Central reserve</div>
+                      )}
+                      <button
+                          className="btn btn-secondary"
+                          onClick={() => handleSelectCenter(center)}
+                      >
+                        Select
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
   );
 };
 

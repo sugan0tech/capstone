@@ -36,7 +36,7 @@ const AddCenter = () => {
 
   return (
       <div>
-        <button className="btn" onClick={() => document.getElementById('my_modal_1').showModal()}>
+        <button className="btn bg-primary" onClick={() => document.getElementById('my_modal_1').showModal()}>
           Add New Center
         </button>
         <dialog id="my_modal_1" className="modal">

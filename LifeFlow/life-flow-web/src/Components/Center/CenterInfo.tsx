@@ -27,17 +27,9 @@ const CenterInfo: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col pb-24">
-            <div className="flex flex-col gap-x-96 items-center bg-base-300 h-48 rounded-box lg:flex-row">
-                <div className="flex-1 lg:pl-24">
-                    <h1 className="text-2xl font-bold">Center Information</h1>
-                </div>
-            </div>
-
-            <div className="divider"></div>
-
+        <div className="flex flex-col pb-16 pt-16 ">
             {selectedCenter ? (
-                <div className="card bg-base-300 h-fit rounded-btn">
+                <div className="card bg-base-300  shadow-lg h-fit rounded-btn">
                     <div className="card-body">
                         <h2 className="card-title">Center Details</h2>
                         {isEditing ? (

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next"; // Import the translation hook
 import { useCenter } from "../contexts/CenterContext";
-import {get, put} from "../utils/apiService.ts";
+import { get, put } from "../utils/apiService.ts";
+import centerInfo from "../Components/Center/CenterInfo.tsx";
 
 export interface DonationSlot {
   id: number;
@@ -38,6 +40,7 @@ export enum SlotStatus {
 }
 
 const Donations: React.FC = () => {
+  const { t } = useTranslation(); // Initialize the translation hook
   const { selectedCenter } = useCenter();
   const [ongoingSlots, setOngoingSlots] = useState<DonationSlot[]>([]);
   const [pendingSlots, setPendingSlots] = useState<DonationSlot[]>([]);
@@ -109,15 +112,16 @@ const Donations: React.FC = () => {
 
   return (
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold my-4">Ongoing Slots</h2>
+        <h2 className="text-2xl font-bold my-4">{t('slots.ongoingSlotsTitle')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {ongoingSlots.length == 0 && (<div className="card bg-warning p-4 text-black">No Ongoing slots found for {selectedCenter?.name}</div>)}
           {ongoingSlots.map((slot) => (
-              <div key={slot.id} className="card bg-base-100 shadow-md p-4">
+              <div key={slot.id} className="card bg-base-200 shadow-md p-4">
                 <h3 className="text-lg font-semibold">{slot.slotTime}</h3>
-                <p>Status: {slot.slotStatus}</p>
+                <p>{t('slots.status')}: {t(`slots.${slot.slotStatus}`)}</p>
                 <div className="dropdown dropdown-right">
-                  <div tabIndex={0} role="button" className="btn m-1">
-                    Change Status
+                  <div tabIndex={0} role="button" className="btn m-1 bg-primary">
+                    {t('slots.changeStatus')}
                   </div>
                   <ul
                       tabIndex={0}
@@ -130,7 +134,7 @@ const Donations: React.FC = () => {
                                   handleStatusChange(slot.id, status as SlotStatus)
                               }
                           >
-                            {status}
+                            {t(`slots.${status}`)}
                           </a>
                         </li>
                     ))}
@@ -140,15 +144,16 @@ const Donations: React.FC = () => {
           ))}
         </div>
 
-        <h2 className="text-2xl font-bold my-4">Pending Slots</h2>
+        <h2 className="text-2xl font-bold my-4">{t('slots.pendingSlotsTitle')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {pendingSlots.length == 0 && (<div className="card bg-warning p-4 text-black">No Pending slots found for {selectedCenter?.name}</div>)}
           {pendingSlots.map((slot) => (
-              <div key={slot.id} className="card bg-base-100 shadow-md p-4">
+              <div key={slot.id} className="card bg-base-200 shadow-md p-4">
                 <h3 className="text-lg font-semibold">{slot.slotTime}</h3>
-                <p>Status: {slot.slotStatus}</p>
+                <p>{t('slots.status')}: {t(`slots.${slot.slotStatus}`)}</p>
                 <div className="dropdown dropdown-right">
-                  <div tabIndex={0} role="button" className="btn m-1">
-                    Change Status
+                  <div tabIndex={0} role="button" className="btn m-1 bg-primary">
+                    {t('slots.changeStatus')}
                   </div>
                   <ul
                       tabIndex={0}
@@ -161,7 +166,7 @@ const Donations: React.FC = () => {
                                   handleStatusChange(slot.id, status as SlotStatus)
                               }
                           >
-                            {status}
+                            {t(`slots.${status}`)}
                           </a>
                         </li>
                     ))}
@@ -171,17 +176,18 @@ const Donations: React.FC = () => {
           ))}
         </div>
 
-        <h2 className="text-2xl font-bold my-4">Completed Slots</h2>
+        <h2 className="text-2xl font-bold my-4">{t('slots.completedSlotsTitle')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {completedSlots.length == 0 && (<div className="card bg-warning p-4 text-black">No Completed slots found for {selectedCenter?.name}</div>)}
           {completedSlots.map((slot) => (
-              <div key={slot.id} className="card bg-base-100 shadow-md p-4">
+              <div key={slot.id} className="card bg-base-200 shadow-md p-4">
                 <h3 className="text-lg font-semibold">{slot.slotTime}</h3>
-                <p>Status: {slot.slotStatus}</p>
+                <p>{t('slots.status')}: {t(`slots.${slot.slotStatus}`)}</p>
                 <button
-                    className="btn mt-2"
+                    className="btn mt-2 bg-secondary"
                     onClick={() => handleOpenModal(slot.donorId)}
                 >
-                  View Donor Info
+                  {t('slots.viewDonorInfo')}
                 </button>
               </div>
           ))}
@@ -189,20 +195,20 @@ const Donations: React.FC = () => {
 
         <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Donor Information</h3>
+            <h3 className="font-bold text-lg">{t('slots.donorInfo')}</h3>
             {selectedDonor && selectedUser && (
                 <div>
-                  <p>Donor ID: {selectedDonor.id}</p>
-                  <p>Name: {selectedUser.name}</p>
-                  <p>Email: {selectedUser.email}</p>
-                  <p>Phone: {selectedUser.phoneNumber}</p>
-                  <p>Blood Type: {selectedDonor.bloodAntigenType}</p>
-                  <p>Blood Subtype: {selectedDonor.bloodSubtype}</p>
+                  <p>{t('slots.donorId')}: {selectedDonor.id}</p>
+                  <p>{t('slots.name')}: {selectedUser.name}</p>
+                  <p>{t('slots.email')}: {selectedUser.email}</p>
+                  <p>{t('slots.phone')}: {selectedUser.phoneNumber}</p>
+                  <p>{t('slots.bloodType')}: {selectedDonor.bloodAntigenType}</p>
+                  <p>{t('slots.bloodSubtype')}: {selectedDonor.bloodSubtype}</p>
                 </div>
             )}
             <div className="modal-action">
               <form method="dialog">
-                <button className="btn">Close</button>
+                <button className="btn bg-secondary">{t('slots.close')}</button>
               </form>
             </div>
           </div>

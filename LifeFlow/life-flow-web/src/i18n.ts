@@ -108,8 +108,72 @@ i18n.use(LanguageDetector)
                         yes: "Yes",
                         no: "No",
                         error_making_payment: "There was an error processing your payment.",
-                    }
+                        dashboard_title: "Orders",
+                        approve_order: "Approve",
+                        reject_order: "Reject",
+                        cancel_order: "Cancel"
+                    },
+                    slots: {
+                        ongoingSlotsTitle: "Ongoing Slots",
+                        pendingSlotsTitle: "Pending Slots",
+                        completedSlotsTitle: "Completed Slots",
+                        status: "Status",
+                        changeStatus: "Change Status",
+                        viewDonorInfo: "View Donor Info",
+                        donorInfo: "Donor Information",
+                        donorId: "Donor ID",
+                        name: "Name",
+                        email: "Email",
+                        phone: "Phone",
+                        bloodType: "Blood Type",
+                        bloodSubtype: "Blood Subtype",
+                        close: "Close",
+                        BloodReceived: "Blood Received",
+                        BloodAccepted: "Blood Accepted",
+                        BloodRejected: "Blood Rejected",
+                        DonorNotArrived: "Donor Not Arrived",
+                        Pending: "Pending",
+                    },
+                    loggedInDevices: {
+                        title: "Logged In Devices",
+                        loggedInAt: "Logged in at",
+                        deviceInfo: "Device Info",
+                        logoutDevice: "Logout Device",
+                        logoutAllDevices: "Logout All Devices",
+                        browser: "browser on"
+                    },
+                    myAccount: {
+                        title: "My Account",
+                        userInfoTitle: "User Account Information",
+                        resetPasswordButton: "Reset Password",
+                    },
+                    userInfo: {
+                        email: "Email",
+                        name: "Name",
+                        role: "Role",
+                        editButton: "Edit",
+                    },
+                    editUserInfo: {
+                        email: "Email",
+                        name: "Name",
+                        saveButton: "Save",
+                        cancelButton: "Cancel",
+                    },
+                    resetPassword: {
+                        currentPassword: "Current Password",
+                        newPassword: "New Password",
+                        confirmPassword: "Confirm New Password",
+                        passwordLengthError: "Password must be at least 8 characters long",
+                        passwordMatchError: "Passwords do not match",
+                        saveButton: "Save",
+                        cancelButton: "Cancel",
+                    },
+                    footer: {
+                        companyName: "LifeFlow Blood Bank Service Ltd.",
+                        tagline: "Helping Humanity since 2024",
+                    },
                 },
+
             },
             fn: {
                 translation: {
@@ -135,7 +199,67 @@ i18n.use(LanguageDetector)
                         amount: "Amoun: ${{amount}}",
                         proceed_to_payment: "Procid to paymin gatewai",
                         pay_now: "Pai Now"
-                    }
+                    },
+                    slots: {
+                        ongoingSlotsTitle: "Créneaux en cours",
+                        pendingSlotsTitle: "Créneaux en attente",
+                        completedSlotsTitle: "Créneaux terminés",
+                        status: "Statut",
+                        changeStatus: "Changer le statut",
+                        viewDonorInfo: "Voir les informations du donneur",
+                        donorInfo: "Informations sur le donneur",
+                        donorId: "ID du donneur",
+                        name: "Nom",
+                        email: "Email",
+                        phone: "Téléphone",
+                        bloodType: "Groupe sanguin",
+                        bloodSubtype: "Sous-type sanguin",
+                        close: "Fermer",
+                        BloodReceived: "Sang reçu",
+                        BloodAccepted: "Sang accepté",
+                        BloodRejected: "Sang rejeté",
+                        DonorNotArrived: "Donneur non arrivé",
+                        Pending: "En attente",
+                    },
+                    loggedInDevices: {
+                        title: "Appareils Connectés",
+                        loggedInAt: "Connecté à",
+                        deviceInfo: "Informations sur l'appareil",
+                        logoutDevice: "Déconnecter l'appareil",
+                        logoutAllDevices: "Déconnecter tous les appareils",
+                        browser: "navigateur sur"
+                    },
+                    myAccount: {
+                        title: "Mon Compte",
+                        userInfoTitle: "Informations sur le compte utilisateur",
+                        resetPasswordButton: "Réinitialiser le mot de passe",
+                    },
+                    userInfo: {
+                        email: "E-mail",
+                        name: "Nom",
+                        role: "Rôle",
+                        editButton: "Éditer",
+                    },
+                    editUserInfo: {
+                        email: "E-mail",
+                        name: "Nom",
+                        saveButton: "Enregistrer",
+                        cancelButton: "Annuler",
+                    },
+                    resetPassword: {
+                        currentPassword: "Mot de passe actuel",
+                        newPassword: "Nouveau mot de passe",
+                        confirmPassword: "Confirmer le nouveau mot de passe",
+                        passwordLengthError: "Le mot de passe doit contenir au moins 8 caractères",
+                        passwordMatchError: "Les mots de passe ne correspondent pas",
+                        saveButton: "Enregistrer",
+                        cancelButton: "Annuler",
+                    },
+                    footer: {
+                        companyName: "LifeFlow Service de Banque de Sang Ltée.",
+                        tagline: "Aider l'humanité depuis 2024",
+                    },
+
                 }
             },
             ta: {
@@ -217,7 +341,66 @@ i18n.use(LanguageDetector)
                         amount: "தொகை: ₹{{amount}}",
                         proceed_to_payment: "கொடுப்பனவுக்குச் செல்லுங்கள்",
                         pay_now: "இப்போது செலுத்துங்கள்"
-                    }
+                    },
+                    slots: {
+                        ongoingSlotsTitle: "நடைமுறையில் இருக்கும் இடங்கள்",
+                        pendingSlotsTitle: "நிலுவையில் உள்ள இடங்கள்",
+                        completedSlotsTitle: "முடிந்த இடங்கள்",
+                        status: "நிலை",
+                        changeStatus: "நிலையை மாற்று",
+                        viewDonorInfo: "தானம் வழங்கியவரின் தகவலை காண்க",
+                        donorInfo: "தானம் வழங்கியவரின் தகவல்",
+                        donorId: "தானம் வழங்கியவரின் ஐடி",
+                        name: "பெயர்",
+                        email: "மின்னஞ்சல்",
+                        phone: "தொலைபேசி",
+                        bloodType: "இரத்த வகை",
+                        bloodSubtype: "இரத்த துணை வகை",
+                        close: "மூடு",
+                        BloodReceived: "இரத்தம் பெறப்பட்டது",
+                        BloodAccepted: "இரத்தம் ஏற்றுக்கொள்ளப்பட்டது",
+                        BloodRejected: "இரத்தம் நிராகரிக்கப்பட்டது",
+                        DonorNotArrived: "தானம் வழங்கியவர் வரவில்லை",
+                        Pending: "நிலுவையில்",
+                    },
+                    loggedInDevices: {
+                        title: "உள் நுழைந்த சாதனங்கள்",
+                        loggedInAt: "உள் நுழைந்த நேரம்",
+                        deviceInfo: "சாதனத்தின் விவரங்கள்",
+                        logoutDevice: "சாதனத்தை வெளியேற்றவும்",
+                        logoutAllDevices: "எல்லா சாதனங்களையும் வெளியேற்றவும்",
+                        browser: "உள்ள உலாவி"
+                    },
+                    myAccount: {
+                        title: "என் கணக்கு",
+                        userInfoTitle: "பயனர் கணக்கு தகவல்",
+                        resetPasswordButton: "கடவுச்சொல்லை மறுஇணைக்கவும்",
+                    },
+                    userInfo: {
+                        email: "மின்னஞ்சல்",
+                        name: "பெயர்",
+                        role: "பங்கு",
+                        editButton: "தொகு",
+                    },
+                    editUserInfo: {
+                        email: "ईमेल",
+                        name: "नाम",
+                        saveButton: "सहेजें",
+                        cancelButton: "रद्द करें",
+                    },
+                    resetPassword: {
+                        currentPassword: "वर्तमान पासवर्ड",
+                        newPassword: "नया पासवर्ड",
+                        confirmPassword: "नए पासवर्ड की पुष्टि करें",
+                        passwordLengthError: "पासवर्ड कम से कम 8 वर्णों का होना चाहिए",
+                        passwordMatchError: "पासवर्ड मेल नहीं खाते",
+                        saveButton: "सहेजें",
+                        cancelButton: "रद्द करें",
+                    },
+                    footer: {
+                        companyName: "லைஃப்ஃப்ளோ ரத்த வங்கி சேவை லிமிடெட்.",
+                        tagline: "2024 முதல் மனிதகுலத்திற்கு உதவுகிறது",
+                    },
                 }
             }
             , hi: {
@@ -244,7 +427,67 @@ i18n.use(LanguageDetector)
                         amount: "राशि: ${{amount}}",
                         proceed_to_payment: "भुगतान गेटवे पर जाएं",
                         pay_now: "अभी भुगतान करें"
-                    }
+                    },
+                    slots: {
+                        ongoingSlotsTitle: "चालू स्लॉट्स",
+                        pendingSlotsTitle: "लंबित स्लॉट्स",
+                        completedSlotsTitle: "पूर्ण स्लॉट्स",
+                        status: "स्थिति",
+                        changeStatus: "स्थिति बदलें",
+                        viewDonorInfo: "डोनर जानकारी देखें",
+                        donorInfo: "डोनर जानकारी",
+                        donorId: "डोनर आईडी",
+                        name: "नाम",
+                        email: "ईमेल",
+                        phone: "फ़ोन",
+                        bloodType: "रक्त प्रकार",
+                        bloodSubtype: "रक्त उपप्रकार",
+                        close: "बंद करें",
+                        BloodReceived: "रक्त प्राप्त हुआ",
+                        BloodAccepted: "रक्त स्वीकार किया गया",
+                        BloodRejected: "रक्त अस्वीकार किया गया",
+                        DonorNotArrived: "डोनर नहीं आया",
+                        Pending: "लंबित",
+                    },
+                    loggedInDevices: {
+                        title: "लॉग इन डिवाइस",
+                        loggedInAt: "लॉग इन समय",
+                        deviceInfo: "डिवाइस जानकारी",
+                        logoutDevice: "डिवाइस लॉग आउट करें",
+                        logoutAllDevices: "सभी डिवाइस लॉग आउट करें",
+                        browser: "ब्राउज़र पर"
+                    },
+                    myAccount: {
+                        title: "मेरा खाता",
+                        userInfoTitle: "उपयोगकर्ता खाता जानकारी",
+                        resetPasswordButton: "पासवर्ड रीसेट करें",
+                    },
+                    userInfo: {
+                        email: "ईमेल",
+                        name: "नाम",
+                        role: "भूमिका",
+                        editButton: "संपादित करें",
+                    },
+                    editUserInfo: {
+                        email: "மின்னஞ்சல்",
+                        name: "பெயர்",
+                        saveButton: "சேமி",
+                        cancelButton: "ரத்து செய்",
+                    },
+                    resetPassword: {
+                        currentPassword: "நடப்புச் சாவி",
+                        newPassword: "புதிய கடவுச்சொல்",
+                        confirmPassword: "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+                        passwordLengthError: "கடவுச்சொல் குறைந்தது 8 எழுத்துகள் நீளமாக இருக்க வேண்டும்",
+                        passwordMatchError: "கடவுச்சொற்கள் பொருந்தவில்லை",
+                        saveButton: "சேமி",
+                        cancelButton: "ரத்து செய்",
+                    },
+                    footer: {
+                        companyName: "लाइफफ्लो ब्लड बैंक सेवा लिमिटेड.",
+                        tagline: "2024 से मानवता की सेवा में",
+                    },
+
                 }
             }
         }

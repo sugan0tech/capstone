@@ -18,6 +18,7 @@ import Donations from "./Pages/Donations";
 import FindDonors from "./Pages/FindDonors.tsx";
 import MyOrders from "./Pages/MyOrders";
 import CreateDonor from "./Pages/CreateDonor";
+import OrdersDashboard from "./Components/Admin/OrdersDashboard.tsx";
 
 function App() {
   return (
@@ -120,6 +121,16 @@ function App() {
             </AuthenticatedRoute>
           }
         ></Route>
+          <Route
+              path="/order-dashboard"
+              element={
+                  <AuthenticatedRoute>
+                      <BloodCenterRoute>
+                          <OrdersDashboard />
+                      </BloodCenterRoute>
+                  </AuthenticatedRoute>
+              }
+              ></Route>
       </Routes>
       <Footer></Footer>
     </>

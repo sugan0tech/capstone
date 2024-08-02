@@ -52,6 +52,11 @@ function NavBar() {
                       {t("navbar.center_console")}
                     </Link>
                   </li>
+                    <li>
+                        <Link to="/order-dashboard" onClick={muteAccountDropdown}>
+                            {t("navbar.orders")}
+                        </Link>
+                    </li>
                   <li>
                     <Link to="/my-account" onClick={muteAccountDropdown}>
                       {t("navbar.account_info")}
