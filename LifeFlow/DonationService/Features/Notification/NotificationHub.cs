@@ -3,40 +3,26 @@ using WatchDog;
 
 namespace DonationService.Features.Notification;
 
-public class NotificationHub : Hub
+public class NotificationHub(NotificationService notificationService) : Hub
 {
-    private static readonly Dictionary<string, string> UserConnections = new ();
+    public static readonly Dictionary<string, string> UserConnections = new();
 
-    public override Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
         var httpContext = Context.GetHttpContext();
         var receiverId = httpContext.Request.Query["receiverId"].ToString();
 
-        if (!string.IsNullOrEmpty(receiverId))
-        {
-            UserConnections[receiverId] = Context.ConnectionId;
-        }
+        WatchLogger.Log($"User connected: {receiverId}, ConnectionId: {Context.ConnectionId}");
+        if (!string.IsNullOrEmpty(receiverId)) UserConnections[receiverId] = Context.ConnectionId;
 
-        return base.OnConnectedAsync();
+        await notificationService.CheckPendingNotifications(int.Parse(receiverId));
     }
 
     public override Task OnDisconnectedAsync(Exception exception)
     {
         var connection = UserConnections.FirstOrDefault(x => x.Value == Context.ConnectionId);
-        if (!string.IsNullOrEmpty(connection.Key))
-        {
-            UserConnections.Remove(connection.Key);
-        }
-
+        if (!string.IsNullOrEmpty(connection.Key)) UserConnections.Remove(connection.Key);
+    
         return base.OnDisconnectedAsync(exception);
     }
-
-    public async Task SendNotification(string receiverId, string message)
-    {
-        WatchLogger.Log("stuff for signal r");
-        if (UserConnections.TryGetValue(receiverId, out var connectionId))
-        {
-            WatchLogger.Log(connectionId);
-            await Clients.Client(connectionId).SendAsync("ReceiveNotification", message);
-        }
-    }}
+}

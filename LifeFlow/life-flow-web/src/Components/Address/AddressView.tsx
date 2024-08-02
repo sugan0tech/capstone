@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {put, post, get} from "../../utils/apiService.ts";
-import {Address, Client as ClientType, useAuth} from "../../contexts/AuthContext.tsx";
+import { put, post, get } from "../../utils/apiService.ts";
+import { Address, Client as ClientType, useAuth } from "../../contexts/AuthContext.tsx";
 import { useAlert } from "../../contexts/AlertContext.tsx";
 import { EditAddress } from "./EditAddress.tsx";
 import { ViewAddress } from "./ViewAddress.tsx";
@@ -24,24 +24,21 @@ export const AddressView: React.FC<AddressViewProps> = () => {
       setAddressInfo(JSON.parse(localAddress));
       setHasAddress(true);
     } else {
-
       const response = get<ClientType>(`/client/user/${user?.id}`);
       response.then(val => {
-        console.log(val)
         if (!val.addressId) {
           addAlert({ message: "Please create an address", type: "warning" });
         } else {
-          const response = get<Address>(`address/${val.addressId}`)
+          const response = get<Address>(`address/${val.addressId}`);
           response.then((addr) => {
             localStorage.setItem("address", JSON.stringify(addr));
-            setAddressInfo(addr)
+            setAddressInfo(addr);
             setHasAddress(true);
-          })
+          });
         }
-      })
-
+      });
     }
-  }, [])
+  }, [user?.id, addAlert]);
 
   const handleUpdateAddressInfo = async (updatedInfo: Address) => {
     await put(`/address`, updatedInfo);
@@ -58,36 +55,43 @@ export const AddressView: React.FC<AddressViewProps> = () => {
     setHasAddress(true);
   };
 
+  const openCreateAddressModal = () => {
+    setIsCreatingAddress(true);
+    document.getElementById('create_address_modal').showModal();
+  };
+
+  const closeCreateAddressModal = () => {
+    setIsCreatingAddress(false);
+    document.getElementById('create_address_modal').close();
+  };
+
   return (
-    <div className="card-body">
-      <h2 className="card-title">Address Info</h2>
-      {!hasAddress ? (
-        <>
-          <button
-            className="btn btn-accent"
-            onClick={() => setIsCreatingAddress(true)}
-          >
-            Create Address
-          </button>
-          {isCreatingAddress && (
-            <CreateAddress
-              onSave={handleCreateAddress}
-              onCancel={() => setIsCreatingAddress(false)}
+      <div className="card-body">
+        <h2 className="card-title">Address Info</h2>
+        {!hasAddress ? (
+            <>
+              <button className="btn btn-accent" onClick={openCreateAddressModal}>
+                Create Address
+              </button>
+            </>
+        ) : isEditingAddress ? (
+            <EditAddress
+                address={addressInfo}
+                onSave={handleUpdateAddressInfo}
+                onCancel={() => setIsEditingAddress(false)}
             />
-          )}
-        </>
-      ) : isEditingAddress ? (
-        <EditAddress
-          address={addressInfo}
-          onSave={handleUpdateAddressInfo}
-          onCancel={() => setIsEditingAddress(false)}
-        />
-      ) : (
-        <ViewAddress
-          address={addressInfo}
-          onEdit={() => setIsEditingAddress(true)}
-        />
-      )}
-    </div>
+        ) : (
+            <ViewAddress
+                address={addressInfo}
+                onEdit={() => setIsEditingAddress(true)}
+            />
+        )}
+        {isCreatingAddress && (
+            <CreateAddress
+                onSave={handleCreateAddress}
+                onCancel={closeCreateAddressModal}
+            />
+        )}
+      </div>
   );
 };

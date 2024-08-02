@@ -14,9 +14,7 @@ public class NotificationService(
     {
         try
         {
-            await hubContext.Clients.User(notification.receiverId.ToString())
-                .SendAsync("ReceiveNotification", notification.Message);
-            notification.IsSent = true;
+            notification.IsSent = await SendToClient(notification.receiverId.ToString(), notification.Message);
         }
         catch (Exception e)
         {
@@ -33,31 +31,51 @@ public class NotificationService(
         var pendingNotifications = await GetPendingNotifications(receiverId);
         if (pendingNotifications.Any())
         {
-            await hubContext.Clients.User(receiverId.ToString())
-                .SendAsync("ReceiveNotification", $"You have {pendingNotifications.Count} new notifications.");
+            var status = await SendToClient(receiverId.ToString(),
+                $"You have {pendingNotifications.Count} new notifications.");
 
-            pendingNotifications.ForEach(async pn =>
-                await MarkNotificationsAsSent(pn.Id)
-            );
+            if (status)
+            {
+                foreach (var pn in pendingNotifications)
+                {
+                    await MarkNotificationsAsSent(pn.Id);
+                }            }
         }
     }
 
-    public Task<List<NotificationDto>> GetPendingNotifications(int receiverId)
+    public async Task<List<NotificationDto>> GetPendingNotifications(int receiverId)
     {
-        return Task.FromResult(GetAll().Result.FindAll(n => n.receiverId.Equals(receiverId)));
+        var notifications = await GetAll();
+        var notificationDtos = notifications.FindAll(n => n.receiverId.Equals(receiverId) && !n.IsViewed);
+        return notificationDtos;
     }
 
     public async Task MarkNotificationsAsSent(int notificationId)
     {
         var notification = await repo.GetById(notificationId);
         notification.IsSent = true;
-        await repo.Add(notification);
+        await repo.Update(notification);
     }
 
     public async Task MarkAsRead(int notificationId)
     {
         var notification = await repo.GetById(notificationId);
         notification.IsViewed = true;
-        await repo.Add(notification);
+        await repo.Update(notification);
+    }
+
+    private async Task<bool> SendToClient(string receiverId, string message)
+    {
+        if (NotificationHub.UserConnections.TryGetValue(receiverId, out var connectionId))
+        {
+            WatchLogger.Log(message);
+            await hubContext.Clients.Client(connectionId)
+                .SendAsync("ReceiveNotification", message);
+            WatchLogger.Log($"Notification sent to {receiverId}");
+            return true;
+        }
+
+        WatchLogger.Log($"Notification Not sent to {receiverId}");
+        return false;
     }
 }

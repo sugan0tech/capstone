@@ -188,6 +188,35 @@ i18n.use(LanguageDetector)
                     findCenters: {
                         noCentersFound: "Search for centers to see",
                     },
+                    myDonations: {
+                        title: "My Donations", // Title for the My Donations page
+                        selectedCenter: "Selected Center: {{centerName}}", // Message showing the selected center
+                    },
+                    alerts: {
+                        createDonorProfile: "Please create a donor profile before proceeding.", // Alert message for creating a donor profile
+                    },
+                    donationHistory: {
+                        title: "History", // Title for the history section
+                        noDonations: "No donations yet", // Message when there are no donations
+                        donatedOn: "Donated on", // Label before the donation date
+                        at: "at", // Label before the donation center name
+                    },
+                    ongoingSlot: {
+                        title: "Ongoing Slot", // Title for the card when there is an ongoing slot
+                        noSlot: "No ongoing slot", // Title for the card when there is no ongoing slot
+                        slotBookedFor: "Slot booked for", // Label for the booked slot details
+                        at: "at", // Label before the time of the slot
+                        cancelSlot: "Cancel Slot", // Button text for canceling the slot
+                        centerNameLabel: "Center Name", // Label for the center name input field
+                        centerNamePlaceholder: "Enter the center name", // Placeholder for the center name input field
+                        bookSlot: "Book a Slot", // Button text for booking a slot
+                        booking: "Booking...", // Button text when the booking is in progress
+                        findCentersNearby: "Find Centers Nearby", // Button text for navigating to the Find Centers page
+                        alerts: {
+                            bookingSuccess: "Booking successful!", // Alert message for a successful booking
+                            bookingError: "Error booking slot: ", // Alert message for a booking error
+                        },
+                    },
                 },
 
             },
@@ -291,6 +320,36 @@ i18n.use(LanguageDetector)
                     findCenters: {
                         noCentersFound: "Recherchez des centres à voir",
                     },
+                    myDonations: {
+                        title: "Mes dons", // Title for the My Donations page
+                        selectedCenter: "Centre sélectionné : {{centerName}}", // Message showing the selected center
+                    },
+                    alerts: {
+                        createDonorProfile: "Veuillez créer un profil de donneur avant de continuer.", // Alert message for creating a donor profile
+                    },
+                    donationHistory: {
+                        title: "Historique", // Title for the history section
+                        noDonations: "Pas encore de dons", // Message when there are no donations
+                        donatedOn: "Donné le", // Label before the donation date
+                        at: "à", // Label before the donation center name
+                    },
+                    ongoingSlot: {
+                        title: "Créneau en cours", // Title for the card when there is an ongoing slot
+                        noSlot: "Aucun créneau en cours", // Title for the card when there is no ongoing slot
+                        slotBookedFor: "Créneau réservé pour", // Label for the booked slot details
+                        at: "à", // Label before the time of the slot
+                        cancelSlot: "Annuler le créneau", // Button text for canceling the slot
+                        centerNameLabel: "Nom du centre", // Label for the center name input field
+                        centerNamePlaceholder: "Entrez le nom du centre", // Placeholder for the center name input field
+                        bookSlot: "Réserver un créneau", // Button text for booking a slot
+                        booking: "Réservation...", // Button text when the booking is in progress
+                        findCentersNearby: "Trouver des centres à proximité", // Button text for navigating to the Find Centers page
+                        alerts: {
+                            bookingSuccess: "Réservation réussie!", // Alert message for a successful booking
+                            bookingError: "Erreur de réservation: ", // Alert message for a booking error
+                        },
+                    },
+
 
                 }
             },
@@ -449,113 +508,169 @@ i18n.use(LanguageDetector)
                     findCenters: {
                         noCentersFound: "மையங்களை காண தேடுங்கள்",
                     },
+                    myDonations: {
+                        title: "எனது நன்கொடை", // Title for the My Donations page
+                        selectedCenter: "தேர்ந்தெடுக்கப்பட்ட மையம்: {{centerName}}", // Message showing the selected center
+                    },
+                    alerts: {
+                        createDonorProfile: "தொடர்பதற்கு முன் நன்கொடையாளரின் சுயவிவரத்தை உருவாக்குங்கள்.", // Alert message for creating a donor profile
+                    },
+                    donationHistory: {
+                        title: "வரலாறு", // Title for the history section
+                        noDonations: "இன்னும் நன்கொடைகள் இல்லை", // Message when there are no donations
+                        donatedOn: "நன்கொடை செய்த நாள்", // Label before the donation date
+                        at: "இடத்தில்", // Label before the donation center name
+                    },
+                    ongoingSlot: {
+                        title: "நடப்புக் கால இடம்", // Title for the card when there is an ongoing slot
+                        noSlot: "நடப்புக் கால இடம் இல்லை", // Title for the card when there is no ongoing slot
+                        slotBookedFor: "இடம் பதிவு செய்யப்பட்டுள்ளது", // Label for the booked slot details
+                        at: "மணிக்கு", // Label before the time of the slot
+                        cancelSlot: "இடத்தை ரத்து செய்யவும்", // Button text for canceling the slot
+                        centerNameLabel: "மையத்தின் பெயர்", // Label for the center name input field
+                        centerNamePlaceholder: "மையத்தின் பெயரை உள்ளிடவும்", // Placeholder for the center name input field
+                        bookSlot: "ஒரு இடத்தைப் பதிவு செய்யவும்", // Button text for booking a slot
+                        booking: "பதிவு செய்யப்படுகிறது...", // Button text when the booking is in progress
+                        findCentersNearby: "சுற்றியுள்ள மையங்களைப் பார்", // Button text for navigating to the Find Centers page
+                        alerts: {
+                            bookingSuccess: "பதிவு வெற்றிகரமாக முடிந்தது!", // Alert message for a successful booking
+                            bookingError: "இடத்தை பதிவு செய்யும் போது பிழை: ", // Alert message for a booking error
+                        },
+                    }
+                }}
+                , hi: {
+                    translation: {
+                        greet: "नमस्ते",
+                        orders: {
+                            my_orders: "मेरे ऑर्डर",
+                            create_order: "ऑर्डर बनाएं",
+                            new_order: "नया ऑर्डर बनाएं",
+                            client_id: "क्लाइंट आईडी",
+                            required: "आवश्यक",
+                            max_quantity: "अधिकतम मात्रा",
+                            order_description: "ऑर्डर विवरण",
+                            optional: "वैकल्पिक",
+                            order_type: "ऑर्डर प्रकार",
+                            fixed: "स्थिर",
+                            blood_types: "रक्त प्रकार चुनें",
+                            antigen_types: "एंटीजन प्रकार चुनें",
+                            blood_subtypes: "रक्त उपप्रकार चुनें",
+                            submit: "सबमिट करें",
+                            close: "बंद करें",
+                            loading: "लोड हो रहा है",
+                            order_created: "ऑर्डर सफलतापूर्वक बनाया गया!",
+                            amount: "राशि: ${{amount}}",
+                            proceed_to_payment: "भुगतान गेटवे पर जाएं",
+                            pay_now: "अभी भुगतान करें"
+                        },
+                        slots: {
+                            ongoingSlotsTitle: "चालू स्लॉट्स",
+                            pendingSlotsTitle: "लंबित स्लॉट्स",
+                            completedSlotsTitle: "पूर्ण स्लॉट्स",
+                            status: "स्थिति",
+                            changeStatus: "स्थिति बदलें",
+                            viewDonorInfo: "डोनर जानकारी देखें",
+                            donorInfo: "डोनर जानकारी",
+                            donorId: "डोनर आईडी",
+                            name: "नाम",
+                            email: "ईमेल",
+                            phone: "फ़ोन",
+                            bloodType: "रक्त प्रकार",
+                            bloodSubtype: "रक्त उपप्रकार",
+                            close: "बंद करें",
+                            BloodReceived: "रक्त प्राप्त हुआ",
+                            BloodAccepted: "रक्त स्वीकार किया गया",
+                            BloodRejected: "रक्त अस्वीकार किया गया",
+                            DonorNotArrived: "डोनर नहीं आया",
+                            Pending: "लंबित",
+                        },
+                        loggedInDevices: {
+                            title: "लॉग इन डिवाइस",
+                            loggedInAt: "लॉग इन समय",
+                            deviceInfo: "डिवाइस जानकारी",
+                            logoutDevice: "डिवाइस लॉग आउट करें",
+                            logoutAllDevices: "सभी डिवाइस लॉग आउट करें",
+                            browser: "ब्राउज़र पर"
+                        },
+                        myAccount: {
+                            title: "मेरा खाता",
+                            userInfoTitle: "उपयोगकर्ता खाता जानकारी",
+                            resetPasswordButton: "पासवर्ड रीसेट करें",
+                        },
+                        userInfo: {
+                            email: "ईमेल",
+                            name: "नाम",
+                            role: "भूमिका",
+                            editButton: "संपादित करें",
+                        },
+                        editUserInfo: {
+                            email: "மின்னஞ்சல்",
+                            name: "பெயர்",
+                            saveButton: "சேமி",
+                            cancelButton: "ரத்து செய்",
+                        },
+                        resetPassword: {
+                            currentPassword: "நடப்புச் சாவி",
+                            newPassword: "புதிய கடவுச்சொல்",
+                            confirmPassword: "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+                            passwordLengthError: "கடவுச்சொல் குறைந்தது 8 எழுத்துகள் நீளமாக இருக்க வேண்டும்",
+                            passwordMatchError: "கடவுச்சொற்கள் பொருந்தவில்லை",
+                            saveButton: "சேமி",
+                            cancelButton: "ரத்து செய்",
+                        },
+                        footer: {
+                            companyName: "लाइफफ्लो ब्लड बैंक सेवा लिमिटेड.",
+                            tagline: "2024 से मानवता की सेवा में",
+                        },
+                        centreCard: {
+                            donateHere: "यहां दान करें",
+                            orderFromHere: "यहां से ऑर्डर करें",
+                            away: "दूर",
+                            stock: "स्टॉक",
+                            from: "से",
+                            to: "तक"
+                        },
+                        locationSearchBar: {
+                            placeholder: "स्थान खोजें",
+                            noLocationsFound: "कोई स्थान नहीं मिला",
+                            clearButton: "साफ करें",
+                        },
+                        findCenters: {
+                            noCentersFound: "केंद्रों को देखने के लिए खोजें",
+                        },
+                        myDonations: {
+                            title: "मेरे दान", // Title for the My Donations page
+                            selectedCenter: "चयनित केंद्र: {{centerName}}", // Message showing the selected center
+                        },
+                        alerts: {
+                            createDonorProfile: "कृपया आगे बढ़ने से पहले एक दाता प्रोफ़ाइल बनाएं।", // Alert message for creating a donor profile
+                        },
+                        donationHistory: {
+                            title: "इतिहास", // Title for the history section
+                            noDonations: "अभी तक कोई दान नहीं", // Message when there are no donations
+                            donatedOn: "दान किया गया", // Label before the donation date
+                            at: "पर", // Label before the donation center name
+                        },
+                        ongoingSlot: {
+                            title: "चल रहा स्लॉट", // Title for the card when there is an ongoing slot
+                            noSlot: "कोई चल रहा स्लॉट नहीं", // Title for the card when there is no ongoing slot
+                            slotBookedFor: "स्लॉट बुक किया गया", // Label for the booked slot details
+                            at: "पर", // Label before the time of the slot
+                            cancelSlot: "स्लॉट रद्द करें", // Button text for canceling the slot
+                            centerNameLabel: "केंद्र का नाम", // Label for the center name input field
+                            centerNamePlaceholder: "केंद्र का नाम दर्ज करें", // Placeholder for the center name input field
+                            bookSlot: "स्लॉट बुक करें", // Button text for booking a slot
+                            booking: "बुकिंग हो रही है...", // Button text when the booking is in progress
+                            findCentersNearby: "पास के केंद्र खोजें", // Button text for navigating to the Find Centers page
+                            alerts: {
+                                bookingSuccess: "बुकिंग सफल रही!", // Alert message for a successful booking
+                                bookingError: "स्लॉट बुकिंग में त्रुटि: ", // Alert message for a booking error
+                            },
+                        },
+                    }
                 }
             }
-            , hi: {
-                translation: {
-                    greet: "नमस्ते",
-                    orders: {
-                        my_orders: "मेरे ऑर्डर",
-                        create_order: "ऑर्डर बनाएं",
-                        new_order: "नया ऑर्डर बनाएं",
-                        client_id: "क्लाइंट आईडी",
-                        required: "आवश्यक",
-                        max_quantity: "अधिकतम मात्रा",
-                        order_description: "ऑर्डर विवरण",
-                        optional: "वैकल्पिक",
-                        order_type: "ऑर्डर प्रकार",
-                        fixed: "स्थिर",
-                        blood_types: "रक्त प्रकार चुनें",
-                        antigen_types: "एंटीजन प्रकार चुनें",
-                        blood_subtypes: "रक्त उपप्रकार चुनें",
-                        submit: "सबमिट करें",
-                        close: "बंद करें",
-                        loading: "लोड हो रहा है",
-                        order_created: "ऑर्डर सफलतापूर्वक बनाया गया!",
-                        amount: "राशि: ${{amount}}",
-                        proceed_to_payment: "भुगतान गेटवे पर जाएं",
-                        pay_now: "अभी भुगतान करें"
-                    },
-                    slots: {
-                        ongoingSlotsTitle: "चालू स्लॉट्स",
-                        pendingSlotsTitle: "लंबित स्लॉट्स",
-                        completedSlotsTitle: "पूर्ण स्लॉट्स",
-                        status: "स्थिति",
-                        changeStatus: "स्थिति बदलें",
-                        viewDonorInfo: "डोनर जानकारी देखें",
-                        donorInfo: "डोनर जानकारी",
-                        donorId: "डोनर आईडी",
-                        name: "नाम",
-                        email: "ईमेल",
-                        phone: "फ़ोन",
-                        bloodType: "रक्त प्रकार",
-                        bloodSubtype: "रक्त उपप्रकार",
-                        close: "बंद करें",
-                        BloodReceived: "रक्त प्राप्त हुआ",
-                        BloodAccepted: "रक्त स्वीकार किया गया",
-                        BloodRejected: "रक्त अस्वीकार किया गया",
-                        DonorNotArrived: "डोनर नहीं आया",
-                        Pending: "लंबित",
-                    },
-                    loggedInDevices: {
-                        title: "लॉग इन डिवाइस",
-                        loggedInAt: "लॉग इन समय",
-                        deviceInfo: "डिवाइस जानकारी",
-                        logoutDevice: "डिवाइस लॉग आउट करें",
-                        logoutAllDevices: "सभी डिवाइस लॉग आउट करें",
-                        browser: "ब्राउज़र पर"
-                    },
-                    myAccount: {
-                        title: "मेरा खाता",
-                        userInfoTitle: "उपयोगकर्ता खाता जानकारी",
-                        resetPasswordButton: "पासवर्ड रीसेट करें",
-                    },
-                    userInfo: {
-                        email: "ईमेल",
-                        name: "नाम",
-                        role: "भूमिका",
-                        editButton: "संपादित करें",
-                    },
-                    editUserInfo: {
-                        email: "மின்னஞ்சல்",
-                        name: "பெயர்",
-                        saveButton: "சேமி",
-                        cancelButton: "ரத்து செய்",
-                    },
-                    resetPassword: {
-                        currentPassword: "நடப்புச் சாவி",
-                        newPassword: "புதிய கடவுச்சொல்",
-                        confirmPassword: "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
-                        passwordLengthError: "கடவுச்சொல் குறைந்தது 8 எழுத்துகள் நீளமாக இருக்க வேண்டும்",
-                        passwordMatchError: "கடவுச்சொற்கள் பொருந்தவில்லை",
-                        saveButton: "சேமி",
-                        cancelButton: "ரத்து செய்",
-                    },
-                    footer: {
-                        companyName: "लाइफफ्लो ब्लड बैंक सेवा लिमिटेड.",
-                        tagline: "2024 से मानवता की सेवा में",
-                    },
-                    centreCard: {
-                        donateHere: "यहां दान करें",
-                        orderFromHere: "यहां से ऑर्डर करें",
-                        away: "दूर",
-                        stock: "स्टॉक",
-                        from: "से",
-                        to: "तक"
-                    },
-                    locationSearchBar: {
-                        placeholder: "स्थान खोजें",
-                        noLocationsFound: "कोई स्थान नहीं मिला",
-                        clearButton: "साफ करें",
-                    },
-                    findCenters: {
-                        noCentersFound: "केंद्रों को देखने के लिए खोजें",
-                    },
 
-                }
-            }
-        }
-
-    });
+        });
 
 export default i18n;

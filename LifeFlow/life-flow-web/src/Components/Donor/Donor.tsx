@@ -34,7 +34,7 @@ export const DonorComponent = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-base-300 h-fit rounded-btn">
+    <div className="flex flex-col gap-4 bg-base-200 h-fit rounded-btn">
       <div className="card-body">
         <h2 className="card-title">Donor Information</h2>
         {isEditingDonor ? (

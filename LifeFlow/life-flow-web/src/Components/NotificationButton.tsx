@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import { HubConnectionBuilder, HttpTransportType, LogLevel } from "@microsoft/signalr";
+import {useEffect, useState} from "react";
+import {HttpTransportType, HubConnectionBuilder} from "@microsoft/signalr";
 import NotificationIcon from "../assets/NotificationIcon";
+import {useAlert} from "../contexts/AlertContext.tsx";
 
 function NotificationButton() {
     const [notifications, setNotifications] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const {addAlert} = useAlert();
 
     useEffect(() => {
         // Fetch pending notifications
@@ -49,9 +51,9 @@ function NotificationButton() {
                     console.log(message)
                     setNotifications((prevNotifications) => [
                         ...prevNotifications,
-                        { id: Date.now(), title: "New Notification", message },
+                        {id: Date.now(), title: "New Notification", message},
                     ]);
-                    alert(message); // Display alert with the message
+                    addAlert({message: message, type: "info"}); // Display alert with the message
                 });
             })
             .catch((err) => {
@@ -87,6 +89,7 @@ function NotificationButton() {
         for (let notification of notifications) {
             await clearNotification(notification.id);
         }
+        setNotifications([])
     };
 
     const toggleDropdown = () => {
@@ -102,18 +105,18 @@ function NotificationButton() {
                     </span>
                 )}
                 <button tabIndex={0} className="btn" onClick={toggleDropdown}>
-                    <NotificationIcon />
+                    <NotificationIcon/>
                 </button>
             </div>
             {isDropdownOpen && (
                 <div
                     tabIndex={0}
-                    className="dropdown-content card card-compact bg-primary text-primary-content z-[1] w-64 p-2 shadow absolute right-0"
+                    className="dropdown-content card card-compact bg-base-200 border-base-100 border-4 text-primary-content z-[1] w-64 p-2 shadow absolute right-0"
                 >
                     <div className="flex justify-between items-center mb-2">
                         <h3 className="card-title">Notifications</h3>
                         <button
-                            className="btn btn-sm btn-secondary"
+                            className="btn btn-sm btn-primary"
                             onClick={clearAllNotifications}
                         >
                             Clear All
@@ -123,18 +126,17 @@ function NotificationButton() {
                         {notifications.map((notification) => (
                             <div
                                 key={notification.id}
-                                className="card-body flex justify-between items-center mb-2 bg-secondary text-secondary-content p-2 rounded"
+                                className="card-body flex justify-between items-center mb-2 bg-base-300 shadow-md text-secondary-content p-2 rounded"
                             >
-                                <div>
-                                    <h3 className="card-title">{notification.title}</h3>
-                                    <p>{notification.message}</p>
+                                <div className="flex items-center">
+                                    <p className="flex-grow mr-4">{notification.message}</p> {/* Added margin-right for spacing */}
+                                    <button
+                                        className="btn btn-sm btn-secondary"
+                                        onClick={() => clearNotification(notification.id)}
+                                    >
+                                        X
+                                    </button>
                                 </div>
-                                <button
-                                    className="btn btn-sm btn-error ml-2"
-                                    onClick={() => clearNotification(notification.id)}
-                                >
-                                    Clear
-                                </button>
                             </div>
                         ))}
                     </div>

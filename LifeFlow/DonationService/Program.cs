@@ -251,7 +251,11 @@ public class Program
         builder.Services.AddCors(opts =>
         {
             opts.AddPolicy("AllowAll",
-                corsPolicyBuilder => { corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); });
+                corsPolicyBuilder =>
+                {
+                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173")
+                        .AllowCredentials();
+                });
         });
 
         #endregion
