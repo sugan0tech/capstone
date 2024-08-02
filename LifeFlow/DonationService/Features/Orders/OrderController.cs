@@ -43,6 +43,22 @@ public class OrderController(
         return Ok(orders);
     }
 
+    [HttpGet("Center/{centerName}")]
+    [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCenterOrders(string centerName)
+    {
+        var orders = await orderService.CenterOrders(centerName);
+        return Ok(orders);
+    }
+
+    [HttpGet("Client/{clientId}")]
+    [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetClientOrders(int clientId)
+    {
+        var orders = await orderService.ClientOrders(clientId);
+        return Ok(orders);
+    }
+
     [HttpPost]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
@@ -124,11 +140,11 @@ public class OrderController(
     [HttpPut("{orderId}/{status}")]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateOrderStatus(int orderId, OrderStatus status)
+    public async Task<IActionResult> UpdateOrderStatus(int orderId, string status)
     {
         try
         {
-            await commandHandler.Handle(new UpdateOrderStatusCommand(orderId, status));
+            await commandHandler.Handle(new UpdateOrderStatusCommand(orderId, Enum.Parse<OrderStatus>(status)));
             return StatusCode(StatusCodes.Status201Created, orderService.GetById(orderId));
         }
         catch (KeyNotFoundException e)

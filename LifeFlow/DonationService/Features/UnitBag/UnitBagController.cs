@@ -13,7 +13,7 @@ namespace DonationService.Features.UnitBag;
 [EnableCors("AllowAll")]
 // [Authorize(Policy = "CenterAdmin")]
 public class UnitBagController(
-    IBaseService<Entities.UnitBag, UnitBagDto> unitBagService,
+    UnitBagService unitBagService,
     CustomControllerValidator validator) : ControllerBase
 {
     /// <summary>
@@ -113,6 +113,18 @@ public class UnitBagController(
     public async Task<IActionResult> GetAll()
     {
         var unitBags = await unitBagService.GetAll();
+        return Ok(unitBags);
+    }
+    
+    /// <summary>
+    ///     Gets all unit bags.
+    /// </summary>
+    /// <returns>A list of unit bags.</returns>
+    [HttpGet("order/{orderId}")]
+    [ProducesResponseType(typeof(List<UnitBagDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllByOrder(int orderId)
+    {
+        var unitBags = await unitBagService.GetBagsByOrder(orderId);
         return Ok(unitBags);
     }
 }

@@ -129,7 +129,7 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped<IBaseService<UnitBag, UnitBagDto>, UnitBagService>();
+        builder.Services.AddScoped<UnitBagService>();
         builder.Services.AddScoped<DonationSlotService>();
         builder.Services.AddScoped<PaymentService>();
         builder.Services.AddScoped<BloodCenterService>();

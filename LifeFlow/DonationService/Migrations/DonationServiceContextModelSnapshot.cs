@@ -80,7 +80,7 @@ namespace DonationService.Migrations
                     b.HasIndex("EntityId", "EntityType")
                         .IsUnique();
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.BloodCenter", b =>
@@ -140,7 +140,7 @@ namespace DonationService.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("BloodCenters");
+                    b.ToTable("BloodCenters", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.Client", b =>
@@ -179,7 +179,7 @@ namespace DonationService.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.DonationSlot", b =>
@@ -211,7 +211,7 @@ namespace DonationService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DonationSlots");
+                    b.ToTable("DonationSlots", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.Donor", b =>
@@ -250,7 +250,7 @@ namespace DonationService.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Donors");
+                    b.ToTable("Donors", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.Notification", b =>
@@ -289,7 +289,7 @@ namespace DonationService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notification");
+                    b.ToTable("Notification", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.Order", b =>
@@ -340,7 +340,7 @@ namespace DonationService.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.Payment", b =>
@@ -379,7 +379,7 @@ namespace DonationService.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.UnitBag", b =>
@@ -430,7 +430,7 @@ namespace DonationService.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("UnitBags");
+                    b.ToTable("UnitBags", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.User", b =>
@@ -484,7 +484,7 @@ namespace DonationService.Migrations
                     b.HasIndex(new[] { "Email" }, "Email_Ind")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.UserSession", b =>
@@ -535,7 +535,7 @@ namespace DonationService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserSessions");
+                    b.ToTable("UserSessions", (string)null);
                 });
 
             modelBuilder.Entity("DonationService.Entities.Client", b =>

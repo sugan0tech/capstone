@@ -85,7 +85,9 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 
         modelBuilder.Entity<Order>().HasOne<Client>(order => order.Client).WithMany(client => client.Orders)
             .HasForeignKey(order => order.ClientId).OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Order>().HasMany<UnitBag>(order => order.Items);
+        modelBuilder.Entity<Order>().HasMany<UnitBag>(order => order.Items).WithOne(bag => bag.Order).HasForeignKey(bag => bag.OrderId);
+        modelBuilder.Entity<Order>().Navigation(order => order.Items).AutoInclude();
+        
 
         #endregion
 

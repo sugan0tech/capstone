@@ -196,8 +196,6 @@ function MakeOrder() {
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">{t('orders.new_order')}</h3>
-                    {console.log("PaymentData")}
-                    {console.log(paymentData)}
                     {isLoading ? (
                         <span className="loading loading-spinner text-primary">{t('orders.loading')}</span>
                     ) : paymentData ? (

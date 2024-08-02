@@ -19,12 +19,8 @@ function MyOrders() {
                 </div>
             </div>
             <div className="divider"></div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div className="card bg-base-300 h-fit rounded-btn">
-                    <div className="card-body">
-                        <ViewOrders/>
-                    </div>
-                </div>
+            <div className="flex flex-col ">
+                    <ViewOrders/>
             </div>
         </div>
     );
