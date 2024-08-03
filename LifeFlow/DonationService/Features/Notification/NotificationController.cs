@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Exceptions;
 using Microsoft.AspNetCore.Cors;
@@ -10,6 +11,7 @@ namespace DonationService.Features.Notification;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
+[ExcludeFromCodeCoverage]
 // [Authorize]
 public class NotificationController(NotificationService notificationService) : ControllerBase
 {

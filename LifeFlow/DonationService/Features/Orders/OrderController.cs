@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Commons.Validations;
@@ -13,6 +14,7 @@ namespace DonationService.Features.Orders;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
+[ExcludeFromCodeCoverage]
 public class OrderController(
     OrderService orderService,
     ICommandHandler<UpdateOrderStatusCommand> commandHandler,

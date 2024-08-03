@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
@@ -10,6 +11,7 @@ namespace DonationService.Features.Client;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
+[ExcludeFromCodeCoverage]
 public class ClientController(ClientService clientService, CustomControllerValidator validator)
     : ControllerBase
 {

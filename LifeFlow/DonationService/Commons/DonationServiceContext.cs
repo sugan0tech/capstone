@@ -12,6 +12,15 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
     public DbSet<DonationSlot> DonationSlots { get; set; }
     public DbSet<UnitBag> UnitBags { get; set; }
     public DbSet<UserSession> UserSessions { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+
+    #region BloodOrders
+
+    public DbSet<Client> Clients { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+
+    #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -120,12 +129,4 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
                     .HasConversion<string>();
         }
     }
-
-    #region BloodOrders
-
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<Payment> Payments { get; set; }
-
-    #endregion
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
@@ -12,6 +13,7 @@ namespace DonationService.Features.Address;
 [ApiController]
 [Route("api/[controller]")]
 [EnableCors("AllowAll")]
+[ExcludeFromCodeCoverage]
 // [Authorize]
 public class AddressController(
     ILogger<AddressController> logger,

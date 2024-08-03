@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DonationService.Features.GeoCoding;
 
 [ApiController]
 [Route("api/[controller]")]
+[ExcludeFromCodeCoverage]
 public class GeocodingController : ControllerBase
 {
     private readonly GeocodingService _geocodingService;

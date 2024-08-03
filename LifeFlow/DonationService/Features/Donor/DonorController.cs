@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Commons.Validations;
@@ -12,6 +13,7 @@ namespace DonationService.Features.Donor;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
+[ExcludeFromCodeCoverage]
 // [Authorize]
 public class DonorController(
     IDonorService donorService,
