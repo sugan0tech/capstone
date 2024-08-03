@@ -66,14 +66,14 @@ const AlertProvider = ({ children }: AuthProviderProps) => {
       {children}
       {alert && (
         <div className="fixed bottom-4 right-4 w-80 z-40">
-          <div role="alert" className={`alert alert-${alert.type} p-4 mb-4`} >
+          <div role="alert" className={`alert alert-${alert.type || "info"} border-4 border-base-100 shadow-2xl shadow-${alert.type || "info"} p-4 mb-4 bg-${alert.type || "info"}`} >
             <div>
               {selectSvg(alert.type)}
               <span>{alert.message}</span>
               <br />
               <button
                 onClick={removeAlert}
-                className={`btn btn-${alert.type} `}
+                className={`btn btn-${alert.type || "info"} border-4 }`}
               >
                 close X
               </button>

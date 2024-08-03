@@ -2,17 +2,19 @@ import {useEffect, useState} from "react";
 import {HttpTransportType, HubConnectionBuilder} from "@microsoft/signalr";
 import NotificationIcon from "../assets/NotificationIcon";
 import {useAlert} from "../contexts/AlertContext.tsx";
+import {useAuth} from "../contexts/AuthContext.tsx";
 
 function NotificationButton() {
     const [notifications, setNotifications] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const {user} = useAuth();
     const {addAlert} = useAlert();
 
     useEffect(() => {
         // Fetch pending notifications
         const fetchNotifications = async () => {
             try {
-                const response = await fetch('http://localhost:5226/api/Notification/pending/17', {
+                const response = await fetch(`http://localhost:5226/api/Notification/pending/${user?.id}`, {
                     headers: {
                         'Accept': 'text/plain',
                         'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
@@ -33,7 +35,7 @@ function NotificationButton() {
         fetchNotifications();
 
         const connection = new HubConnectionBuilder()
-            .withUrl(`http://localhost:5226/notificationHub?receiverId=${17}`, {
+            .withUrl(`http://localhost:5226/notificationHub?receiverId=${user?.id}`, {
                 skipNegotiation: true,
                 transport: HttpTransportType.WebSockets,
                 accessTokenFactory: () => localStorage.getItem("accessToken"),
@@ -49,11 +51,8 @@ function NotificationButton() {
                 connection.on("ReceiveNotification", (message) => {
                     console.log("From Socket")
                     console.log(message)
-                    setNotifications((prevNotifications) => [
-                        ...prevNotifications,
-                        {id: Date.now(), title: "New Notification", message},
-                    ]);
-                    addAlert({message: message, type: "info"}); // Display alert with the message
+                    fetchNotifications();
+                    addAlert({message: message, type: "warning"}); // Display alert with the message
                 });
             })
             .catch((err) => {
@@ -66,6 +65,7 @@ function NotificationButton() {
     }, []);
 
     const clearNotification = async (id) => {
+        console.log(id)
         try {
             const response = await fetch(`http://localhost:5226/api/Notification/mark-read/${id}`, {
                 method: 'PUT',
@@ -134,7 +134,7 @@ function NotificationButton() {
                                         className="btn btn-sm btn-secondary"
                                         onClick={() => clearNotification(notification.id)}
                                     >
-                                        X
+                                        X {console.log(notification)}
                                     </button>
                                 </div>
                             </div>
