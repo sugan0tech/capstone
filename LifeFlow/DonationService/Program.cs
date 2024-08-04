@@ -80,6 +80,7 @@ public class Program
         }); // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
         var secretClient = new SecretClient(new Uri("https://LifeFlowVault.vault.azure.net/"), new DefaultAzureCredential());
+        builder.Services.AddSingleton(secretClient);
         var mainDbConnectionString = secretClient.GetSecret("LifeFlowDbConnectionString").Value.Value;
         var eventDbConnectionString = secretClient.GetSecret("EventDbConnectionString").Value.Value;
         var tokenKey = secretClient.GetSecret("TokenKey").Value.Value;
