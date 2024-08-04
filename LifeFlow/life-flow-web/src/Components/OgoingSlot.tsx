@@ -21,7 +21,7 @@ export function OngoingSlot({ slot, onCancel }) {
     const handleBooking = async () => {
         setLoading(true);
         try {
-            const response = await post(`http://localhost:5226/api/BloodCenter/${centerName}/book/1`, {
+            const response = await post(`https://donationservice.azurewebsites.net/api/BloodCenter/${centerName}/book/1`, {
                 headers: {
                     Accept: "text/plain",
                     Authorization: "{{apiKey}}",

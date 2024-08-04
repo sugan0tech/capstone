@@ -30,7 +30,7 @@ function DonorCard({
 
     const fetchUserDetails = async () => {
         try {
-            const response = await get<UserDetail>(`http://localhost:5226/api/User/${userId}`);
+            const response = await get<UserDetail>(`https://donationservice.azurewebsites.net/api/User/${userId}`);
             setUserDetails(response);
             document.getElementById("userModal")?.showModal();
         } catch (error) {

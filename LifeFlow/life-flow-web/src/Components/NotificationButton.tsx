@@ -14,7 +14,7 @@ function NotificationButton() {
         // Fetch pending notifications
         const fetchNotifications = async () => {
             try {
-                const response = await fetch(`http://localhost:5226/api/Notification/pending/${user?.id}`, {
+                const response = await fetch(`https://donationservice.azurewebsites.net/api/Notification/pending/${user?.id}`, {
                     headers: {
                         'Accept': 'text/plain',
                         'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
@@ -35,7 +35,7 @@ function NotificationButton() {
         fetchNotifications();
 
         const connection = new HubConnectionBuilder()
-            .withUrl(`http://localhost:5226/notificationHub?receiverId=${user?.id}`, {
+            .withUrl(`https://donationservice.azurewebsites.net/notificationHub?receiverId=${user?.id}`, {
                 skipNegotiation: true,
                 transport: HttpTransportType.WebSockets,
                 accessTokenFactory: () => localStorage.getItem("accessToken"),
@@ -67,7 +67,7 @@ function NotificationButton() {
     const clearNotification = async (id) => {
         console.log(id)
         try {
-            const response = await fetch(`http://localhost:5226/api/Notification/mark-read/${id}`, {
+            const response = await fetch(`https://donationservice.azurewebsites.net/api/Notification/mark-read/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'text/plain',
