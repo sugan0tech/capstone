@@ -3,6 +3,7 @@ import {HttpTransportType, HubConnectionBuilder} from "@microsoft/signalr";
 import NotificationIcon from "../assets/NotificationIcon";
 import {useAlert} from "../contexts/AlertContext.tsx";
 import {useAuth} from "../contexts/AuthContext.tsx";
+import {baseURL} from "../utils/apiService.ts";
 
 function NotificationButton() {
     const [notifications, setNotifications] = useState([]);
@@ -14,7 +15,7 @@ function NotificationButton() {
         // Fetch pending notifications
         const fetchNotifications = async () => {
             try {
-                const response = await fetch(`https://donationservice.azurewebsites.net/api/Notification/pending/${user?.id}`, {
+                const response = await fetch(`${baseURL}Notification/pending/${user?.id}`, {
                     headers: {
                         'Accept': 'text/plain',
                         'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
@@ -67,7 +68,7 @@ function NotificationButton() {
     const clearNotification = async (id) => {
         console.log(id)
         try {
-            const response = await fetch(`https://donationservice.azurewebsites.net/api/Notification/mark-read/${id}`, {
+            const response = await fetch(`${baseURL}Notification/mark-read/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'text/plain',

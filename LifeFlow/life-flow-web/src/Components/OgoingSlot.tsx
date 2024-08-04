@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { get, post } from "../utils/apiService";
+import {baseURL, get, post} from "../utils/apiService";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../contexts/AlertContext.tsx";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,7 @@ export function OngoingSlot({ slot, onCancel }) {
     const handleBooking = async () => {
         setLoading(true);
         try {
-            const response = await post(`https://donationservice.azurewebsites.net/api/BloodCenter/${centerName}/book/1`, {
+            const response = await post(`${baseURL}BloodCenter/${centerName}/book/1`, {
                 headers: {
                     Accept: "text/plain",
                     Authorization: "{{apiKey}}",

@@ -159,8 +159,11 @@ public class DonorService(
     public async Task<List<DonationSlotDto>> GetCompletedSlotsByDonor(int donorId)
     {
         var donationSlots = await slotRepo.GetAll();
+        // var completedSlots = donationSlots.Where(s =>
+        //         s.DonorId == donorId && s.SlotStatus is SlotStatus.BloodAccepted or SlotStatus.BloodReceived)
+        //     .ToList();
         var completedSlots = donationSlots.Where(s =>
-                s.DonorId == donorId && s.SlotStatus is SlotStatus.BloodAccepted or SlotStatus.BloodReceived)
+                s.DonorId == donorId)
             .ToList();
         return mapper.Map<List<DonationSlotDto>>(completedSlots);
     }

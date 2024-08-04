@@ -5,6 +5,7 @@ import { put } from "../../utils/apiService.ts";
 import { DonorInfoEdit } from "./DonorInfoEdit.tsx";
 import { DonorInfoDisplay } from "./DonorInfoDisplay.tsx";
 import { AddressView } from "../Address/AddressView.tsx";
+import {useNavigate} from "react-router-dom";
 
 export const DonorComponent = () => {
   const { user } = useAuth();
@@ -12,6 +13,7 @@ export const DonorComponent = () => {
   const [addressInfo, setAddressInfo] = useState<Address | null>(null);
   const [isEditingDonor, setIsEditingDonor] = useState(false);
   const { addAlert } = useAlert();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const localDonor = localStorage.getItem("Donor");
@@ -20,6 +22,7 @@ export const DonorComponent = () => {
       setDonorInfo(JSON.parse(localDonor));
     } else {
       addAlert({ message: "Please create a donor profile", type: "error" });
+      navigate("/create-donor")
     }
     if (localAddress) {
       setAddressInfo(JSON.parse(localAddress));

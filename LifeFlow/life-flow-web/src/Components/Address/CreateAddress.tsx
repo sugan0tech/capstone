@@ -86,13 +86,14 @@ export function CreateAddress({ onSave, onCancel }) {
         userId: user?.id || 0,
       });
 
-      localStorage.setItem("Address", JSON.stringify(response));
+      localStorage.setItem("address", JSON.stringify(response));
 
       addAlert({
         message: "Address created successfully!",
         type: "success",
       });
       onSave(response);
+      window.location.reload()
     } catch (error: any) {
       addAlert({
         message: error.message || "Failed to create address. Please try again.",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext"; // Assuming you have an AuthContext for getting roles
-import { get } from "../../utils/apiService"; // Utility to make API calls
+import {baseURL, get} from "../../utils/apiService"; // Utility to make API calls
 
 interface DonorProps {
     userId: number;
@@ -30,7 +30,7 @@ function DonorCard({
 
     const fetchUserDetails = async () => {
         try {
-            const response = await get<UserDetail>(`https://donationservice.azurewebsites.net/api/User/${userId}`);
+            const response = await get<UserDetail>(`${baseURL}User/${userId}`);
             setUserDetails(response);
             document.getElementById("userModal")?.showModal();
         } catch (error) {

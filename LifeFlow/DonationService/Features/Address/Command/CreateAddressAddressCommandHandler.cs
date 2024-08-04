@@ -11,10 +11,10 @@ using MediatR;
 
 namespace DonationService.Features.Address.Command;
 
-public class CreateAddressCommandHandler(IBaseRepo<Entities.Address> repository, IMediator mediator, IMapper mapper)
-    : ICommandHandler<CreateAddressCommand>
+public class CreateAddressAddressCommandHandler(IBaseRepo<Entities.Address> repository, IMediator mediator, IMapper mapper)
+    : IAddressCommandHandler<CreateAddressCommand>
 {
-    public async Task Handle(CreateAddressCommand command)
+    public async Task<AddressDto> Handle(CreateAddressCommand command)
     {
         if (repository.GetAll().Result.Exists(address =>
                 address.EntityId.Equals(command.Address.EntityId) &&
@@ -24,26 +24,27 @@ public class CreateAddressCommandHandler(IBaseRepo<Entities.Address> repository,
 
         // validation for entity existance
         var address = mapper.Map<Entities.Address>(command.Address);
+        Entities.Address addr;
         switch (command.Address.EntityType)
         {
             case "Donor":
                 var donor = await mediator.Send(new GetDonorQuery(command.Address.EntityId));
-                await repository.Add(address);
+                addr = await repository.Add(address);
                 donor.AddressId = address.Id;
                 await mediator.Send(new UpdateDonorCommand(donor));
-                break;
+                return mapper.Map<AddressDto>(addr);
             case "BloodCenter":
                 var centre = await mediator.Send(new GetBloodCenterQuery(command.Address.EntityId));
-                await repository.Add(address);
+                addr = await repository.Add(address);
                 centre.AddressId = address.Id;
                 await mediator.Send(new UpdateBloodCenterCommand(centre));
-                break;
+                return mapper.Map<AddressDto>(addr);
             case "Client":
                 var client = await mediator.Send(new GetClientQuery(command.Address.EntityId));
-                await repository.Add(address);
+                addr = await repository.Add(address);
                 client.AddressId = address.Id;
                 await mediator.Send(new UpdateClientCommand(client));
-                break;
+                return mapper.Map<AddressDto>(addr);
             default:
                 throw new InvalidEntityTypeException($"{command.Address.EntityType} is not of accepted types");
         }

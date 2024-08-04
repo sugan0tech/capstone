@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Azure.Security.KeyVault.Secrets;
 using DonationService.Auth.Dto;
 using DonationService.Exceptions;
 using DonationService.Features.User;
@@ -13,9 +14,9 @@ public class TokenService : ITokenService
     private readonly SymmetricSecurityKey _key;
 
     /// <intheritdoc />
-    public TokenService(IConfiguration configuration)
+    public TokenService(IConfiguration configuration, SecretClient secretClient)
     {
-        var secretKey = configuration.GetSection("TokenKey").GetSection("JWT").Value;
+        var secretKey = secretClient.GetSecret("TokenKey").Value.Value;
         if (secretKey == null)
             throw new NoSecretKeyFoundException("No Token generation Secret key found for this Environment");
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));

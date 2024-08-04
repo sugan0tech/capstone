@@ -145,14 +145,14 @@ public class Program
 
         // Commands and queries 
         builder.Services.AddMediatR(options => { options.RegisterServicesFromAssemblies(typeof(Program).Assembly); });
-        builder.Services.AddScoped<ICommandHandler<CreateAddressCommand>, CreateAddressCommandHandler>();
-        builder.Services.AddScoped<ICommandHandler<UpdateAddressCommand>, UpdateAddressCommandHandler>();
-        builder.Services.AddScoped<ICommandHandler<DeleteAddressCommand>, DeleteAddressCommandHandler>();
+        builder.Services.AddScoped<IAddressCommandHandler<CreateAddressCommand>, CreateAddressAddressCommandHandler>();
+        builder.Services.AddScoped<IAddressCommandHandler<UpdateAddressCommand>, UpdateAddressAddressCommandHandler>();
+        builder.Services.AddScoped<IAddressCommandHandler<DeleteAddressCommand>, DeleteAddressAddressCommandHandler>();
         builder.Services.AddScoped<IQueryHandler<GetAddressByIdQuery, AddressDto>, GetAddressByIdQueryHandler>();
         builder.Services
             .AddScoped<IQueryHandler<GetAllAddressesQuery, List<AddressDto>>, GetAllAddressesQueryHandler>();
         builder.Services.AddScoped<CustomControllerValidator>();
-        builder.Services.AddScoped<ICommandHandler<UpdateOrderStatusCommand>, UpdateOrderCommandHandler>();
+        builder.Services.AddScoped<IOrderCommandHandler<UpdateOrderStatusCommand>, UpdateOrderCommandHandler>();
 
         // OrderServices
         builder.Services.AddScoped<OrderService>();
@@ -246,7 +246,7 @@ public class Program
             options.AddPolicy("HospitalAdmin",
                 policyBuilder => policyBuilder.RequireRole(Role.HospitalAdmin.ToString()));
             options.AddPolicy("PharmaAdmin", policyBuilder => policyBuilder.RequireRole(Role.PharmaAdmin.ToString()));
-            options.AddPolicy("AdminPolicy", policyBuilder => policyBuilder.RequireRole(Role.PharmaAdmin.ToString()));
+            options.AddPolicy("AdminPolicy", policyBuilder => policyBuilder.RequireRole(Role.Admin.ToString()));
             options.AddPolicy("Donor",
                 policyBuilder => policyBuilder.RequireRole(Role.Donor.ToString()));
         });
@@ -260,7 +260,7 @@ public class Program
             opts.AddPolicy("AllowAll",
                 corsPolicyBuilder =>
                 {
-                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173")
+                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173", "https://orange-hill-0f44ca01e.5.azurestaticapps.net")
                         .AllowCredentials();
                 });
         });

@@ -101,6 +101,9 @@ function CreateDonor() {
         </select>
       </label>
       <label className="input input-bordered flex items-center gap-2">
+        <div className="label">
+          <span className="label-text">Last donation time</span>
+        </div>
         <input
           type="date"
           value={

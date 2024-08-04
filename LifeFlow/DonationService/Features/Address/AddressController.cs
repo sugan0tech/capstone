@@ -18,9 +18,9 @@ namespace DonationService.Features.Address;
 [Authorize]
 public class AddressController(
     ILogger<AddressController> logger,
-    ICommandHandler<CreateAddressCommand> createAddressHandler,
-    ICommandHandler<UpdateAddressCommand> updateAddressHandler,
-    ICommandHandler<DeleteAddressCommand> deleteAddressHandler,
+    IAddressCommandHandler<CreateAddressCommand> createAddressHandler,
+    IAddressCommandHandler<UpdateAddressCommand> updateAddressHandler,
+    IAddressCommandHandler<DeleteAddressCommand> deleteAddressHandler,
     IQueryHandler<GetAddressByIdQuery, AddressDto> getAddressByIdHandler,
     IQueryHandler<GetAllAddressesQuery, List<AddressDto>> getAllAddressesHandler,
     CustomControllerValidator validator)
@@ -63,8 +63,9 @@ public class AddressController(
         {
             // validator.ValidateUserPrivilege(User.Claims, addressDto.EntityId);
             logger.LogInformation(addressDto.ToString());
-            await createAddressHandler.Handle(new CreateAddressCommand(addressDto));
-            return StatusCode(201);
+            var createdAddress = await createAddressHandler.Handle(new CreateAddressCommand(addressDto));
+            
+            return Ok(createdAddress);
         }
         catch (AlreadyExistingEntityException e)
         {

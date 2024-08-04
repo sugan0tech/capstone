@@ -9,7 +9,7 @@ namespace DonationService.Features.Payment;
 
 public class PaymentService(
     IBaseRepo<Entities.Payment> repo,
-    ICommandHandler<UpdateOrderStatusCommand> commandHandler,
+    IOrderCommandHandler<UpdateOrderStatusCommand> commandHandler,
     IMapper mapper)
     : BaseService<Entities.Payment, PaymentDto>(repo, mapper), IPaymentService
 {

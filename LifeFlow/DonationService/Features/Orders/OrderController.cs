@@ -19,7 +19,7 @@ namespace DonationService.Features.Orders;
 [Authorize]
 public class OrderController(
     OrderService orderService,
-    ICommandHandler<UpdateOrderStatusCommand> commandHandler,
+    IAddressCommandHandler<UpdateOrderStatusCommand> commandHandler,
     CustomControllerValidator validator)
     : ControllerBase
 {
