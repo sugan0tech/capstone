@@ -14,7 +14,7 @@ namespace DonationService.Features.User;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-// [Authorize]
+[Authorize]
 public class UserController(
     IUserService userService,
     CustomControllerValidator validator) : ControllerBase

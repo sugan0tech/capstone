@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace DonationService.Features.Payment;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
+[Authorize]
 public class PaymentController(PaymentService paymentService, CustomControllerValidator validator)
     : ControllerBase
 {

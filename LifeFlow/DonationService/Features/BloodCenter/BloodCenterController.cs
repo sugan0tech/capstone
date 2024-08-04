@@ -4,6 +4,7 @@ using DonationService.Commons;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
 using DonationService.Features.DonationSlot;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WatchDog;
@@ -14,7 +15,7 @@ namespace DonationService.Features.BloodCenter;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-// [Authorize]
+[Authorize]
 public class BloodCenterController(
     BloodCenterService bloodCenterService,
     CustomControllerValidator validator) : ControllerBase
@@ -27,7 +28,7 @@ public class BloodCenterController(
     [HttpPost]
     [ProducesResponseType(typeof(BloodCenterDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
-    // [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> Add([FromBody] BloodCenterDto bloodCenterDto)
     {
         try
@@ -140,6 +141,7 @@ public class BloodCenterController(
     [ProducesResponseType(typeof(List<BloodCenterDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetNearByCenters(double latitude, double longitude)
     {
         try
@@ -167,6 +169,7 @@ public class BloodCenterController(
     [HttpGet("name/{name}")]
     [ProducesResponseType(typeof(List<BloodCenterDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetCenterByName(string name)
     {
         try

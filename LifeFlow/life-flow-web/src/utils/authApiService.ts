@@ -54,6 +54,23 @@ const verifyOtp = async (email: string, otp: string) => {
         throw new Error("An unexpected error occurred");
     }
 };
+const getAccessToken = async (refreshToken: string) => {
+    try {
+        const response = await api.get("/Auth/access-token", {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
+        return response.data.accessToken;
+    } catch (error: any) {
+        if (axios.isAxiosError(error) && error.response) {
+            const errorMessage =
+                error.response.data?.message || "Failed to refresh access token";
+            const errorStatus = error.response.data?.status || error.response.status;
+            throw new Error(`${errorMessage} (Status: ${errorStatus})`);
+        }
+        throw new Error("An unexpected error occurred while refreshing the access token");
+    }
+};
 
-
-export {login, register, verifyOtp }
+export { login, register, verifyOtp, getAccessToken };

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using DonationService.Commons;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WatchDog;
@@ -11,7 +12,7 @@ namespace DonationService.Features.UnitBag;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]
-// [Authorize(Policy = "CenterAdmin")]
+[Authorize]
 public class UnitBagController(
     UnitBagService unitBagService,
     CustomControllerValidator validator) : ControllerBase

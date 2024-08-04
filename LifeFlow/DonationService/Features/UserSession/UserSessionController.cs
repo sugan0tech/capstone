@@ -13,7 +13,7 @@ namespace DonationService.Features.UserSession;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-// [Authorize]
+[Authorize]
 public class UserSessionController(
     IUserSessionService userSessionService,
     CustomControllerValidator validator,

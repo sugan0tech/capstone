@@ -5,6 +5,7 @@ using DonationService.Commons.Validations;
 using DonationService.Exceptions;
 using DonationService.Features.Address.Command;
 using DonationService.Features.Address.Query;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ namespace DonationService.Features.Address;
 [Route("api/[controller]")]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-// [Authorize]
+[Authorize]
 public class AddressController(
     ILogger<AddressController> logger,
     ICommandHandler<CreateAddressCommand> createAddressHandler,
@@ -45,7 +46,7 @@ public class AddressController(
 
     [HttpGet]
     [ProducesResponseType(typeof(List<AddressDto>), StatusCodes.Status200OK)]
-    // [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> GetAllAddresses()
     {
         var addresses = await getAllAddressesHandler.Handle(new GetAllAddressesQuery());
@@ -101,20 +102,20 @@ public class AddressController(
         }
     }
 
-    // [HttpDelete("{id}")]
-    // [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
-    // [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
-    // public async Task<IActionResult> DeleteAddressById(int id)
-    // {
-    //     try
-    //     {
-    //         await deleteAddressHandler.Handle(new DeleteAddressCommand { Id = id });
-    //         return Ok();
-    //     }
-    //     catch (KeyNotFoundException e)
-    //     {
-    //         logger.LogError(e.Message);
-    //         return NotFound(new ErrorModel(404, e.Message));
-    //     }
-    // }
+    [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteAddressById(int id)
+    {
+        try
+        {
+            await deleteAddressHandler.Handle(new DeleteAddressCommand { Id = id });
+            return Ok();
+        }
+        catch (KeyNotFoundException e)
+        {
+            logger.LogError(e.Message);
+            return NotFound(new ErrorModel(404, e.Message));
+        }
+    }
 }

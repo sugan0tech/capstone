@@ -6,6 +6,7 @@ using DonationService.Commons.Validations;
 using DonationService.Exceptions;
 using DonationService.Features.Address.Command;
 using DonationService.Features.Orders.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace DonationService.Features.Orders;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
+[Authorize]
 public class OrderController(
     OrderService orderService,
     ICommandHandler<UpdateOrderStatusCommand> commandHandler,

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {getAccessToken} from "./authApiService.ts";
 
 const baseURL = "http://localhost:5226/api/";
 
@@ -18,41 +19,39 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+
 api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (refreshToken) {
-        try {
-          const response = await api.get("/Auth/access-token", {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          });
-          localStorage.setItem("accessToken", response.data.accessToken);
-          api.defaults.headers.common["Authorization"] =
-            `Bearer ${response.data.accessToken}`;
-          return api(originalRequest);
-        } catch (e) {
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (refreshToken) {
+          try {
+            const newAccessToken = await getAccessToken(refreshToken);
+            localStorage.setItem("accessToken", newAccessToken);
+            api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+            return api(originalRequest);
+          } catch (e) {
+            clearAuthTokens();
+            window.location.href = "/login";
+            return Promise.reject(error);
+          }
+        } else {
           clearAuthTokens();
           window.location.href = "/login";
+          return Promise.reject(error);
         }
-      } else {
-        clearAuthTokens();
-        window.location.href = "/login";
       }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
 );
-
 function clearAuthTokens() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("isAuthenticated");
+  localStorage.clear();
 }
 
 function setAuthTokens(accessToken: string, refreshToken: string) {

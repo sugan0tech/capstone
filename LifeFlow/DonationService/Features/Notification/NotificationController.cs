@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WatchDog;
@@ -12,7 +13,7 @@ namespace DonationService.Features.Notification;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-// [Authorize]
+[Authorize]
 public class NotificationController(NotificationService notificationService) : ControllerBase
 {
     /// <summary>

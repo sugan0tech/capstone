@@ -1,5 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using DonationService.Auth;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
@@ -77,6 +79,10 @@ public class Program
             });
         }); // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
+        var secretClient = new SecretClient(new Uri("https://LifeFlowVault.vault.azure.net/"), new DefaultAzureCredential());
+        var mainDbConnectionString = secretClient.GetSecret("LifeFlowDbConnectionString").Value.Value;
+        var eventDbConnectionString = secretClient.GetSecret("EventDbConnectionString").Value.Value;
+        var tokenKey = secretClient.GetSecret("TokenKey").Value.Value;
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddHttpContextAccessor();
@@ -85,7 +91,7 @@ public class Program
 
         builder.Services.AddDbContext<DonationServiceContext>(optionsBuilder =>
             {
-                optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
+                optionsBuilder.UseSqlServer(mainDbConnectionString);
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
         );
@@ -97,7 +103,7 @@ public class Program
         builder.Services.AddLogging(l => l.AddLog4Net());
         builder.Services.AddWatchDogServices(opt =>
         {
-            opt.SetExternalDbConnString = builder.Configuration.GetConnectionString("eventStore");
+            opt.SetExternalDbConnString = eventDbConnectionString;
             opt.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
         });
 
@@ -230,7 +236,7 @@ public class Program
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
                     IssuerSigningKey =
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey:JWT"]))
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey))
                 };
             });
         builder.Services.AddAuthorization(options =>

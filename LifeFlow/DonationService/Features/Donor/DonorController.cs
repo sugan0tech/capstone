@@ -4,6 +4,7 @@ using DonationService.Commons;
 using DonationService.Commons.Enums;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WatchDog;
@@ -14,7 +15,7 @@ namespace DonationService.Features.Donor;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-// [Authorize]
+[Authorize]
 public class DonorController(
     IDonorService donorService,
     CustomControllerValidator validator) : ControllerBase

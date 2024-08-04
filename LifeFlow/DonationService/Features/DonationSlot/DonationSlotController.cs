@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using DonationService.Commons;
 using DonationService.Commons.Validations;
 using DonationService.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WatchDog;
@@ -13,7 +14,7 @@ namespace DonationService.Features.DonationSlot;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-// [Authorize]
+[Authorize]
 public class DonationSlotController(
     DonationSlotService donationSlotService,
     CustomControllerValidator validator) : ControllerBase
@@ -26,7 +27,7 @@ public class DonationSlotController(
     [HttpPost]
     [ProducesResponseType(typeof(DonationSlotDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
-    // [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> Add([FromBody] DonationSlotDto donationSlotDto)
     {
         var createdDonationSlot = await donationSlotService.Add(donationSlotDto);
