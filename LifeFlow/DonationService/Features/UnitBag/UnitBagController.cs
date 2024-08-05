@@ -116,7 +116,7 @@ public class UnitBagController(
         var unitBags = await unitBagService.GetAll();
         return Ok(unitBags);
     }
-    
+
     /// <summary>
     ///     Gets all unit bags.
     /// </summary>

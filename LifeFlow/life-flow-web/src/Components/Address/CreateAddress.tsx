@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 import { useAlert } from "../../contexts/AlertContext";
 import { get, post } from "../../utils/apiService";
 import { useAuth } from "../../contexts/AuthContext";
-import MapPickerLeaflet from "../MapPickerLeaflet";
 import { GeocodeResult } from "../LocationSearchBar.tsx";
+import MapPickerLeaflet from "../MapPickerLeaflet.tsx";
 
 export interface AddressCreate {
   entityId: number;
@@ -51,9 +52,24 @@ export function CreateAddress({ onSave, onCancel }) {
     longitude: 0,
   });
 
+  const [debouncedCity] = useDebounce(address.city, 1000);
+  const [debouncedState] = useDebounce(address.state, 1000);
+  const [debouncedCountry] = useDebounce(address.country, 1000);
+
   useEffect(() => {
-    console.log(address);
-  }, [address]);
+    const query = `${debouncedCity},${debouncedState},${debouncedCountry}`;
+    if (debouncedCity && debouncedState && debouncedCountry) {
+      geocode(query)
+          .then((data) => {
+            if (data && data.length > 0) {
+              handleLocationSelect(parseFloat(data[0].lat), parseFloat(data[0].lon));
+            }
+          })
+          .catch((error) => {
+            console.error("Geocoding error:", error);
+          });
+    }
+  }, [debouncedCity, debouncedState, debouncedCountry]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -93,7 +109,7 @@ export function CreateAddress({ onSave, onCancel }) {
         type: "success",
       });
       onSave(response);
-      window.location.reload()
+      window.location.reload();
     } catch (error: any) {
       addAlert({
         message: error.message || "Failed to create address. Please try again.",
@@ -101,21 +117,6 @@ export function CreateAddress({ onSave, onCancel }) {
       });
     }
   };
-
-  useEffect(() => {
-    const query = `${address.city},${address.state},${address.country}`;
-    if (address.city && address.state && address.country) {
-      geocode(query)
-          .then((data) => {
-            if (data && data.length > 0) {
-              handleLocationSelect(parseFloat(data[0].lat), parseFloat(data[0].lon));
-            }
-          })
-          .catch((error) => {
-            console.error("Geocoding error:", error);
-          });
-    }
-  }, [address.city, address.state, address.country]);
 
   return (
       <dialog id="create_address_modal" className="modal">

@@ -71,7 +71,7 @@ public class BloodCenterService(
             .Where(s => s.CenterId == center.Id && s.SlotTime.TimeOfDay > DateTime.Today.TimeOfDay).ToList();
 
         var groupedSlots = new Dictionary<TimeSpan, List<Entities.DonationSlot>>();
-        var currentTime = DateTime.Now.TimeOfDay;
+        var currentTime = DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(60));
 
         var startTime = currentTime > center.OpenByTime ? currentTime : center.OpenByTime;
         for (var time = startTime; time < center.CloseByTime; time = time.Add(TimeSpan.FromMinutes(20)))

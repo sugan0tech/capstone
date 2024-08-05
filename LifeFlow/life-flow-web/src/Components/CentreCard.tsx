@@ -32,7 +32,7 @@ function CentreCard({
         if (user?.role === "Donor") {
             navigate("/my-donations");
         } else {
-            // Show an alert or handle other roles if necessary
+            navigate("/my-orders");
         }
     };
 

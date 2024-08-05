@@ -79,7 +79,8 @@ public class Program
             });
         }); // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-        var secretClient = new SecretClient(new Uri("https://LifeFlowVault.vault.azure.net/"), new DefaultAzureCredential());
+        var secretClient =
+            new SecretClient(new Uri("https://LifeFlowVault.vault.azure.net/"), new DefaultAzureCredential());
         builder.Services.AddSingleton(secretClient);
         var mainDbConnectionString = secretClient.GetSecret("LifeFlowDbConnectionString").Value.Value;
         var eventDbConnectionString = secretClient.GetSecret("EventDbConnectionString").Value.Value;
@@ -188,12 +189,14 @@ public class Program
             q.AddJob<CheckExpiryJob>(opts => opts.WithIdentity("CheckExpiryJob"));
             q.AddTrigger(opts => opts.ForJob("CheckExpiryJob")
                 .WithIdentity("CheckExpiryJob-trigger")
+                // .WithCronSchedule("0 0 * * * ?"));
                 .WithCronSchedule("0 0 6 * * ?"));
 
             q.AddJob<EarlyExpiryNotificationJob>(opts => opts.WithIdentity("EarlyExpiryNotificationJob"));
             q.AddTrigger(opts => opts
                 .ForJob("EarlyExpiryNotificationJob")
                 .WithIdentity("EarlyExpiryNotificationJob-trigger")
+                // .WithCronSchedule("0 0 * * * ?"));
                 .WithCronSchedule("0 0 6 * * ?"));
 
             // If slot reaches time
@@ -208,20 +211,25 @@ public class Program
             q.AddTrigger(opts => opts
                 .ForJob("DonationRequestJob")
                 .WithIdentity("DonationRequestJob-trigger")
+                // .WithCronSchedule("0 0 * * * ?"));
                 .WithCronSchedule("0 0 8 1 * ?"));
 
             q.AddJob<OrderPaymentNotifyJob>(opts => opts.WithIdentity("OrderPaymentNotifyJob"));
             q.AddTrigger(opts => opts
                 .ForJob("OrderPaymentNotifyJob")
                 .WithIdentity("OrderPaymentNotifyJob-trigger")
+                // .WithCronSchedule("0 0 * * * ?"));
                 .WithCronSchedule("0 0 8 * * ?")); // works for every day 8 am
 
             q.AddJob<OrderDeliveredNotifyJob>(opts => opts.WithIdentity("OrderDeliveredNotifyJob"));
             q.AddTrigger(opts => opts
                 .ForJob("OrderDeliveredNotifyJob")
                 .WithIdentity("OrderDeliveredNotifyJob-trigger")
+                // .WithCronSchedule("0 0 * * * ?"));
                 .WithCronSchedule("0 0 8 * * ?")); // works for every day 8 am
         });
+
+        builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
         #endregion
 
@@ -260,7 +268,8 @@ public class Program
             opts.AddPolicy("AllowAll",
                 corsPolicyBuilder =>
                 {
-                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173", "https://orange-hill-0f44ca01e.5.azurestaticapps.net")
+                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173",
+                            "https://orange-hill-0f44ca01e.5.azurestaticapps.net")
                         .AllowCredentials();
                 });
         });

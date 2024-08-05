@@ -72,16 +72,6 @@ function App() {
           }
         ></Route>
         <Route
-          path="/orders"
-          element={
-            <AuthenticatedRoute>
-              <ClientRoute>
-                <MyDonations />
-              </ClientRoute>
-            </AuthenticatedRoute>
-          }
-        ></Route>
-        <Route
           path="/find-donors"
           element={
             <AuthenticatedRoute>

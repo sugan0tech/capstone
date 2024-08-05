@@ -12,15 +12,7 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
     public DbSet<DonationSlot> DonationSlots { get; set; }
     public DbSet<UnitBag> UnitBags { get; set; }
     public DbSet<UserSession> UserSessions { get; set; }
-    public DbSet<Notification> Notifications { get; set; }
-
-    #region BloodOrders
-
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<Payment> Payments { get; set; }
-
-    #endregion
+    public DbSet<Notification> Notification { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -94,9 +86,9 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
 
         modelBuilder.Entity<Order>().HasOne<Client>(order => order.Client).WithMany(client => client.Orders)
             .HasForeignKey(order => order.ClientId).OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Order>().HasMany<UnitBag>(order => order.Items).WithOne(bag => bag.Order).HasForeignKey(bag => bag.OrderId);
+        modelBuilder.Entity<Order>().HasMany<UnitBag>(order => order.Items).WithOne(bag => bag.Order)
+            .HasForeignKey(bag => bag.OrderId);
         modelBuilder.Entity<Order>().Navigation(order => order.Items).AutoInclude();
-        
 
         #endregion
 
@@ -129,4 +121,12 @@ public class DonationServiceContext(DbContextOptions<DonationServiceContext> opt
                     .HasConversion<string>();
         }
     }
+
+    #region BloodOrders
+
+    public DbSet<Client> Clients { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+
+    #endregion
 }

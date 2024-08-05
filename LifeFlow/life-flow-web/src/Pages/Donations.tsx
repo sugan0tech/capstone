@@ -91,6 +91,7 @@ const Donations: React.FC = () => {
               slot.id === slotId ? { ...slot, slotStatus: newStatus } : slot
           )
       );
+      window.location.reload();
     } catch (error) {
       console.error("Error updating slot status", error);
     }

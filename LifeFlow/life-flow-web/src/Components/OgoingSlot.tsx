@@ -3,9 +3,11 @@ import {baseURL, get, post} from "../utils/apiService";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../contexts/AlertContext.tsx";
 import { useTranslation } from "react-i18next";
+import {Donor} from "../contexts/AuthContext.tsx";
 
 export function OngoingSlot({ slot, onCancel }) {
     const [centerName, setCenterName] = useState(localStorage.getItem("centerName") || "");
+    const [donor, setDonor] = useState<Donor | undefined>(JSON.parse(localStorage.getItem("Donor")));
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { addAlert } = useAlert();
@@ -21,16 +23,17 @@ export function OngoingSlot({ slot, onCancel }) {
     const handleBooking = async () => {
         setLoading(true);
         try {
-            const response = await post(`${baseURL}BloodCenter/${centerName}/book/1`, {
+            const response = await post(`${baseURL}BloodCenter/${centerName}/book/${donor.id}`, {
                 headers: {
                     Accept: "text/plain",
                     Authorization: "{{apiKey}}",
                 },
             });
             // Handle successful booking, e.g., refresh the slot or display a success message
-            addAlert(t("ongoingSlot.alerts.bookingSuccess"), "success");
+            addAlert({ message : t("ongoingSlot.alerts.bookingSuccess"), type : "success"});
+            window.location.reload();
         } catch (error) {
-            addAlert(t("ongoingSlot.alerts.bookingError") + error.message, "error");
+            addAlert({message: t("ongoingSlot.alerts.bookingError") + error.message, type: "error"});
         } finally {
             setLoading(false);
         }

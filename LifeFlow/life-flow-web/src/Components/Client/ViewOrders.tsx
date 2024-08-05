@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {get, post, put} from "../../utils/apiService.ts";
 import {useTranslation} from "react-i18next";
 import {useAlert} from "../../contexts/AlertContext.tsx";
+import client from "./Client.tsx";
 
 enum OrderType {
     HospitalStockUpdate = "HospitalStockUpdate",
@@ -60,12 +61,12 @@ function ViewOrders() {
     const [paymentMethod, setPaymentMethod] = useState("NetBanking");
     const {t} = useTranslation();
     const {addAlert} = useAlert();
+    const ClientId = JSON.parse(localStorage.getItem("Client")).id;
 
     useEffect(() => {
         async function fetchOrders() {
             try {
-                const clientId = 1; // Fetch this from context
-                const orders = await get<OrderDto[]>(`/order/client/${clientId}`);
+                const orders = await get<OrderDto[]>(`/order/client/${ClientId}`);
 
                 setDeliveredOrders(orders.filter(order => order.status === OrderStatus.Delivered));
                 setOngoingOrders(orders.filter(order => order.status !== OrderStatus.Delivered));

@@ -21,7 +21,7 @@ const LoggedInDevices = () => {
 
   useEffect(() => {
     const fetchDevices = async () => {
-      const response = await get<Device[]>(`UserSession/`);
+      const response = await get<Device[]>(`UserSession/user`);
       const validDevices = response.filter((device) => device.isValid);
       setDevices(validDevices);
     };

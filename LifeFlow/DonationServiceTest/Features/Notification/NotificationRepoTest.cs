@@ -8,10 +8,6 @@ namespace DonationServiceTest.Features.Notification;
 [TestFixture]
 public class NotificationRepoTests
 {
-    private DbContextOptions<DonationServiceContext> _dbContextOptions;
-    private DonationServiceContext _context;
-    private NotificationRepo _notificationRepo;
-
     [SetUp]
     public void Setup()
     {
@@ -30,6 +26,10 @@ public class NotificationRepoTests
         _context.Dispose();
     }
 
+    private DbContextOptions<DonationServiceContext> _dbContextOptions;
+    private DonationServiceContext _context;
+    private NotificationRepo _notificationRepo;
+
     [Test]
     public async Task GetById_ShouldReturnEntity_WhenEntityExists()
     {
@@ -44,7 +44,7 @@ public class NotificationRepoTests
             IsSent = false,
             IsViewed = false
         };
-        await _context.Notifications.AddAsync(notification);
+        await _context.Notification.AddAsync(notification);
         await _context.SaveChangesAsync();
 
         // Act
@@ -67,7 +67,7 @@ public class NotificationRepoTests
     public async Task GetAll_ShouldReturnAllEntities()
     {
         // Arrange
-        await _context.Notifications.AddRangeAsync(
+        await _context.Notification.AddRangeAsync(
             new DonationService.Entities.Notification
             {
                 Id = 1,
@@ -119,7 +119,7 @@ public class NotificationRepoTests
         // Assert
         ClassicAssert.IsNotNull(result);
         ClassicAssert.AreEqual("Test Message", result.Message);
-        ClassicAssert.AreEqual(1, await _context.Notifications.CountAsync());
+        ClassicAssert.AreEqual(1, await _context.Notification.CountAsync());
     }
 
     [Test]
@@ -144,7 +144,7 @@ public class NotificationRepoTests
             IsSent = false,
             IsViewed = false
         };
-        await _context.Notifications.AddAsync(notification);
+        await _context.Notification.AddAsync(notification);
         await _context.SaveChangesAsync();
 
         notification.Message = "Updated Test Message";
@@ -173,7 +173,8 @@ public class NotificationRepoTests
         };
 
         // Act & Assert
-        var ex = Assert.ThrowsAsync<KeyNotFoundException>(async () => await _notificationRepo.Update(updateNotification));
+        var ex = Assert.ThrowsAsync<KeyNotFoundException>(
+            async () => await _notificationRepo.Update(updateNotification));
         ClassicAssert.AreEqual("Notification with key 99 not found!!!", ex.Message);
     }
 
@@ -191,14 +192,14 @@ public class NotificationRepoTests
             IsSent = false,
             IsViewed = false
         };
-        await _context.Notifications.AddAsync(notification);
+        await _context.Notification.AddAsync(notification);
         await _context.SaveChangesAsync();
 
         // Act
         await _notificationRepo.DeleteById(1);
 
         // Assert
-        ClassicAssert.AreEqual(0, await _context.Notifications.CountAsync());
+        ClassicAssert.AreEqual(0, await _context.Notification.CountAsync());
     }
 
     [Test]

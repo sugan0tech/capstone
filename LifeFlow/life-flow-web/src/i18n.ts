@@ -111,7 +111,8 @@ i18n.use(LanguageDetector)
                         dashboard_title: "Orders",
                         approve_order: "Approve",
                         reject_order: "Reject",
-                        cancel_order: "Cancel"
+                        cancel_order: "Cancel",
+                        mark_as_ongoing: "Ongoing"
                     },
                     slots: {
                         ongoingSlotsTitle: "Ongoing Slots",
@@ -219,95 +220,175 @@ i18n.use(LanguageDetector)
                     },
                 },
 
-            },
-            fn: {
+            }
+            , fn: {
                 translation: {
-                    greet: "Gerotosmas",
+                    greet: "Saluer",
+                    stats: {
+                        total_units: "Unités Totales",
+                        total_units_desc: "21% de plus le mois dernier",
+                        life_saved: "Vies Sauvées",
+                        life_saved_desc: "0% de décès par manque de sang",
+                        blood_banks: "Banques de Sang",
+                        blood_banks_desc: "Présentes dans tout le pays",
+                    },
+                    hero: {
+                        title: "Soyez un héros dans la vie de quelqu'un. Donnez du sang.",
+                        description: "En donnant du sang, vous devenez un héros dans la vie de quelqu'un. Votre simple acte de générosité peut sauver des vies en cas d'urgence, soutenir les patients atteints de maladies chroniques, et garantir le bien-être des mères et des nouveau-nés. Rejoignez-nous pour faire la différence—donnez du sang et devenez un héros dès aujourd'hui.",
+                        get_started: "Commencer"
+                    },
+                    navbar: {
+                        home: "Accueil",
+                        account: "Compte",
+                        my_donations: "Mes Dons",
+                        account_info: "Infos Compte",
+                        donations: "Dons",
+                        center_console: "Console Centrale",
+                        orders: "Commandes",
+                        find_donors: "Trouver des Donneurs",
+                        find_centers: "Trouver des Centres",
+                        login: "Connexion",
+                        register: "Inscription",
+                        logout: "Déconnexion"
+                    },
+                    register: {
+                        email_placeholder: "Email",
+                        username_placeholder: "Nom d'utilisateur",
+                        phone_placeholder: "Téléphone",
+                        password_placeholder: "Mot de passe",
+                        confirm_password_placeholder: "Retaper le mot de passe",
+                        role_label: "But",
+                        donor: "Donneur",
+                        hospital_admin: "Demande de Sang - Hôpital",
+                        pharma_admin: "Demande de Sang - Pharma",
+                        register_button: "S'inscrire",
+                        otp_placeholder: "Entrer l'OTP",
+                        submit_otp_button: "Soumettre OTP",
+                        alert_password_mismatch: "Les mots de passe ne correspondent pas.",
+                        alert_registration_success: "Inscription réussie ! Veuillez entrer l'OTP envoyé à votre email.",
+                        alert_registration_fail: "L'inscription a échoué. Veuillez réessayer.",
+                        alert_verification_success: "Vérification réussie ! Redirection vers l'accueil.",
+                        alert_otp_fail: "Échec de la vérification de l'OTP. Veuillez réessayer.",
+                    },
+                    login: {
+                        email_placeholder: "Email",
+                        password_placeholder: "Mot de passe",
+                        remember_me_label: "Se souvenir de moi",
+                        login_button: "Connexion",
+                        login_success: "Connexion réussie !",
+                        user_not_found: "Utilisateur non trouvé",
+                        login_fail: "Échec de la connexion. Veuillez réessayer.",
+                    },
                     orders: {
-                        my_orders: "Mowi ail;vei",
-                        create_order: "Aiemas Order",
-                        new_order: "Gererai sorem nuv",
-                        client_id: "Clien ID",
-                        required: "Reqiued",
-                        max_quantity: "Maxi Quantiti",
-                        order_description: "Ordir Descripti",
-                        optional: "Opthional",
-                        order_type: "Ordir Tipe",
-                        fixed: "Fiexd",
-                        blood_types: "Selec Blood Typis",
-                        antigen_types: "Selec Antijen Typis",
-                        blood_subtypes: "Selec Blood Subtypis",
-                        submit: "Submet",
-                        close: "Closi",
-                        loading: "Loasing",
-                        order_created: "Ordir creatid succesfulli!",
-                        amount: "Amoun: ${{amount}}",
-                        proceed_to_payment: "Procid to paymin gatewai",
-                        pay_now: "Pai Now"
+                        my_orders: "Mes Commandes",
+                        create_order: "Créer une Commande",
+                        client_id: "ID Client",
+                        required: "Requis",
+                        max_quantity: "Quantité Maximale",
+                        order_description: "Description de la Commande",
+                        optional: "Optionnel",
+                        order_type: "Type de Commande",
+                        fixed: "Fixe",
+                        blood_types: "Sélectionner les Groupes Sanguins",
+                        antigen_types: "Sélectionner les Types d'Antigènes",
+                        blood_subtypes: "Sélectionner les Sous-Types de Sang",
+                        submit: "Soumettre",
+                        close: "Fermer",
+                        loading: "Chargement",
+                        order_created: "Commande créée avec succès !",
+                        amount: "Montant : ₹{{amount}}",
+                        proceed_to_payment: "Passer à la passerelle de paiement",
+                        payment_successful: "Paiement Réussi",
+                        pay_now: "Payer Maintenant",
+                        error_submitting_order: "Erreur lors de la soumission de la commande",
+                        ongoing_orders: "Commandes en Cours",
+                        delivered_orders: "Commandes Livrées",
+                        new_order: "Nouvelle Commande",
+                        payment_method: "Sélectionner le Mode de Paiement",
+                        make_payment: "Effectuer le Paiement",
+                        mark_as_delivered: "Marquer comme Livré",
+                        order_details: "Détails de la Commande",
+                        description: "Description",
+                        quantity: "Quantité",
+                        total_price: "Prix Total",
+                        view_more: "Voir Plus",
+                        unit_bags: "Sacs d'Unités",
+                        blood_subtype: "Sous-Type de Sang",
+                        blood_type: "Groupe Sanguin",
+                        expiry: "Date de Péremption",
+                        is_rare: "Est Rare",
+                        yes: "Oui",
+                        no: "Non",
+                        error_making_payment: "Erreur lors du traitement de votre paiement.",
+                        dashboard_title: "Commandes",
+                        approve_order: "Approuver",
+                        reject_order: "Rejeter",
+                        cancel_order: "Annuler",
+                        mark_as_ongoing: "En Cours"
                     },
                     slots: {
-                        ongoingSlotsTitle: "Créneaux en cours",
-                        pendingSlotsTitle: "Créneaux en attente",
-                        completedSlotsTitle: "Créneaux terminés",
+                        ongoingSlotsTitle: "Créneaux en Cours",
+                        pendingSlotsTitle: "Créneaux en Attente",
+                        completedSlotsTitle: "Créneaux Terminés",
                         status: "Statut",
-                        changeStatus: "Changer le statut",
-                        viewDonorInfo: "Voir les informations du donneur",
-                        donorInfo: "Informations sur le donneur",
-                        donorId: "ID du donneur",
+                        changeStatus: "Changer le Statut",
+                        viewDonorInfo: "Voir les Infos du Donneur",
+                        donorInfo: "Informations du Donneur",
+                        donorId: "ID du Donneur",
                         name: "Nom",
                         email: "Email",
                         phone: "Téléphone",
-                        bloodType: "Groupe sanguin",
-                        bloodSubtype: "Sous-type sanguin",
+                        bloodType: "Groupe Sanguin",
+                        bloodSubtype: "Sous-Type de Sang",
                         close: "Fermer",
-                        BloodReceived: "Sang reçu",
-                        BloodAccepted: "Sang accepté",
-                        BloodRejected: "Sang rejeté",
-                        DonorNotArrived: "Donneur non arrivé",
-                        Pending: "En attente",
+                        BloodReceived: "Sang Reçu",
+                        BloodAccepted: "Sang Accepté",
+                        BloodRejected: "Sang Rejeté",
+                        DonorNotArrived: "Donneur Non Arrivé",
+                        Pending: "En Attente",
                     },
                     loggedInDevices: {
                         title: "Appareils Connectés",
-                        loggedInAt: "Connecté à",
-                        deviceInfo: "Informations sur l'appareil",
-                        logoutDevice: "Déconnecter l'appareil",
-                        logoutAllDevices: "Déconnecter tous les appareils",
+                        loggedInAt: "Connecté le",
+                        deviceInfo: "Informations de l'Appareil",
+                        logoutDevice: "Déconnecter l'Appareil",
+                        logoutAllDevices: "Déconnecter Tous les Appareils",
                         browser: "navigateur sur"
                     },
                     myAccount: {
                         title: "Mon Compte",
-                        userInfoTitle: "Informations sur le compte utilisateur",
-                        resetPasswordButton: "Réinitialiser le mot de passe",
+                        userInfoTitle: "Informations du Compte Utilisateur",
+                        resetPasswordButton: "Réinitialiser le Mot de Passe",
                     },
                     userInfo: {
-                        email: "E-mail",
+                        email: "Email",
                         name: "Nom",
                         role: "Rôle",
                         editButton: "Éditer",
                     },
                     editUserInfo: {
-                        email: "E-mail",
+                        email: "Email",
                         name: "Nom",
                         saveButton: "Enregistrer",
                         cancelButton: "Annuler",
                     },
                     resetPassword: {
-                        currentPassword: "Mot de passe actuel",
-                        newPassword: "Nouveau mot de passe",
-                        confirmPassword: "Confirmer le nouveau mot de passe",
+                        currentPassword: "Mot de Passe Actuel",
+                        newPassword: "Nouveau Mot de Passe",
+                        confirmPassword: "Confirmer le Nouveau Mot de Passe",
                         passwordLengthError: "Le mot de passe doit contenir au moins 8 caractères",
                         passwordMatchError: "Les mots de passe ne correspondent pas",
                         saveButton: "Enregistrer",
                         cancelButton: "Annuler",
                     },
                     footer: {
-                        companyName: "LifeFlow Service de Banque de Sang Ltée.",
-                        tagline: "Aider l'humanité depuis 2024",
+                        companyName: "LifeFlow Blood Bank Service Ltd.",
+                        tagline: "Aider l'Humanité depuis 2024",
                     },
                     centreCard: {
-                        donateHere: "Faire un don ici",
-                        orderFromHere: "Commander d'ici",
-                        away: "loin",
+                        donateHere: "Donnez Ici",
+                        orderFromHere: "Commander Ici",
+                        away: "À distance de",
                         stock: "Stock",
                         from: "de",
                         to: "à"
@@ -318,42 +399,40 @@ i18n.use(LanguageDetector)
                         clearButton: "Effacer",
                     },
                     findCenters: {
-                        noCentersFound: "Recherchez des centres à voir",
+                        noCentersFound: "Rechercher des centres à afficher",
                     },
                     myDonations: {
-                        title: "Mes dons", // Title for the My Donations page
-                        selectedCenter: "Centre sélectionné : {{centerName}}", // Message showing the selected center
+                        title: "Mes Dons",
+                        selectedCenter: "Centre Sélectionné : {{centerName}}",
                     },
                     alerts: {
-                        createDonorProfile: "Veuillez créer un profil de donneur avant de continuer.", // Alert message for creating a donor profile
+                        createDonorProfile: "Veuillez créer un profil de donneur avant de continuer.",
                     },
                     donationHistory: {
-                        title: "Historique", // Title for the history section
-                        noDonations: "Pas encore de dons", // Message when there are no donations
-                        donatedOn: "Donné le", // Label before the donation date
-                        at: "à", // Label before the donation center name
+                        title: "Historique",
+                        noDonations: "Aucun don pour l'instant",
+                        donatedOn: "Donné le",
+                        at: "à",
                     },
                     ongoingSlot: {
-                        title: "Créneau en cours", // Title for the card when there is an ongoing slot
-                        noSlot: "Aucun créneau en cours", // Title for the card when there is no ongoing slot
-                        slotBookedFor: "Créneau réservé pour", // Label for the booked slot details
-                        at: "à", // Label before the time of the slot
-                        cancelSlot: "Annuler le créneau", // Button text for canceling the slot
-                        centerNameLabel: "Nom du centre", // Label for the center name input field
-                        centerNamePlaceholder: "Entrez le nom du centre", // Placeholder for the center name input field
-                        bookSlot: "Réserver un créneau", // Button text for booking a slot
-                        booking: "Réservation...", // Button text when the booking is in progress
-                        findCentersNearby: "Trouver des centres à proximité", // Button text for navigating to the Find Centers page
+                        title: "Créneau en Cours",
+                        noSlot: "Aucun créneau en cours",
+                        slotBookedFor: "Créneau réservé pour",
+                        at: "à",
+                        cancelSlot: "Annuler le Créneau",
+                        centerNameLabel: "Nom du Centre",
+                        centerNamePlaceholder: "Entrer le nom du centre",
+                        bookSlot: "Réserver un Créneau",
+                        booking: "Réservation en cours...",
+                        findCentersNearby: "Trouver des Centres à Proximité",
                         alerts: {
-                            bookingSuccess: "Réservation réussie!", // Alert message for a successful booking
-                            bookingError: "Erreur de réservation: ", // Alert message for a booking error
+                            bookingSuccess: "Réservation réussie !",
+                            bookingError: "Erreur lors de la réservation du créneau : ",
                         },
                     },
-
-
-                }
-            },
-            ta: {
+                },
+            }
+            , ta: {
                 translation: {
                     greet: "வணக்கம்",
                     stats: {
@@ -537,140 +616,222 @@ i18n.use(LanguageDetector)
                             bookingError: "இடத்தை பதிவு செய்யும் போது பிழை: ", // Alert message for a booking error
                         },
                     }
-                }}
-                , hi: {
-                    translation: {
-                        greet: "नमस्ते",
-                        orders: {
-                            my_orders: "मेरे ऑर्डर",
-                            create_order: "ऑर्डर बनाएं",
-                            new_order: "नया ऑर्डर बनाएं",
-                            client_id: "क्लाइंट आईडी",
-                            required: "आवश्यक",
-                            max_quantity: "अधिकतम मात्रा",
-                            order_description: "ऑर्डर विवरण",
-                            optional: "वैकल्पिक",
-                            order_type: "ऑर्डर प्रकार",
-                            fixed: "स्थिर",
-                            blood_types: "रक्त प्रकार चुनें",
-                            antigen_types: "एंटीजन प्रकार चुनें",
-                            blood_subtypes: "रक्त उपप्रकार चुनें",
-                            submit: "सबमिट करें",
-                            close: "बंद करें",
-                            loading: "लोड हो रहा है",
-                            order_created: "ऑर्डर सफलतापूर्वक बनाया गया!",
-                            amount: "राशि: ${{amount}}",
-                            proceed_to_payment: "भुगतान गेटवे पर जाएं",
-                            pay_now: "अभी भुगतान करें"
-                        },
-                        slots: {
-                            ongoingSlotsTitle: "चालू स्लॉट्स",
-                            pendingSlotsTitle: "लंबित स्लॉट्स",
-                            completedSlotsTitle: "पूर्ण स्लॉट्स",
-                            status: "स्थिति",
-                            changeStatus: "स्थिति बदलें",
-                            viewDonorInfo: "डोनर जानकारी देखें",
-                            donorInfo: "डोनर जानकारी",
-                            donorId: "डोनर आईडी",
-                            name: "नाम",
-                            email: "ईमेल",
-                            phone: "फ़ोन",
-                            bloodType: "रक्त प्रकार",
-                            bloodSubtype: "रक्त उपप्रकार",
-                            close: "बंद करें",
-                            BloodReceived: "रक्त प्राप्त हुआ",
-                            BloodAccepted: "रक्त स्वीकार किया गया",
-                            BloodRejected: "रक्त अस्वीकार किया गया",
-                            DonorNotArrived: "डोनर नहीं आया",
-                            Pending: "लंबित",
-                        },
-                        loggedInDevices: {
-                            title: "लॉग इन डिवाइस",
-                            loggedInAt: "लॉग इन समय",
-                            deviceInfo: "डिवाइस जानकारी",
-                            logoutDevice: "डिवाइस लॉग आउट करें",
-                            logoutAllDevices: "सभी डिवाइस लॉग आउट करें",
-                            browser: "ब्राउज़र पर"
-                        },
-                        myAccount: {
-                            title: "मेरा खाता",
-                            userInfoTitle: "उपयोगकर्ता खाता जानकारी",
-                            resetPasswordButton: "पासवर्ड रीसेट करें",
-                        },
-                        userInfo: {
-                            email: "ईमेल",
-                            name: "नाम",
-                            role: "भूमिका",
-                            editButton: "संपादित करें",
-                        },
-                        editUserInfo: {
-                            email: "மின்னஞ்சல்",
-                            name: "பெயர்",
-                            saveButton: "சேமி",
-                            cancelButton: "ரத்து செய்",
-                        },
-                        resetPassword: {
-                            currentPassword: "நடப்புச் சாவி",
-                            newPassword: "புதிய கடவுச்சொல்",
-                            confirmPassword: "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
-                            passwordLengthError: "கடவுச்சொல் குறைந்தது 8 எழுத்துகள் நீளமாக இருக்க வேண்டும்",
-                            passwordMatchError: "கடவுச்சொற்கள் பொருந்தவில்லை",
-                            saveButton: "சேமி",
-                            cancelButton: "ரத்து செய்",
-                        },
-                        footer: {
-                            companyName: "लाइफफ्लो ब्लड बैंक सेवा लिमिटेड.",
-                            tagline: "2024 से मानवता की सेवा में",
-                        },
-                        centreCard: {
-                            donateHere: "यहां दान करें",
-                            orderFromHere: "यहां से ऑर्डर करें",
-                            away: "दूर",
-                            stock: "स्टॉक",
-                            from: "से",
-                            to: "तक"
-                        },
-                        locationSearchBar: {
-                            placeholder: "स्थान खोजें",
-                            noLocationsFound: "कोई स्थान नहीं मिला",
-                            clearButton: "साफ करें",
-                        },
-                        findCenters: {
-                            noCentersFound: "केंद्रों को देखने के लिए खोजें",
-                        },
-                        myDonations: {
-                            title: "मेरे दान", // Title for the My Donations page
-                            selectedCenter: "चयनित केंद्र: {{centerName}}", // Message showing the selected center
-                        },
-                        alerts: {
-                            createDonorProfile: "कृपया आगे बढ़ने से पहले एक दाता प्रोफ़ाइल बनाएं।", // Alert message for creating a donor profile
-                        },
-                        donationHistory: {
-                            title: "इतिहास", // Title for the history section
-                            noDonations: "अभी तक कोई दान नहीं", // Message when there are no donations
-                            donatedOn: "दान किया गया", // Label before the donation date
-                            at: "पर", // Label before the donation center name
-                        },
-                        ongoingSlot: {
-                            title: "चल रहा स्लॉट", // Title for the card when there is an ongoing slot
-                            noSlot: "कोई चल रहा स्लॉट नहीं", // Title for the card when there is no ongoing slot
-                            slotBookedFor: "स्लॉट बुक किया गया", // Label for the booked slot details
-                            at: "पर", // Label before the time of the slot
-                            cancelSlot: "स्लॉट रद्द करें", // Button text for canceling the slot
-                            centerNameLabel: "केंद्र का नाम", // Label for the center name input field
-                            centerNamePlaceholder: "केंद्र का नाम दर्ज करें", // Placeholder for the center name input field
-                            bookSlot: "स्लॉट बुक करें", // Button text for booking a slot
-                            booking: "बुकिंग हो रही है...", // Button text when the booking is in progress
-                            findCentersNearby: "पास के केंद्र खोजें", // Button text for navigating to the Find Centers page
-                            alerts: {
-                                bookingSuccess: "बुकिंग सफल रही!", // Alert message for a successful booking
-                                bookingError: "स्लॉट बुकिंग में त्रुटि: ", // Alert message for a booking error
-                            },
-                        },
-                    }
                 }
             }
+            , hi: {
+                translation: {
+                    greet: "नमस्ते",
+                    stats: {
+                        total_units: "कुल यूनिट्स",
+                        total_units_desc: "पिछले महीने में 21% अधिक",
+                        life_saved: "जीवन बचाया",
+                        life_saved_desc: "रक्त की कमी के लिए 0% मौत",
+                        blood_banks: "ब्लड बैंक",
+                        blood_banks_desc: "राष्ट्र भर में सेवा कर रहे हैं",
+                    },
+                    hero: {
+                        title: "किसी की ज़िन्दगी में नायक बनें। रक्त दान करें।",
+                        description: "रक्त दान करके, आप किसी की ज़िन्दगी में नायक बन जाते हैं। आपकी एक छोटी सी दयालुता की क्रिया आपातकालीन स्थितियों में जीवन बचा सकती है, रोगियों की सहायता कर सकती है और माताओं और नवजात शिशुओं की भलाई सुनिश्चित कर सकती है। हमारे साथ जुड़ें और बदलाव लाएं—आज ही रक्त दान करें और नायक बनें।",
+                        get_started: "शुरू करें"
+                    },
+                    navbar: {
+                        home: "मुख्य पृष्ठ",
+                        account: "खाता",
+                        my_donations: "मेरे दान",
+                        account_info: "खाता जानकारी",
+                        donations: "दान",
+                        center_console: "केंद्र कंसोल",
+                        orders: "ऑर्डर",
+                        find_donors: "डोनर ढूंढें",
+                        find_centers: "केंद्र ढूंढें",
+                        login: "लॉग इन",
+                        register: "रजिस्टर करें",
+                        logout: "लॉग आउट"
+                    },
+                    register: {
+                        email_placeholder: "ईमेल",
+                        username_placeholder: "उपयोगकर्ता नाम",
+                        phone_placeholder: "फ़ोन",
+                        password_placeholder: "पासवर्ड",
+                        confirm_password_placeholder: "पासवर्ड फिर से लिखें",
+                        role_label: "उद्देश्य",
+                        donor: "डोनर",
+                        hospital_admin: "रक्त अनुरोध - अस्पताल",
+                        pharma_admin: "रक्त अनुरोध - फार्मा",
+                        register_button: "रजिस्टर करें",
+                        otp_placeholder: "ओटीपी दर्ज करें",
+                        submit_otp_button: "ओटीपी जमा करें",
+                        alert_password_mismatch: "पासवर्ड मेल नहीं खाता।",
+                        alert_registration_success: "पंजीकरण सफल! कृपया अपने ईमेल पर भेजा गया ओटीपी दर्ज करें।",
+                        alert_registration_fail: "पंजीकरण विफल रहा। कृपया पुनः प्रयास करें।",
+                        alert_verification_success: "सत्यापन सफल! मुख्य पृष्ठ पर पुनर्निर्देशित कर रहे हैं।",
+                        alert_otp_fail: "ओटीपी सत्यापन विफल रहा। कृपया पुनः प्रयास करें।",
+                    },
+                    login: {
+                        email_placeholder: "ईमेल",
+                        password_placeholder: "पासवर्ड",
+                        remember_me_label: "मुझे याद रखें",
+                        login_button: "लॉग इन करें",
+                        login_success: "लॉग इन सफल!",
+                        user_not_found: "उपयोगकर्ता नहीं मिला",
+                        login_fail: "लॉग इन विफल रहा। कृपया पुनः प्रयास करें।",
+                    },
+                    orders: {
+                        my_orders: "मेरे ऑर्डर",
+                        create_order: "ऑर्डर बनाएं",
+                        client_id: "क्लाइंट आईडी",
+                        required: "आवश्यक",
+                        max_quantity: "अधिकतम मात्रा",
+                        order_description: "ऑर्डर विवरण",
+                        optional: "वैकल्पिक",
+                        order_type: "ऑर्डर प्रकार",
+                        fixed: "स्थिर",
+                        blood_types: "रक्त समूह का चयन करें",
+                        antigen_types: "एंटीजन प्रकार चुनें",
+                        blood_subtypes: "रक्त उप-प्रकार चुनें",
+                        submit: "जमा करें",
+                        close: "बंद करें",
+                        loading: "लोड हो रहा है",
+                        order_created: "ऑर्डर सफलतापूर्वक बनाया गया!",
+                        amount: "राशि: ₹{{amount}}",
+                        proceed_to_payment: "भुगतान गेटवे पर जाएं",
+                        payment_successful: "भुगतान सफल",
+                        pay_now: "अभी भुगतान करें",
+                        error_submitting_order: "ऑर्डर जमा करने में त्रुटि",
+                        ongoing_orders: "चल रहे ऑर्डर",
+                        delivered_orders: "वितरित ऑर्डर",
+                        new_order: "नया ऑर्डर",
+                        payment_method: "भुगतान विधि का चयन करें",
+                        make_payment: "भुगतान करें",
+                        mark_as_delivered: "वितरित के रूप में चिह्नित करें",
+                        order_details: "ऑर्डर विवरण",
+                        description: "विवरण",
+                        quantity: "मात्रा",
+                        total_price: "कुल मूल्य",
+                        view_more: "और देखें",
+                        unit_bags: "यूनिट बैग्स",
+                        blood_subtype: "रक्त उप-प्रकार",
+                        blood_type: "रक्त समूह",
+                        expiry: "समाप्ति तिथि",
+                        is_rare: "क्या दुर्लभ है",
+                        yes: "हाँ",
+                        no: "नहीं",
+                        error_making_payment: "आपके भुगतान को संसाधित करने में त्रुटि हुई।",
+                        dashboard_title: "ऑर्डर",
+                        approve_order: "स्वीकृत करें",
+                        reject_order: "अस्वीकृत करें",
+                        cancel_order: "ऑर्डर रद्द करें",
+                        mark_as_ongoing: "चल रहे के रूप में चिह्नित करें"
+                    },
+                    slots: {
+                        ongoingSlotsTitle: "चल रहे स्लॉट्स",
+                        pendingSlotsTitle: "लंबित स्लॉट्स",
+                        completedSlotsTitle: "समाप्त स्लॉट्स",
+                        status: "स्थिति",
+                        changeStatus: "स्थिति बदलें",
+                        viewDonorInfo: "डोनर जानकारी देखें",
+                        donorInfo: "डोनर जानकारी",
+                        donorId: "डोनर आईडी",
+                        name: "नाम",
+                        email: "ईमेल",
+                        phone: "फ़ोन",
+                        bloodType: "रक्त समूह",
+                        bloodSubtype: "रक्त उप-प्रकार",
+                        close: "बंद करें",
+                        BloodReceived: "रक्त प्राप्त हुआ",
+                        BloodAccepted: "रक्त स्वीकृत",
+                        BloodRejected: "रक्त अस्वीकृत",
+                        DonorNotArrived: "डोनर नहीं पहुँचा",
+                        Pending: "लंबित",
+                    },
+                    loggedInDevices: {
+                        title: "लॉग इन डिवाइस",
+                        loggedInAt: "लॉग इन किया गया",
+                        deviceInfo: "डिवाइस जानकारी",
+                        logoutDevice: "डिवाइस से लॉग आउट करें",
+                        logoutAllDevices: "सभी डिवाइस से लॉग आउट करें",
+                        browser: "ब्राउज़र पर"
+                    },
+                    myAccount: {
+                        title: "मेरा खाता",
+                        userInfoTitle: "उपयोगकर्ता खाता जानकारी",
+                        resetPasswordButton: "पासवर्ड रीसेट करें",
+                    },
+                    userInfo: {
+                        email: "ईमेल",
+                        name: "नाम",
+                        role: "भूमिका",
+                        editButton: "संपादित करें",
+                    },
+                    editUserInfo: {
+                        email: "ईमेल",
+                        name: "नाम",
+                        saveButton: "सहेजें",
+                        cancelButton: "रद्द करें",
+                    },
+                    resetPassword: {
+                        currentPassword: "वर्तमान पासवर्ड",
+                        newPassword: "नया पासवर्ड",
+                        confirmPassword: "नया पासवर्ड पुष्टि करें",
+                        passwordLengthError: "पासवर्ड कम से कम 8 वर्णों का होना चाहिए",
+                        passwordMatchError: "पासवर्ड मेल नहीं खाते",
+                        saveButton: "सहेजें",
+                        cancelButton: "रद्द करें",
+                    },
+                    footer: {
+                        companyName: "लाइफफ्लो ब्लड बैंक सर्विस लिमिटेड",
+                        tagline: "2024 से मानवता की सेवा में"
+                    },
+                    centreCard: {
+                        donateHere: "यहाँ दान करें",
+                        orderFromHere: "यहाँ से ऑर्डर करें",
+                        away: "दूर",
+                        stock: "स्टॉक",
+                        from: "से",
+                        to: "तक"
+                    },
+                    locationSearchBar: {
+                        placeholder: "स्थान खोजें",
+                        noLocationsFound: "कोई स्थान नहीं मिला",
+                        clearButton: "साफ करें",
+                    },
+                    findCenters: {
+                        noCentersFound: "केंद्रों को देखने के लिए खोजें",
+                    },
+                    myDonations: {
+                        title: "मेरे दान",
+                        selectedCenter: "चयनित केंद्र: {{centerName}}",
+                    },
+                    alerts: {
+                        createDonorProfile: "कृपया आगे बढ़ने से पहले एक डोनर प्रोफ़ाइल बनाएं।",
+                    },
+                    donationHistory: {
+                        title: "इतिहास",
+                        noDonations: "अभी तक कोई दान नहीं",
+                        donatedOn: "दान किया",
+                        at: "पर",
+                    },
+                    ongoingSlot: {
+                        title: "चल रहा स्लॉट",
+                        noSlot: "कोई चल रहा स्लॉट नहीं",
+                        slotBookedFor: "स्लॉट बुक किया गया",
+                        at: "पर",
+                        cancelSlot: "स्लॉट रद्द करें",
+                        centerNameLabel: "केंद्र का नाम",
+                        centerNamePlaceholder: "केंद्र का नाम दर्ज करें",
+                        bookSlot: "स्लॉट बुक करें",
+                        booking: "बुकिंग...",
+                        findCentersNearby: "आस-पास के केंद्र ढूंढें",
+                        alerts: {
+                            bookingSuccess: "बुकिंग सफल!",
+                            bookingError: "स्लॉट बुकिंग में त्रुटि: ",
+                        },
+                    },
+                },
+            }
 
-        });
+        }
+
+    });
 
 export default i18n;

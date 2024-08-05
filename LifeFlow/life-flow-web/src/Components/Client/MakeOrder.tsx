@@ -84,7 +84,7 @@ function MakeOrder() {
         Subtypes: [],
         MaxQuantity: 0,
         Description: "",
-        orderType: "HospitalStockUpdate",
+        orderType: role === "PharmaAdmin" ? "RecurringAPI" : "HospitalStockUpdate",
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -180,6 +180,7 @@ function MakeOrder() {
 
             setPaymentData(paymentResponse);
             addAlert({ message: t("orders.payment_successful"), type: "success" });
+            window.location.reload();
         } catch (error) {
             console.error("Error making payment:", error);
             addAlert({ message: t("orders.error_making_payment"), type: "error" });

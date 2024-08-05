@@ -50,6 +50,8 @@ export const CreateClient = ({ onSave, onCancel, currentUserId }) => {
     try {
       const response = await post<Client>("client", formState);
       onSave(response);
+      localStorage.setItem("Client", JSON.stringify(response))
+      window.location.reload();
     } catch (error) {
       console.error("Error creating client:", error);
       // Handle errors appropriately, e.g., display error messages
@@ -68,7 +70,7 @@ export const CreateClient = ({ onSave, onCancel, currentUserId }) => {
           onChange={handleChange}
         />
       </div>
-      {formState.type === "" && (
+      {formState.type != "Pharma" && (
         <div className="form-control">
           <label className="label">Type</label>
           <select
@@ -78,6 +80,7 @@ export const CreateClient = ({ onSave, onCancel, currentUserId }) => {
             value={formState.type}
           >
             <option value="Hospital">Hospital</option>
+            <option value="GovtHospital">GovtHospital</option>
             <option value="Pharma">Pharma</option>
           </select>
         </div>

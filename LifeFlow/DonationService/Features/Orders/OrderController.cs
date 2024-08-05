@@ -19,7 +19,7 @@ namespace DonationService.Features.Orders;
 [Authorize]
 public class OrderController(
     OrderService orderService,
-    IAddressCommandHandler<UpdateOrderStatusCommand> commandHandler,
+    IOrderCommandHandler<UpdateOrderStatusCommand> commandHandler,
     CustomControllerValidator validator)
     : ControllerBase
 {
@@ -149,7 +149,8 @@ public class OrderController(
         try
         {
             await commandHandler.Handle(new UpdateOrderStatusCommand(orderId, Enum.Parse<OrderStatus>(status)));
-            return StatusCode(StatusCodes.Status201Created, orderService.GetById(orderId));
+            var order = await orderService.GetById(orderId);
+            return Ok(order);
         }
         catch (KeyNotFoundException e)
         {

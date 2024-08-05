@@ -134,10 +134,10 @@ public class OrderService(
         {
             var unitBags = await unitBagService.GetAll();
             var unitBagDtos = unitBags.Where(bag =>
-                bag.CenterId.Equals(center.Id) && !bag.IsSold && Equals(request.AntigenTypes.First())).ToList();
+                bag.CenterId.Equals(center.Id) && !bag.IsSold && bag.Type.Equals(request.AntigenTypes.First())).ToList();
             foreach (var unitbag in unitBagDtos)
             {
-                if (request.MaxQuantity == 0) continue;
+                if (request.MaxQuantity == 0) return bags;
                 // For emergency only RBC needed & subtype should be Rhd, Ro not needed for emergency transfussion
                 if (unitbag.BloodType.Equals(BloodType.RBC) && unitbag.BloodSubtype.Equals(BloodSubtype.Rhd))
                 {
@@ -217,7 +217,7 @@ public class OrderService(
         {
             var unitBags = await unitBagService.GetAll();
             var unitBagDtos = unitBags.Where(bag =>
-                bag.CenterId.Equals(center.Id) && !bag.IsSold && Equals(request.AntigenTypes.First())).ToList();
+                bag.CenterId.Equals(center.Id) && bag is { IsSold: false, BloodType: BloodType.Plasma }).ToList();
             foreach (var unitbag in unitBagDtos)
             {
                 if (request.MaxQuantity == 0) continue;
@@ -249,6 +249,7 @@ public class OrderService(
         order.OrderDate = DateTime.UtcNow;
         order.Status = OrderStatus.Pending;
         order.Description = request.Description;
+        order.OrderType = request.OrderType;
         order.ClientId = request.ClientId;
 
         // Set the state of existing UnitBags to Unchanged

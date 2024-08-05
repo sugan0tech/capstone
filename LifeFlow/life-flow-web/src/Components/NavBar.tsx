@@ -90,7 +90,7 @@ function NavBar() {
             setAccountButtons(
                 <>
                   <li>
-                    <Link to="/orders" onClick={muteAccountDropdown}>
+                    <Link to="/my-orders" onClick={muteAccountDropdown}>
                       {t("navbar.orders")}
                     </Link>
                   </li>
