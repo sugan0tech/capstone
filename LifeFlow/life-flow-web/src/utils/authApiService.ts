@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:5226/api/";
+// const baseURL = "http://localhost:5226/api/";
+const baseURL = "https://donationservice.azurewebsites.net/api/";
 
 const api = axios.create({
     baseURL,

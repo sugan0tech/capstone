@@ -1,8 +1,8 @@
 import axios from "axios";
 import {getAccessToken} from "./authApiService.ts";
 
-// const baseURL = "https://donationservice.azurewebsites.net/api/";
-const baseURL = "http://localhost:5226/api/";
+const baseURL = "https://donationservice.azurewebsites.net/api/";
+// const baseURL = "http://localhost:5226/api/";
 
 const api = axios.create({
   baseURL,

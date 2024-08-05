@@ -36,8 +36,8 @@ function NotificationButton() {
         fetchNotifications();
 
         const connection = new HubConnectionBuilder()
-            // .withUrl(`https://donationservice.azurewebsites.net/notificationHub?receiverId=${user?.id}`, {
-            .withUrl(`http://localhost:5226/notificationHub?receiverId=${user?.id}`, {
+            .withUrl(`https://donationservice.azurewebsites.net/notificationHub?receiverId=${user?.id}`, {
+            // .withUrl(`http://localhost:5226/notificationHub?receiverId=${user?.id}`, {
                 skipNegotiation: true,
                 transport: HttpTransportType.WebSockets,
                 accessTokenFactory: () => localStorage.getItem("accessToken"),
