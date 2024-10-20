@@ -1,7 +1,9 @@
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
+using Amazon;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
 using DonationService.Auth;
 using DonationService.Commons;
 using DonationService.Commons.Enums;
@@ -79,12 +81,37 @@ public class Program
             });
         }); // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-        var secretClient =
-            new SecretClient(new Uri("https://LifeFlowVault.vault.azure.net/"), new DefaultAzureCredential());
-        builder.Services.AddSingleton(secretClient);
-        var mainDbConnectionString = secretClient.GetSecret("LifeFlowDbConnectionString").Value.Value;
-        var eventDbConnectionString = secretClient.GetSecret("EventDbConnectionString").Value.Value;
-        var tokenKey = secretClient.GetSecret("TokenKey").Value.Value;
+        // AWS Secrets Manager integration
+        string secretName = "LifeFlowSecrets";
+        string region = "us-east-1";
+
+        IAmazonSecretsManager client = new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(region));
+
+        GetSecretValueRequest request = new GetSecretValueRequest
+        {
+            SecretId = secretName,
+            VersionStage = "AWSCURRENT",
+        };
+
+        GetSecretValueResponse response;
+        try
+        {
+            response = client.GetSecretValueAsync(request).Result;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+
+        string secret = response.SecretString;
+
+        // Parse the secret JSON
+        var secretData = JsonSerializer.Deserialize<Dictionary<string, string>>(secret);
+
+        string mainDbConnectionString = secretData["LifeFlowDbConnectionString"];
+        string eventDbConnectionString = secretData["EventDbConnectionString"];
+        string tokenKey = secretData["TokenKey"];
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddHttpContextAccessor();

@@ -1,7 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Azure.Security.KeyVault.Secrets;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
 using DonationService.Auth.Dto;
 using DonationService.Exceptions;
 using DonationService.Features.User;
@@ -13,16 +14,38 @@ public class TokenService : ITokenService
 {
     private readonly SymmetricSecurityKey _key;
 
-    /// <intheritdoc />
-    public TokenService(IConfiguration configuration, SecretClient secretClient)
+    /// <inheritdoc />
+    public TokenService(IConfiguration configuration, IAmazonSecretsManager secretsManager)
     {
-        var secretKey = secretClient.GetSecret("TokenKey").Value.Value;
+        // Fetch the secret from AWS Secrets Manager
+        string secretName = "LifeFlowSecrets";
+        var request = new GetSecretValueRequest
+        {
+            SecretId = secretName,
+            VersionStage = "AWSCURRENT"
+        };
+
+        GetSecretValueResponse response;
+        try
+        {
+            response = secretsManager.GetSecretValueAsync(request).Result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Failed to retrieve secret from AWS Secrets Manager", e);
+        }
+
+        string secretString = response.SecretString;
+        var secretData = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(secretString);
+        var secretKey = secretData.ContainsKey("TokenKey") ? secretData["TokenKey"] : null;
+
         if (secretKey == null)
             throw new NoSecretKeyFoundException("No Token generation Secret key found for this Environment");
+
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
     }
 
-    /// <intheritdoc />
+    /// <inheritdoc />
     public string GenerateToken(UserDto user, DateTime expiration)
     {
         var claims = new List<Claim>
@@ -32,19 +55,18 @@ public class TokenService : ITokenService
             new(ClaimTypes.Role, user.Role)
         };
         var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
-        var myToken = new JwtSecurityToken(null, null, claims, expires: expiration,
-            signingCredentials: credentials);
+        var myToken = new JwtSecurityToken(null, null, claims, expires: expiration, signingCredentials: credentials);
         var token = new JwtSecurityTokenHandler().WriteToken(myToken);
         return token;
     }
 
-    /// <intheritdoc />
+    /// <inheritdoc />
     public string GenerateAccessToken(UserDto user)
     {
         return GenerateToken(user, DateTime.Now.AddMinutes(1)); // Short-lived access token
     }
 
-    /// <intheritdoc />
+    /// <inheritdoc />
     public string GenerateRefreshToken(UserDto user, bool shortLived)
     {
         var claims = new List<Claim>
@@ -61,7 +83,7 @@ public class TokenService : ITokenService
         return token;
     }
 
-    /// <intheritdoc />
+    /// <inheritdoc />
     public AuthReturnDto GenerateTokens(UserDto user, bool shortLived)
     {
         var accessToken = GenerateToken(user, DateTime.Now.AddMinutes(300)); // Short-lived access token
@@ -69,7 +91,7 @@ public class TokenService : ITokenService
         return new AuthReturnDto { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
-    /// <intheritdoc />
+    /// <inheritdoc />
     public PayloadDto GetPayload(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
