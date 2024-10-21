@@ -19,6 +19,7 @@ public class AuthController(IAuthService authService, ILogger<AuthController> lo
     [ProducesResponseType(typeof(Ok), StatusCodes.Status200OK)]
     public ActionResult Health()
     {
+            logger.LogInformation("Health Call occured");
             return Ok();
     }
     [HttpPost("login")]
