@@ -294,8 +294,7 @@ public class Program
             opts.AddPolicy("AllowAll",
                 corsPolicyBuilder =>
                 {
-                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("*",
-                            "https://app.liveflow53.com")
+                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true)
                         .AllowCredentials();
                 });
         });
