@@ -5,7 +5,6 @@ using DonationService.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using WatchDog;
 
 namespace DonationService.Features.UnitBag;
 
@@ -49,12 +48,10 @@ public class UnitBagController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (AuthenticationException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return StatusCode(StatusCodes.Status403Forbidden,
                 new ErrorModel(StatusCodes.Status403Forbidden, ex.Message));
         }
@@ -78,7 +75,6 @@ public class UnitBagController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
     }
@@ -100,7 +96,6 @@ public class UnitBagController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
     }

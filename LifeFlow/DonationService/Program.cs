@@ -31,8 +31,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Quartz;
-using WatchDog;
-using WatchDog.src.Enums;
 
 namespace DonationService;
 
@@ -130,11 +128,11 @@ public class Program
         #region Logger
 
         builder.Services.AddLogging(l => l.AddLog4Net());
-        builder.Services.AddWatchDogServices(opt =>
-        {
-            opt.SetExternalDbConnString = eventDbConnectionString;
-            opt.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
-        });
+        // builder.Services.AddWatchDogServices(opt =>
+        // {
+        //     opt.SetExternalDbConnString = eventDbConnectionString;
+        //     opt.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
+        // });
 
         #endregion
 

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using WatchDog;
 
 namespace DonationService.Features.Notification;
 
@@ -12,7 +11,6 @@ public class NotificationHub(NotificationService notificationService) : Hub
         var httpContext = Context.GetHttpContext();
         var receiverId = httpContext.Request.Query["receiverId"].ToString();
 
-        WatchLogger.Log($"User connected: {receiverId}, ConnectionId: {Context.ConnectionId}");
         if (!string.IsNullOrEmpty(receiverId)) UserConnections[receiverId] = Context.ConnectionId;
 
         await notificationService.CheckPendingNotifications(int.Parse(receiverId));

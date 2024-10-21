@@ -7,7 +7,6 @@ using DonationService.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using WatchDog;
 
 namespace DonationService.Features.Donor;
 
@@ -38,12 +37,10 @@ public class DonorController(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
         catch (AuthenticationException e)
         {
-            WatchLogger.LogError(e.Message);
             return StatusCode(403, new ErrorModel(StatusCodes.Status403Forbidden, "You are not this user"));
         }
     }
@@ -65,7 +62,6 @@ public class DonorController(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
     }
@@ -132,12 +128,10 @@ public class DonorController(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
         catch (AuthenticationException e)
         {
-            WatchLogger.LogError(e.Message);
             return StatusCode(403, new ErrorModel(StatusCodes.Status403Forbidden, e.Message));
         }
     }
@@ -194,12 +188,10 @@ public class DonorController(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
         catch (InvalidUpdateOperationException e)
         {
-            WatchLogger.LogError(e.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
         }
     }
@@ -217,12 +209,10 @@ public class DonorController(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
         catch (InvalidUpdateOperationException e)
         {
-            WatchLogger.LogError(e.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
         }
     }
@@ -240,12 +230,10 @@ public class DonorController(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, e.Message));
         }
         catch (InvalidUpdateOperationException e)
         {
-            WatchLogger.LogError(e.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, e.Message));
         }
     }

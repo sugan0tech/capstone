@@ -32,7 +32,6 @@
         <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.11.0" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.11.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-        <PackageReference Include="WatchDog.NET" Version="1.4.11" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DonationService.Commons;
 using DonationService.Exceptions;
-using WatchDog;
 
 namespace DonationService.Features.User;
 
@@ -18,7 +17,6 @@ public class UserService(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             throw;
         }
     }
@@ -60,7 +58,6 @@ public class UserService(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             throw;
         }
     }
@@ -86,7 +83,6 @@ public class UserService(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             throw;
         }
     }
@@ -100,7 +96,6 @@ public class UserService(
         }
         catch (KeyNotFoundException e)
         {
-            WatchLogger.LogError(e.Message);
             throw;
         }
     }

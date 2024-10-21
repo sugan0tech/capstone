@@ -11,7 +11,6 @@ using DonationService.Features.Payment;
 using DonationService.Features.UnitBag;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WatchDog;
 
 namespace DonationService.Features.Orders;
 
@@ -96,7 +95,6 @@ public class OrderService(
                 if (order == null)
                     throw new InvalidOperationException("Some error occured");
 
-                WatchLogger.Log(order.ToString());
                 var updatedPayment = await paymentService.CreatePayment(order.Id, order.TotalPrice, "InAppPayment");
                 order.PaymentId = updatedPayment.Id;
                 await repo.Update(order);
@@ -106,7 +104,6 @@ public class OrderService(
             }
             catch (Exception e)
             {
-                WatchLogger.LogError(e.Message);
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -238,7 +235,6 @@ public class OrderService(
     {
         if (bags.Count == 0)
         {
-            WatchLogger.LogError("Invalid No Blood Found with Given types");
             throw new OutOfServiceException("Wfff!! We are out of service, there is not stock left near by you");
         }
 
@@ -264,15 +260,12 @@ public class OrderService(
             case OrderType.HospitalStockUpdate:
                 foreach (var bag in bags)
                 {
-                    WatchLogger.Log(totalPrice.ToString());
-                    WatchLogger.Log(bag.Type.ToString());
                     if (bag.BloodType.Equals(BloodType.RBC))
                         totalPrice += clientType.Equals(ClientType.GovtHospital) ? 1100 : 1550;
                     if (bag.BloodType.Equals(BloodType.Plasma))
                         totalPrice += clientType.Equals(ClientType.GovtHospital) ? 300 : 400;
                     if (bag.BloodType.Equals(BloodType.Platelet))
                         totalPrice += clientType.Equals(ClientType.GovtHospital) ? 300 : 400;
-                    WatchLogger.Log(totalPrice.ToString());
                 }
 
                 break;

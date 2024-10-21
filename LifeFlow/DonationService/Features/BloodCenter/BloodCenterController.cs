@@ -7,7 +7,6 @@ using DonationService.Features.DonationSlot;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using WatchDog;
 
 namespace DonationService.Features.BloodCenter;
 
@@ -62,12 +61,10 @@ public class BloodCenterController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (AuthenticationException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return StatusCode(StatusCodes.Status403Forbidden,
                 new ErrorModel(StatusCodes.Status403Forbidden, ex.Message));
         }
@@ -91,7 +88,6 @@ public class BloodCenterController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
     }
@@ -113,7 +109,6 @@ public class BloodCenterController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
     }
@@ -151,12 +146,10 @@ public class BloodCenterController(
         }
         catch (OutOfServiceException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
     }
@@ -179,7 +172,6 @@ public class BloodCenterController(
         }
         catch (InvalidOperationException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, "No center present with the name"));
         }
     }
@@ -203,27 +195,22 @@ public class BloodCenterController(
         }
         catch (NoSlotAvailableException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (InvalidDonationRequestException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
         catch (InvalidOperationException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return StatusCode(StatusCodes.Status500InternalServerError,
                 new ErrorModel(StatusCodes.Status500InternalServerError, ex.Message));
         }
@@ -246,12 +233,10 @@ public class BloodCenterController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return StatusCode(StatusCodes.Status500InternalServerError,
                 new ErrorModel(StatusCodes.Status500InternalServerError, ex.Message));
         }
@@ -274,12 +259,10 @@ public class BloodCenterController(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return StatusCode(StatusCodes.Status500InternalServerError,
                 new ErrorModel(StatusCodes.Status500InternalServerError, ex.Message));
         }

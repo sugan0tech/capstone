@@ -5,7 +5,6 @@ using DonationService.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using WatchDog;
 
 namespace DonationService.Features.Notification;
 
@@ -33,7 +32,6 @@ public class NotificationController(NotificationService notificationService) : C
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
     }
@@ -55,7 +53,6 @@ public class NotificationController(NotificationService notificationService) : C
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
     }
@@ -77,7 +74,6 @@ public class NotificationController(NotificationService notificationService) : C
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
     }
@@ -99,7 +95,6 @@ public class NotificationController(NotificationService notificationService) : C
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
     }
@@ -121,7 +116,6 @@ public class NotificationController(NotificationService notificationService) : C
         }
         catch (Exception ex)
         {
-            WatchLogger.LogError(ex.Message);
             return BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, ex.Message));
         }
     }
@@ -143,7 +137,6 @@ public class NotificationController(NotificationService notificationService) : C
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
     }
@@ -203,7 +196,6 @@ public class NotificationController(NotificationService notificationService) : C
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             return NotFound(new ErrorModel(StatusCodes.Status404NotFound, ex.Message));
         }
     }

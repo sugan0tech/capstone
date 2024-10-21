@@ -1,7 +1,6 @@
 using AutoMapper;
 using DonationService.Commons;
 using Microsoft.AspNetCore.SignalR;
-using WatchDog;
 
 namespace DonationService.Features.Notification;
 
@@ -18,7 +17,6 @@ public class NotificationService(
         }
         catch (Exception e)
         {
-            WatchLogger.LogError(e.Message);
         }
         finally
         {
@@ -68,14 +66,11 @@ public class NotificationService(
     {
         if (NotificationHub.UserConnections.TryGetValue(receiverId, out var connectionId))
         {
-            WatchLogger.Log(message);
             await hubContext.Clients.Client(connectionId)
                 .SendAsync("ReceiveNotification", message);
-            WatchLogger.Log($"Notification sent to {receiverId}");
             return true;
         }
 
-        WatchLogger.Log($"Notification Not sent to {receiverId}");
         return false;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using WatchDog;
 
 namespace DonationService.Commons;
 
@@ -27,7 +26,6 @@ public abstract class BaseService<TBaseEntity, TDTO>(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             throw;
         }
     }
@@ -68,7 +66,6 @@ public abstract class BaseService<TBaseEntity, TDTO>(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             throw;
         }
     }
@@ -87,7 +84,6 @@ public abstract class BaseService<TBaseEntity, TDTO>(
         }
         catch (KeyNotFoundException ex)
         {
-            WatchLogger.LogError(ex.Message);
             throw;
         }
     }

@@ -3,7 +3,6 @@ using DonationService.Entities;
 using DonationService.Features.Donor;
 using DonationService.Features.Notification;
 using Quartz;
-using WatchDog;
 
 namespace DonationService.Jobs;
 
@@ -17,7 +16,6 @@ public class SlotNotificationJob(IServiceScopeFactory scopeFactory) : IJob
         var donorService = scope.ServiceProvider.GetRequiredService<IDonorService>();
         var upcomingSlots = donationSlotRepo.GetAll().Result
             .Where(s => s.SlotTime > DateTime.UtcNow && s.SlotTime < DateTime.Now.AddMinutes(30));
-        WatchLogger.Log("From Slot Notification Job");
         foreach (var slot in upcomingSlots)
         {
             var userId = donorService.GetById(slot.DonorId).Result.UserId;
