@@ -294,7 +294,7 @@ public class Program
             opts.AddPolicy("AllowAll",
                 corsPolicyBuilder =>
                 {
-                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173",
+                    corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("*",
                             "https://app.liveflow53.com")
                         .AllowCredentials();
                 });
@@ -312,7 +312,6 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
         app.UseRouting();
         app.UseCors("AllowAll");
 
