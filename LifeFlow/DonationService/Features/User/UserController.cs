@@ -14,7 +14,7 @@ namespace DonationService.Features.User;
 [ApiController]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-[Authorize]
+// [Authorize]
 public class UserController(
     IUserService userService,
     CustomControllerValidator validator) : ControllerBase
@@ -53,7 +53,7 @@ public class UserController(
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
-    [Authorize(Policy = "AdminPolicy")]
+    // [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> GetAll()
     {
         var users = await userService.GetAll();
@@ -63,7 +63,7 @@ public class UserController(
     [HttpPost]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationResult), StatusCodes.Status400BadRequest)]
-    [Authorize(Policy = "AdminPolicy")]
+    // [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> Add([FromBody] UserDto user)
     {
         var createdUser = await userService.Add(user);

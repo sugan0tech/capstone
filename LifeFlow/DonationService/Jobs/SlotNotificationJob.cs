@@ -25,7 +25,7 @@ public class SlotNotificationJob(IServiceScopeFactory scopeFactory) : IJob
             {
                 receiverId = userId,
                 receiverKind = "User",
-                Message = $"Reminder: Your donation slot is coming up soon at {slot.SlotTime.ToShortTimeString()}."
+                Message = $"Reminder: Your donation slot is coming up soon at{slot.SlotTime.ToShortTimeString()}."
             };
             await notificationService.SendNotification(notification);
         }

@@ -15,7 +15,7 @@ namespace DonationService.Features.Address;
 [Route("api/[controller]")]
 [EnableCors("AllowAll")]
 [ExcludeFromCodeCoverage]
-[Authorize]
+// [Authorize]
 public class AddressController(
     ILogger<AddressController> logger,
     IAddressCommandHandler<CreateAddressCommand> createAddressHandler,

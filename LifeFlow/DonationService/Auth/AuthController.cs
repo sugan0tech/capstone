@@ -15,6 +15,12 @@ namespace DonationService.Auth;
 [EnableCors("AllowAll")]
 public class AuthController(IAuthService authService, ILogger<AuthController> logger) : ControllerBase
 {
+    [HttpGet("health")]
+    [ProducesResponseType(typeof(Ok), StatusCodes.Status200OK)]
+    public ActionResult Health()
+    {
+            return Ok();
+    }
     [HttpPost("login")]
     [ProducesResponseType(typeof(AuthReturnDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]

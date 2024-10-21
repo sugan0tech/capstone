@@ -296,7 +296,7 @@ public class Program
                 corsPolicyBuilder =>
                 {
                     corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173",
-                            "https://orange-hill-0f44ca01e.5.azurestaticapps.net")
+                            "https://app.liveflow53.com")
                         .AllowCredentials();
                 });
         });
@@ -323,16 +323,16 @@ public class Program
 
         #endregion
 
-        app.UseAuthentication();
-        app.UseAuthorization();
-        app.UseWatchDogExceptionLogger();
+        // app.UseAuthentication();
+        // app.UseAuthorization();
+        // app.UseWatchDogExceptionLogger();
 
-        var watchdogCredentials = builder.Configuration.GetSection("WatchDog");
-        app.UseWatchDog(opt =>
-        {
-            opt.WatchPageUsername = watchdogCredentials["username"];
-            opt.WatchPagePassword = watchdogCredentials["password"];
-        });
+        // var watchdogCredentials = builder.Configuration.GetSection("WatchDog");
+        // app.UseWatchDog(opt =>
+        // {
+        //     opt.WatchPageUsername = watchdogCredentials["username"];
+        //     opt.WatchPagePassword = watchdogCredentials["password"];
+        // });
 
         app.MapControllers();
 
