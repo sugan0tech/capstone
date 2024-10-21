@@ -199,6 +199,7 @@ public class Program
             options.AddPolicy("NotificationPolicy", policy => { policy.RequireAuthenticatedUser(); });
         });
 
+        builder.Services.AddSingleton<IAmazonSecretsManager, AmazonSecretsManagerClient>();
         #endregion
 
         #region Jobs
