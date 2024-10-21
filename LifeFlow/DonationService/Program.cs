@@ -320,8 +320,8 @@ public class Program
 
         #endregion
 
-        // app.UseAuthentication();
-        // app.UseAuthorization();
+        app.UseAuthentication();
+        app.UseAuthorization();
         // app.UseWatchDogExceptionLogger();
 
         // var watchdogCredentials = builder.Configuration.GetSection("WatchDog");
