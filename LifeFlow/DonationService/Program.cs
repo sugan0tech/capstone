@@ -79,36 +79,9 @@ public class Program
             });
         }); // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-        // AWS Secrets Manager integration
-        string secretName = "LifeFlowSecrets";
-        string region = "us-east-1";
-
-        IAmazonSecretsManager client = new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(region));
-
-        GetSecretValueRequest request = new GetSecretValueRequest
-        {
-            SecretId = secretName,
-            VersionStage = "AWSCURRENT",
-        };
-
-        GetSecretValueResponse response;
-        try
-        {
-            response = client.GetSecretValueAsync(request).Result;
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
-
-        string secret = response.SecretString;
-
-        // Parse the secret JSON
-        var secretData = JsonSerializer.Deserialize<Dictionary<string, string>>(secret);
-
-        string mainDbConnectionString = secretData["LifeFlowDbConnectionString"];
-        string eventDbConnectionString = secretData["EventDbConnectionString"];
-        string tokenKey = secretData["TokenKey"];
+        string mainDbConnectionString = builder.Configuration.GetConnectionString("defaultConnection");
+        string eventDbConnectionString = builder.Configuration.GetConnectionString("eventStore");
+        string tokenKey = "This is the dummy key which has to be a bit long for the 512. which should be even more longer for the passing";
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -118,7 +91,7 @@ public class Program
 
         builder.Services.AddDbContext<DonationServiceContext>(optionsBuilder =>
             {
-                optionsBuilder.UseSqlServer(mainDbConnectionString);
+                optionsBuilder.UseNpgsql(mainDbConnectionString);
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
         );
